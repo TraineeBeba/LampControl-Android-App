@@ -6,31 +6,109 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
     <RelativeLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/homescreen__background_off"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-330dp">
+        android:background="@drawable/homescreen__background_off">
 
-        <ImageButton
-            android:id="@+id/Button_on"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="78dp"
-            android:layout_marginEnd="78dp"
-            android:layout_marginBottom="300dp"
-            android:background="@null"
-            android:contentDescription="@string/aa"
-            android:onClick="function"
-            android:padding="100dp"
-            android:src="@drawable/pisun" />
+        <RelativeLayout
+            android:id="@+id/mainLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/image_turn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/turn_off_image"
+                />
+
+            <Button
+                android:id="@+id/Button_on"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="#00FFFFFF"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/aa"
+                android:onClick="toggleLamp"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_alignParentBottom="true"
+
+                android:src="@drawable/menu1" />
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:background="#2A2C34" />
+
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:paddingBottom="70dp">
+
+            <Button
+                android:id="@+id/button_home"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/aa"
+                android:onClick="menu1"
+                android:background="#00FFFFFF"/>
+
+            <Button
+                android:id="@+id/button_light"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/aa"
+                android:onClick="menu2"
+                android:background="#00FFFFFF"/>
+
+            <Button
+                android:id="@+id/button_wifi"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/aa"
+                android:onClick="menu3"
+                android:background="#00FFFFFF"/>
+        </LinearLayout>
+
 
 
     </RelativeLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
