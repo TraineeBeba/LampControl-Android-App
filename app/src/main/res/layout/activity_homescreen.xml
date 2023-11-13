@@ -4,16 +4,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/homescreen__background_off">
-<!--        dzsdsahsиооzchhjsddfgsdsbfdgjsdfssdsssds-->
-        <ImageButton
 
+        <ImageButton
             android:id="@+id/Button_on"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:contentDescription="@string/app_name"
-            android:background="null"
-            android:src="@drawable/sun2"
-             />
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:contentDescription="@string/app_name" />
 
 
     </RelativeLayout>

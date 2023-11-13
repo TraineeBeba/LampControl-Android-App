@@ -9,15 +9,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/homescreen__background_off">
+        android:background="@drawable/homescreen__background_off"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-330dp">
 
         <ImageButton
             android:id="@+id/Button_on"
-            android:layout_width="170dp"
-            android:layout_height="186dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="78dp"
+            android:layout_marginEnd="78dp"
+            android:layout_marginBottom="300dp"
             android:background="@null"
             android:contentDescription="@string/aa"
             android:onClick="function"
+            android:padding="100dp"
             android:src="@drawable/pisun" />
 
 
