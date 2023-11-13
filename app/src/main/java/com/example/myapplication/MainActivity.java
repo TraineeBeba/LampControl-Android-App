@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.ImageView;
 import android.widget.Button;
+import android.content.Intent;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     public void menu3(View view) {
         // lamp tracking off/on
         Log.d("AAAA", "Page is wifi");
+
+        Intent intent = new Intent(MainActivity.this, ThirdActivity.class);
+        startActivity(intent);
 
 
     }

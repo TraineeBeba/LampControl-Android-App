@@ -4,42 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-
+    tools:context=".ThirdActivity">
 
     <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/homescreen__background_off">
-
-        <RelativeLayout
-            android:id="@+id/mainLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true">
-
-            <ImageView
-                android:id="@+id/image_turn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/turn_off_image"
-                />
-
-            <Button
-                android:id="@+id/Button_on"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:background="#00FFFFFF"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/aa"
-                android:onClick="toggleLamp"
-                />
-
-        </RelativeLayout>
+        android:background="@drawable/fone_for_wifi">
 
 
         <RelativeLayout
@@ -54,7 +25,7 @@
                 android:layout_height="150dp"
                 android:layout_alignParentBottom="true"
 
-                android:src="@drawable/home_menu" />
+                android:src="@drawable/wifi_menu" />
 
 
             <View
@@ -63,10 +34,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="#2A2C34" />
 
-
-
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -105,10 +73,7 @@
                 android:background="#00FFFFFF"/>
         </LinearLayout>
 
-
-
     </RelativeLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
