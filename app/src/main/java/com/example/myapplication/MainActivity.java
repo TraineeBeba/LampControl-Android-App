@@ -2,15 +2,15 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.frame.HomeFrame;
+import com.example.myapplication.frame.WifiFrame;
+
 
 public class MainActivity extends AppCompatActivity {
+
 
 
 

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.frame;
 
 import android.content.Intent;
 import android.nfc.Tag;
@@ -17,6 +17,10 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.State;
 
 
 public class HomeFrame extends Fragment {
