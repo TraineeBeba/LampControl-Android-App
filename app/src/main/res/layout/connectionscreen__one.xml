@@ -7,7 +7,7 @@
     tools:context=".frame.WifiFrame">
 
     <FrameLayout
-        android:id="@+id/mainLayout2"
+        android:id="@+id/mainLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -48,34 +48,34 @@
                 android:gravity="bottom"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
-                android:paddingBottom="70dp">
+                android:paddingBottom="10dp">
 
                 <Button
                     android:id="@+id/button_home"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="140dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/aa"
-
-                    android:background="#00FFFFFF"/>
+                    android:background="#00FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/button_light"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="140dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/aa"
-
-                    android:background="#00FFFFFF"/>
+                    android:background="#00FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/button_wifi"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="140dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/aa"
-
-                    android:background="#00FFFFFF"/>
+                    android:background="#00FFFFFF"
+                    />
             </LinearLayout>
 
         </RelativeLayout>

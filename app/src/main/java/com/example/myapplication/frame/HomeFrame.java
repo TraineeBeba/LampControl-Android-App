@@ -29,6 +29,7 @@ public class HomeFrame extends Fragment {
     private ImageView imageView; // image for button off/on
     private Button buttonToggleLamp;
     private Button buttonWifi;
+    private Button buttonLight;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,12 +53,22 @@ public class HomeFrame extends Fragment {
         });
 
         // Ініціалізація іншої кнопки
+        buttonLight = view.findViewById(R.id.button_light);
+        buttonLight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).showFromHomeToLightFragment();
+                }
+            }
+        });
+
         buttonWifi = view.findViewById(R.id.button_wifi);
         buttonWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).showWifiFragment();
+                    ((MainActivity) getActivity()).showFromHomeToWifiFragment();
                 }
             }
         });
