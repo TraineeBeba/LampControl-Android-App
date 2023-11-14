@@ -4,76 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ThirdActivity">
+    tools:context=".WifiFrame">
 
-    <RelativeLayout
-        android:id="@+id/mainLayout"
+    <FrameLayout
+        android:id="@+id/mainLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/fone_for_wifi">
-
+        android:layout_height="match_parent">
 
         <RelativeLayout
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fone_for_wifi">
 
 
-            <ImageView
+            <RelativeLayout
 
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_alignParentBottom="true"
-
-                android:src="@drawable/wifi_menu" />
+                android:layout_height="wrap_content">
 
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_alignParentBottom="true"
-                android:background="#2A2C34" />
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_alignParentBottom="true"
+
+                    android:src="@drawable/wifi_menu" />
+
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#2A2C34" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:paddingBottom="70dp">
+
+                <Button
+                    android:id="@+id/button_home"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/aa"
+
+                    android:background="#00FFFFFF"/>
+
+                <Button
+                    android:id="@+id/button_light"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/aa"
+
+                    android:background="#00FFFFFF"/>
+
+                <Button
+                    android:id="@+id/button_wifi"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/aa"
+
+                    android:background="#00FFFFFF"/>
+            </LinearLayout>
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="bottom"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp"
-            android:paddingBottom="70dp">
+    </FrameLayout>
 
-            <Button
-                android:id="@+id/button_home"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/aa"
-                android:onClick="menu1"
-                android:background="#00FFFFFF"/>
-
-            <Button
-                android:id="@+id/button_light"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/aa"
-                android:onClick="menu2"
-                android:background="#00FFFFFF"/>
-
-            <Button
-                android:id="@+id/button_wifi"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/aa"
-                android:onClick="menu3"
-                android:background="#00FFFFFF"/>
-        </LinearLayout>
-
-    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,84 +1,55 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.ImageView;
 import android.widget.Button;
-import android.content.Intent;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private RelativeLayout mainLayoutView;
-    private Button button_home;
-    private Button button_tighle;
-    private Button button_wifi;
 
-    private ImageView imageView; // image for button off/on
-    private boolean isLampOn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("AAAA ", "ShowStart");
         setContentView(R.layout.activity_main);
 
-//        ImageButton imageButton = findViewById(R.layout.Button_on)
-        imageView = findViewById(R.id.image_turn);
-        mainLayoutView = findViewById(R.id.mainLayout);
-        button_home = findViewById(R.id.button_home);
-        button_tighle = findViewById(R.id.button_light);
-        button_wifi = findViewById(R.id.button_wifi);
-
+        // Початкове завантаження HomeFragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainLayout1, new HomeFrame())
+                .commit();
 
 
     }
 
 
-    public void toggleLamp(View view) {
-        // lamp tracking off/on
+    public void showHomeFragment() {
+        Log.d("AAAA ", "showHome");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainLayout2, new HomeFrame())
+                .commit();
+    }
 
-        if (isLampOn){
-            Log.d("AAAA ", "On");
-            imageView.setImageResource(R.drawable.turn_on_image); // changes  picture for button
-            mainLayoutView.setBackgroundResource(R.drawable.homescreen__background_on);
-            isLampOn = false;
-        }
-        else{
-            Log.d("AAAA", "Off");
-            imageView.setImageResource(R.drawable.turn_off_image); // changes  picture for button
-            mainLayoutView.setBackgroundResource(R.drawable.homescreen__background_off);
-            isLampOn = true;
-        }
+//    public void showLightFragment(View view) {
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container, new LightFragment())
+//                .commit();
+//    }
+
+    public void showWifiFragment() {
+        Log.d("AAAA ", "showWifi");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainLayout1, new WifiFrame())
+                .commit();
 
     }
 
-
-    public void menu1(View view) {
-        // lamp tracking off/on
-
-        Log.d("AAAA", "Page is home");
-
-    }
-
-    public void menu2(View view) {
-        // lamp tracking off/on
-        Log.d("AAAA", "Page is light");
-
-
-    }
-
-    public void menu3(View view) {
-        // lamp tracking off/on
-        Log.d("AAAA", "Page is wifi");
-
-        Intent intent = new Intent(MainActivity.this, ThirdActivity.class);
-        startActivity(intent);
-
-
-    }
 
 }

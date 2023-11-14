@@ -22,11 +22,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Додавання ThirdActivity до маніфесту -->
-        <activity
-            android:name=".ThirdActivity"
-            android:exported="true">
-        </activity>
+<!--        &lt;!&ndash; Додавання ThirdActivity до маніфесту &ndash;&gt;-->
+<!--        <activity-->
+<!--            android:name=".WifiFrame"-->
+<!--            android:exported="true">-->
+<!--        </activity>-->
 
     </application>
 </manifest>
