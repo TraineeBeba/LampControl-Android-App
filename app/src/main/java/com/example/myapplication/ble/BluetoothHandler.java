@@ -31,19 +31,10 @@ import java.util.UUID;
 public class BluetoothHandler {
 
     // Intent constants
-    public static final String MEASUREMENT_BLOODPRESSURE = "blessed.measurement.bloodpressure";
-    public static final String MEASUREMENT_BLOODPRESSURE_EXTRA = "blessed.measurement.bloodpressure.extra";
-    public static final String MEASUREMENT_TEMPERATURE = "blessed.measurement.temperature";
-    public static final String MEASUREMENT_TEMPERATURE_EXTRA = "blessed.measurement.temperature.extra";
-    public static final String MEASUREMENT_HEARTRATE = "blessed.measurement.heartrate";
-    public static final String MEASUREMENT_HEARTRATE_EXTRA = "blessed.measurement.heartrate.extra";
-    public static final String MEASUREMENT_GLUCOSE = "blessed.measurement.glucose";
-    public static final String MEASUREMENT_GLUCOSE_EXTRA = "blessed.measurement.glucose.extra";
-    public static final String MEASUREMENT_PULSE_OX = "blessed.measurement.pulseox";
-    public static final String MEASUREMENT_PULSE_OX_EXTRA_CONTINUOUS = "blessed.measurement.pulseox.extra.continuous";
-    public static final String MEASUREMENT_PULSE_OX_EXTRA_SPOT = "blessed.measurement.pulseox.extra.spot";
-    public static final String MEASUREMENT_WEIGHT = "blessed.measurement.weight";
-    public static final String MEASUREMENT_WEIGHT_EXTRA = "blessed.measurement.weight.extra";
+    public static final String LAMP_STATE_UPDATE_ACTION = "com.example.myapplication.LAMP_STATE_UPDATE";
+    public static final String DISCONNECT_LAMP_STATE_UPDATE_ACTION = "com.example.myapplication.DISCONNECT_LAMP_STATE_UPDATE_ACTION";
+    public static final String EXTRA_LAMP_STATE = "EXTRA_LAMP_STATE";
+
     public static final String MEASUREMENT_EXTRA_PERIPHERAL = "blessed.measurement.peripheral";
 
     public static final UUID LC_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
@@ -64,6 +55,16 @@ public class BluetoothHandler {
 
     public static String address;
 
+    private void sendLampStateUpdateBroadcast(String lampState) {
+        Intent intent = new Intent(LAMP_STATE_UPDATE_ACTION);
+        intent.putExtra(EXTRA_LAMP_STATE, lampState);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendDisconnectLampStateUpdateBroadcast() {
+        Intent intent = new Intent(DISCONNECT_LAMP_STATE_UPDATE_ACTION);
+        context.sendBroadcast(intent);
+    }
     // Callback for peripherals
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
         @Override
@@ -157,13 +158,13 @@ public class BluetoothHandler {
             if (status == GattStatus.SUCCESS) {
                 Log.d("NOTIFICATION",String.format("SUCCESS: Writing <%s> to <%s>", new String(value), characteristic.getUuid()));
             } else {
-                Log.d("NOTIFICATION",String.format("ERROR: Failed writing <%s> to <%s> (%s)", new String(value), characteristic.getUuid()));
+                Log.d("NOTIFICATION",String.format("ERROR: Failed writing <%s> to <%s>", new String(value), characteristic.getUuid()));
             }
         }
 
 
         @Override
-        public void onCharacteristicUpdate(@NotNull BluetoothPeripheral peripheral, @NotNull byte[] value, @NotNull BluetoothGattCharacteristic characteristic, @NotNull GattStatus status) {
+            public void onCharacteristicUpdate(@NotNull BluetoothPeripheral peripheral, @NotNull byte[] value, @NotNull BluetoothGattCharacteristic characteristic, @NotNull GattStatus status) {
             if (status != GattStatus.SUCCESS) return;
 
             UUID characteristicUUID = characteristic.getUuid();
@@ -172,6 +173,8 @@ public class BluetoothHandler {
             if (characteristicUUID.equals(LAMP_SWITCH_CHARACTERISTIC_UUID)) {
                 Log.d("NOTIFICATION",String.format("LAMP STATE CHANGED"));
                 Log.d("NOTIFICATION", new String(value));
+                String lampState = new String(value);
+                sendLampStateUpdateBroadcast(lampState);
             } else if(characteristicUUID.equals(LAMP_BRIGHTNESS_CHARACTERISTIC_UUID)){
                 Log.d("NOTIFICATION",String.format("BRIGHTNESS CHANGED"));
                 Log.d("NOTIFICATION", new String(value));
@@ -239,22 +242,32 @@ public class BluetoothHandler {
     // Callback for central
     private final BluetoothCentralManagerCallback bluetoothCentralManagerCallback = new BluetoothCentralManagerCallback() {
 
+
         @Override
         public void onConnectedPeripheral(@NotNull BluetoothPeripheral peripheral) {
             address = peripheral.getAddress();
+
             peripheral.setNotify(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID, true);
             peripheral.setNotify(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID, true);
             peripheral.setNotify(LC_SERVICE_UUID, LAMP_MODE_CHARACTERISTIC_UUID, true);
+
+            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
+            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID);
+            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_MODE_CHARACTERISTIC_UUID);
+
             Log.d("Scan",String.format("connected to '%s'", peripheral.getName()));
         }
 
         @Override
         public void onConnectionFailed(@NotNull BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
+            address = null;
             Log.d("Scan",String.format("connection '%s' failed with status %s", peripheral.getName(), status));
         }
 
         @Override
         public void onDisconnectedPeripheral(@NotNull final BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
+            sendDisconnectLampStateUpdateBroadcast();
+            address = null;
             Log.d("Scan",String.format("disconnected '%s' with status %s", peripheral.getName(), status));
             // Reconnect to this device when it becomes available again
             handler.postDelayed(new Runnable() {
