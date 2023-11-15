@@ -114,8 +114,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/seekBar"
-                    android:layout_marginBottom="45dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="45dp"
                     android:text="Якравість"
                     android:textColor="#FFFFFF"
                     android:textSize="30dp" />
