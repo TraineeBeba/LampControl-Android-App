@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frame.WifiFrame">
+    tools:context=".fragment.WifiFragment">
 
     <FrameLayout
-        android:id="@+id/mainLayout2"
+        android:id="@+id/lightLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -278,7 +278,7 @@
                     android:layout_above="@+id/seekBar"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="45dp"
-                    android:text="Якравість"
+                    android:text="Яcкравість"
                     android:textColor="#FFFFFF"
                     android:textSize="30dp" />
 

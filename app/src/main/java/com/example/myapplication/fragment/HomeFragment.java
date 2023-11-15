@@ -1,4 +1,4 @@
-package com.example.myapplication.frame;
+package com.example.myapplication.fragment;
 
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
@@ -15,13 +15,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.State;
+import com.example.myapplication.constant.FragmentType;
+import com.example.myapplication.constant.LampViewState;
 import com.example.myapplication.ble.BluetoothHandler;
 import com.welie.blessed.BluetoothCentralManager;
 import com.welie.blessed.BluetoothPeripheral;
@@ -29,7 +31,7 @@ import com.welie.blessed.ConnectionState;
 import com.welie.blessed.WriteType;
 
 
-public class HomeFrame extends Fragment {
+public class HomeFragment extends Fragment {
 
     private FrameLayout  mainLayoutView;
     private ImageView imageView; // image for button off/on
@@ -46,6 +48,7 @@ public class HomeFrame extends Fragment {
             }
         }
     };
+
 
     private final BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
         @Override
@@ -86,7 +89,7 @@ public class HomeFrame extends Fragment {
         } else if (value.equals("ON")){
             imageView.setImageResource(R.drawable.turn_on_image); // changes  picture for button
             mainLayoutView.setBackgroundResource(R.drawable.homescreen__background_on);
-            State.isLampOn = true;
+            LampViewState.setIsLampOn(true);
         }
     }
 
@@ -95,10 +98,16 @@ public class HomeFrame extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_main, container, false);
+//        if (savedInstanceState == null) {
+//            ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.homeLayout, new HomeFragment(), FragmentType.HOME.name())
+//                    .commit();
+//        }
+
+        View view = inflater.inflate(R.layout.home, container, false);
 
         imageView = view.findViewById(R.id.image_turn);
-        mainLayoutView = view.findViewById(R.id.mainLayout1);
+        mainLayoutView = view.findViewById(R.id.homeLayout);
         btnToggleLamp = view.findViewById(R.id.Button_on);
         buttonWifi = view.findViewById(R.id.button_wifi);
 
@@ -113,7 +122,7 @@ public class HomeFrame extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).showFromHomeToLightFragment();
+                    ((MainActivity) getActivity()).navigateToFragment(R.id.homeLayout, FragmentType.LIGHT);
                 }
             }
         });
@@ -123,7 +132,7 @@ public class HomeFrame extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).showFromHomeToWifiFragment();
+                    ((MainActivity) getActivity()).navigateToFragment(R.id.homeLayout, FragmentType.WIFI);
                 }
             }
         });
@@ -161,7 +170,7 @@ public class HomeFrame extends Fragment {
                 byte[] newValue = newState.getBytes();
                 peripheral.writeCharacteristic(lampStateCharacteristic, newValue, WriteType.WITH_RESPONSE);
                 if(newState.equals("ON")){
-                    
+
                 }
                 toggleVisual(newState);
             }

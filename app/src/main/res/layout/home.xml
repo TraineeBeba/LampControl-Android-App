@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frame.HomeFrame">
+    tools:context=".fragment.HomeFragment">
 
 
     <FrameLayout
-        android:id="@+id/mainLayout1"
+        android:id="@+id/homeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/homescreen__background_off">
