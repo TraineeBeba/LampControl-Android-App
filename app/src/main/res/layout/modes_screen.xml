@@ -70,151 +70,155 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="270dp"
+                android:layout_marginTop="320dp"
                 android:orientation="vertical"
                 >
 
                 <!-- Перший Рядок з 5 Кнопками -->
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center">
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton1"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
                         app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton2"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton3"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton4"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton5"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center">
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton6"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton7"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton8"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton9"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton10"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center">
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton11"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton12"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton13"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton14"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <Button
                         android:id="@+id/myButton15"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:backgroundTint="#ed2424"
-                        app:cornerRadius="50dp" />
+                        app:cornerRadius="40dp" />
 
                 </LinearLayout>
 

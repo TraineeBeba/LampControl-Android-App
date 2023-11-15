@@ -7,22 +7,22 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="adb-z9mfjvsgxscye6cu-49qZcI._adb-tls-connect._tcp" />
+            <value value="adb-R58R83LQSAY-gnsoSE._adb-tls-connect._tcp." />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-11-14T17:30:15.621847200Z" />
-    <targetsSelectedWithDialog>
+    <timeTargetWasSelectedWithDropDown value="2023-11-15T11:13:41.738774Z" />
+    <runningDeviceTargetsSelectedWithDialog>
       <Target>
-        <type value="QUICK_BOOT_TARGET" />
+        <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\ivang\.android\avd\Pixel_6_Pro_API_27.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="adb-R58R83LQSAY-gnsoSE._adb-tls-connect._tcp." />
           </Key>
         </deviceKey>
       </Target>
-    </targetsSelectedWithDialog>
+    </runningDeviceTargetsSelectedWithDialog>
   </component>
 </project>
