@@ -26,15 +26,19 @@ public class LightFrame extends Fragment {
 
     private ImageView imageViewMode;
 
-    private int countState = 7;
+    private int maxOld = 9;
     private int positionBar;
     SeekBar seekBar;
     TextView textView;
 
-    private int transform(int count_step, int step_now){
-        return (int) (step_now*100) / (count_step-1);
-
+    public int scaleValue(double inputValue) {
+        int minOld = 0;
+        int minNew = 10;
+        int maxNew = 100;
+        int scaledValue = (int) (minNew + ((inputValue - minOld) / (maxOld - minOld)) * (maxNew - minNew));
+        return scaledValue;
     }
+
 
     private void saveMode(int numbermode){
         switch (numbermode){
@@ -72,8 +76,8 @@ public class LightFrame extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // Цей метод викликається кожного разу, коли змінюється поточне положення ковзанця
-                textView.setText(String.valueOf(transform(countState, progress) + " %"));
-                State.valueBrightnessText = transform(countState, progress);
+                textView.setText(String.valueOf(scaleValue(progress) + " %"));
+                State.valueBrightnessText = scaleValue(progress);
                 State.seekBarposition = seekBar.getProgress(); // position seekBar
             }
 
