@@ -1,6 +1,16 @@
 package com.example.myapplication.frame;
 
+import static com.example.myapplication.ble.BluetoothHandler.LAMP_BRIGHTNESS_CHARACTERISTIC_UUID;
+import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
+import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
+
 import androidx.fragment.app.Fragment;
+
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +20,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.State;
+import com.example.myapplication.ble.BluetoothHandler;
+import com.welie.blessed.BluetoothBytesParser;
+import com.welie.blessed.BluetoothCentralManager;
+import com.welie.blessed.BluetoothPeripheral;
+import com.welie.blessed.ConnectionState;
+import com.welie.blessed.WriteType;
+
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 public class LightFrame extends Fragment {
     private Button buttonHome;
@@ -30,6 +50,33 @@ public class LightFrame extends Fragment {
     private int positionBar;
     SeekBar seekBar;
     TextView textView;
+
+    private final BroadcastReceiver brightnessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION)) {
+                String brightnessStr = intent.getStringExtra(BluetoothHandler.EXTRA_BRIGHTNESS);
+                Log.d("AAAA", brightnessStr);
+
+                int brightness = Integer.valueOf(brightnessStr);
+
+                // Define the ranges
+                int minBrightness = 25;
+                int maxBrightness = 250;
+                int minSeekBar = 0;
+                int maxSeekBar = 9;
+
+                // Calculate the scaling factor
+                double scaleFactor = (double) (maxSeekBar - minSeekBar) / (maxBrightness - minBrightness);
+
+                // Apply the scaling factor to get the corresponding SeekBar position
+                int seekBarPosition = (int)((brightness - minBrightness) * scaleFactor);
+
+                seekBar.setProgress(seekBarPosition);
+            }
+        }
+    };
+
 
     public int scaleValue(double inputValue) {
         int minOld = 0;
@@ -76,9 +123,13 @@ public class LightFrame extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // Цей метод викликається кожного разу, коли змінюється поточне положення ковзанця
-                textView.setText(String.valueOf(scaleValue(progress) + " %"));
-                State.valueBrightnessText = scaleValue(progress);
+                int valueBrightnessText = scaleValue(progress);
+                textView.setText(valueBrightnessText + " %");
+                State.valueBrightnessText = valueBrightnessText;
                 State.seekBarposition = seekBar.getProgress(); // position seekBar
+                int value = (progress + 1) * 25;
+                Log.d("BRIGHTNESS" , String.valueOf(value));
+                setBrightness(value);
             }
 
             @Override
@@ -140,8 +191,45 @@ public class LightFrame extends Fragment {
             }
         });
 
+        IntentFilter filter1 = new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION);
+        getActivity().registerReceiver(brightnessReceiver, filter1);
 
         return view;
+    }
+
+    private void setBrightness(int value) {
+        String address = BluetoothHandler.address;
+        if (address == null) {
+            Toast.makeText(getContext(), "No Bluetooth device connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        BluetoothPeripheral peripheral = getPeripheral(address);
+        if (peripheral != null && peripheral.getState() == ConnectionState.CONNECTED) {
+            BluetoothGattCharacteristic lampBrightnessCharacteristic = peripheral.getCharacteristic(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID);
+            if (lampBrightnessCharacteristic != null) {
+//                peripheral.readCharacteristic(lampStateCharacteristic);
+//                String currentState = new String(lampBrightnessCharacteristic.getValue());
+//                Log.d("VALUE", currentState);
+//                // Toggle the lamp state
+//                String newState = "OFF".equals(currentState) ? "ON" : "OFF";
+                byte[] brightnessValue = new byte[]{(byte) value};
+
+                peripheral.writeCharacteristic(lampBrightnessCharacteristic, brightnessValue, WriteType.WITH_RESPONSE);
+            }
+        } else {
+            Toast.makeText(getContext(), "Bluetooth device is not connected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private BluetoothPeripheral getPeripheral(String peripheralAddress) {
+        BluetoothCentralManager central = BluetoothHandler.getInstance(getContext()).central;
+        return central.getPeripheral(peripheralAddress);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().unregisterReceiver(brightnessReceiver);
     }
 
 }
