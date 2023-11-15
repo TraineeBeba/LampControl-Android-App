@@ -160,6 +160,9 @@ public class HomeFrame extends Fragment {
                 String newState = "OFF".equals(currentState) ? "ON" : "OFF";
                 byte[] newValue = newState.getBytes();
                 peripheral.writeCharacteristic(lampStateCharacteristic, newValue, WriteType.WITH_RESPONSE);
+                if(newState.equals("ON")){
+                    
+                }
                 toggleVisual(newState);
             }
         } else {

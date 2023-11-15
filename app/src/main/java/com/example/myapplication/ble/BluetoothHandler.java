@@ -26,6 +26,9 @@ import com.welie.blessed.ScanFailure;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class BluetoothHandler {
@@ -35,7 +38,9 @@ public class BluetoothHandler {
     public static final String DISCONNECT_LAMP_STATE_UPDATE_ACTION = "com.example.myapplication.DISCONNECT_LAMP_STATE_UPDATE_ACTION";
     public static final String EXTRA_LAMP_STATE = "EXTRA_LAMP_STATE";
 
-    public static final String MEASUREMENT_EXTRA_PERIPHERAL = "blessed.measurement.peripheral";
+    public static final String BRIGHTNESS_UPDATE_ACTION = "com.example.myapplication.BRIGHTNESS_UPDATE_ACTION";
+    public static final String EXTRA_BRIGHTNESS = "EXTRA_BRIGHTNESS";
+
 
     public static final UUID LC_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
     public static final UUID LAMP_SWITCH_CHARACTERISTIC_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8");
@@ -63,6 +68,12 @@ public class BluetoothHandler {
 
     private void sendDisconnectLampStateUpdateBroadcast() {
         Intent intent = new Intent(DISCONNECT_LAMP_STATE_UPDATE_ACTION);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendBrightnessUpdateBroadcast(String brightness) {
+        Intent intent = new Intent(BRIGHTNESS_UPDATE_ACTION);
+        intent.putExtra(EXTRA_BRIGHTNESS, brightness);
         context.sendBroadcast(intent);
     }
     // Callback for peripherals
@@ -175,10 +186,18 @@ public class BluetoothHandler {
                 Log.d("NOTIFICATION", new String(value));
                 String lampState = new String(value);
                 sendLampStateUpdateBroadcast(lampState);
-            } else if(characteristicUUID.equals(LAMP_BRIGHTNESS_CHARACTERISTIC_UUID)){
-                Log.d("NOTIFICATION",String.format("BRIGHTNESS CHANGED"));
-                Log.d("NOTIFICATION", new String(value));
-            } else if(characteristicUUID.equals(LAMP_MODE_CHARACTERISTIC_UUID)){
+            }else if(characteristicUUID.equals(LAMP_BRIGHTNESS_CHARACTERISTIC_UUID)){
+                Log.d("NOTIFICATION", "BRIGHTNESS CHANGED");
+
+                int brightness = parser.getUInt8();
+                Log.d("BLE", "Brightness value: " + brightness);
+
+
+                // Convert integer to string and send broadcast
+                String brightnessStr = String.valueOf(brightness);
+                sendBrightnessUpdateBroadcast(brightnessStr);
+            }
+            else if(characteristicUUID.equals(LAMP_MODE_CHARACTERISTIC_UUID)){
                 Log.d("NOTIFICATION",String.format("MODE CHANGED"));
                 Log.d("NOTIFICATION", new String(value));
             }
@@ -207,12 +226,7 @@ public class BluetoothHandler {
         public void onMtuChanged(@NotNull BluetoothPeripheral peripheral, int mtu, @NotNull GattStatus status) {
             Log.d("Scan",String.format("new MTU set: %d", mtu));
         }
-        //
-        private void sendMeasurement(@NotNull Intent intent, @NotNull BluetoothPeripheral peripheral ) {
-            intent.putExtra(MEASUREMENT_EXTRA_PERIPHERAL, peripheral.getAddress());
-            intent.setPackage(context.getPackageName());
-            context.sendBroadcast(intent);
-        }
+
 //
 //        private void writeContourClock(@NotNull BluetoothPeripheral peripheral) {
 //            Calendar calendar = Calendar.getInstance();
