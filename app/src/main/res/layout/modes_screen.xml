@@ -98,34 +98,30 @@
                     android:gravity="center"
                     android:visibility="invisible">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/activeColorBtnMode2_1"
-                        app:backgroundTint="#AAE600"
                         android:layout_marginLeft="230dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/circle_fone" />
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/activeColorBtnMode2_2"
                         android:layout_marginLeft="10dp"
-                        app:backgroundTint="#AAE600"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/circle_fone" />
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/activeColorBtnMode2_3"
                         android:layout_marginLeft="10dp"
-                        app:backgroundTint="#AAE600"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/circle_fone" />
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/activeColorBtnMode2_4"
                         android:layout_marginLeft="10dp"
-                        app:backgroundTint="#AAE600"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/circle_fone" />
@@ -141,10 +137,9 @@
                     android:gravity="center"
                     android:visibility="invisible">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/activeColorBtnMode3_1"
                         android:layout_marginLeft="110dp"
-                        app:backgroundTint="#AAE600"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/circle_fone" />
@@ -168,44 +163,39 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center">
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn1"
-                            app:backgroundTint="#FFE600"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn2"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#FF0000"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn3"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#52FF00"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn4"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#00A3FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn5"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#00F0FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone"/>
+                            android:background="@drawable/circle_fone" />
 
                     </LinearLayout>
 
@@ -217,41 +207,36 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center">
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn6"
-                            app:backgroundTint="#FFA500"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
-                            android:id="@+id/myButton7"
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/colorBtn7"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#B19CD9"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn8"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#FFC0CB"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn9"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#0000FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn10"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#808000"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
@@ -266,41 +251,36 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center">
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn11"
-                            app:backgroundTint="#FA00FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn12"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#FA00FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn13"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#FA00FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn14"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#FA00FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn15"
                             android:layout_marginLeft="30dp"
-                            app:backgroundTint="#FA00FF"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/circle_fone" />

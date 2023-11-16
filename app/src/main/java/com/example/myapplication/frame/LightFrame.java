@@ -24,7 +24,12 @@ import android.widget.Toast;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 
-
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import com.example.myapplication.MainActivity;
@@ -56,7 +61,6 @@ public class LightFrame extends Fragment {
     private Button button_ActiveColor2_4;
     private Button button_ActiveColor3_1;
 
-    private GradientDrawable drawable;
     private ImageView imageViewMode;
 
     private LinearLayout groupActiveLayout1;
@@ -95,6 +99,11 @@ public class LightFrame extends Fragment {
         }
     };
 
+
+    private void colorStartAllButton(){
+        Drawable background1 = button_ActiveColor1_1.getBackground();
+        ((ShapeDrawable)background1).getPaint().setColor(Color.RED);
+    }
 
     public int scaleValue(double inputValue) {
         int minOld = 0;
