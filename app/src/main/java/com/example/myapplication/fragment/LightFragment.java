@@ -65,6 +65,7 @@ public class LightFragment extends Fragment {
 
 
     private boolean onClicker = false;
+    private int numberActiveNumber = 0;
 
 
     private Button[] colorCircleButtons = new Button[15];
@@ -335,9 +336,9 @@ public class LightFragment extends Fragment {
         });
 
         for (int i = 0; i < colorCircleButtons.length; i++) {
-            int index = i;
+
             colorCircleButtons[i].setOnClickListener(v -> {
-                buttonClick(index, v);
+                onTouchCircleBtn(v);
 
             });
         }
@@ -347,32 +348,50 @@ public class LightFragment extends Fragment {
         });
 
         button_ActiveColor1_1.setOnClickListener(v -> {
+            numberActiveNumber = 0;
+            onClicker = !onClicker;
             onTouchCircleArctiveBtn(v, backgroundActiveBtn1_1);
+            Log.d("Мітка", "Onclick: " + onClicker);
         });
 
         button_ActiveColor2_1.setOnClickListener(v -> {
-            disablePrevActiveCircleBtn();
+            numberActiveNumber = 1;
+            onClicker = !onClicker;
+            disablePrevActiveCircleBtnMode2();
             onTouchCircleArctiveBtn(v, backgroundActiveBtn2_1);
+            Log.d("Мітка", "Onclick: " + onClicker);
         });
 
         button_ActiveColor2_2.setOnClickListener(v -> {
-            disablePrevActiveCircleBtn();
+            numberActiveNumber = 2;
+            onClicker = !onClicker;
+            disablePrevActiveCircleBtnMode2();
             onTouchCircleArctiveBtn(v, backgroundActiveBtn2_2);
+
+            Log.d("Мітка", "Onclick: " + onClicker);
         });
 
         button_ActiveColor2_3.setOnClickListener(v -> {
-            disablePrevActiveCircleBtn();
+            numberActiveNumber = 3;
+            onClicker = !onClicker;
+            disablePrevActiveCircleBtnMode2();
             onTouchCircleArctiveBtn(v, backgroundActiveBtn2_3);
+            Log.d("Мітка", "Onclick: " + onClicker);
         });
 
         button_ActiveColor2_4.setOnClickListener(v -> {
-            disablePrevActiveCircleBtn();
+            numberActiveNumber = 4;
+            onClicker = !onClicker;
+            disablePrevActiveCircleBtnMode2();
             onTouchCircleArctiveBtn(v, backgroundActiveBtn2_4);
+            Log.d("Мітка", "Onclick: " + onClicker);
         });
 
         button_ActiveColor3_1.setOnClickListener(v -> {
-
+            numberActiveNumber = 5;
+            onClicker = !onClicker;
             onTouchCircleArctiveBtn(v, backgroundActiveBtn3_1);
+            Log.d("Мітка", "Onclick: " + onClicker);
         });
 
 
@@ -406,7 +425,6 @@ public class LightFragment extends Fragment {
                 break;
             case 2:
                 imageViewMode.setImageResource(R.drawable.mode_three_on);
-
                 break;
         }
     }
@@ -420,18 +438,7 @@ public class LightFragment extends Fragment {
 
     }
 
-    private void buttonClick(int buttonIndex, View v) {
-        onTouchCircleBtn(v);
 
-//        switch (buttonIndex) {
-//            case 0:
-//
-//                break;
-//            case 1:
-//                break;
-//
-//        }
-    }
 
     private void writePrevStateMode(int numberMode){
         if (LampViewState.getPrevNumberMode() != numberMode){
@@ -450,6 +457,27 @@ public class LightFragment extends Fragment {
             ((GradientDrawable)background).setStroke(3, Color.WHITE);
 
         }
+    }
+
+    private void disablePrevActiveCircleBtnMode2(){
+
+
+        button_ActiveColor2_1.setScaleX(1f);
+        button_ActiveColor2_1.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_1).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_2.setScaleX(1f);
+        button_ActiveColor2_2.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_2).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_3.setScaleX(1f);
+        button_ActiveColor2_3.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_3).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_4.setScaleX(1f);
+        button_ActiveColor2_4.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_4).setStroke(3, Color.WHITE);
+
     }
 
     private void disablePrevActiveCircleBtn(){
@@ -490,25 +518,45 @@ public class LightFragment extends Fragment {
             v.setScaleX(1.1f);
             v.setScaleY(1.1f);
             ((GradientDrawable)background).setStroke(10, Color.WHITE);
+
+
+            switch (numberActiveNumber){
+                case 0:
+                    ((GradientDrawable)backgroundActiveBtn1_1).setColor(((GradientDrawable)background).getColor());
+                case 1:
+                    ((GradientDrawable)backgroundActiveBtn2_1).setColor(((GradientDrawable)background).getColor());
+                case 2:
+                    ((GradientDrawable)backgroundActiveBtn2_2).setColor(((GradientDrawable)background).getColor());
+                case 3:
+                    ((GradientDrawable)backgroundActiveBtn2_3).setColor(((GradientDrawable)background).getColor());
+                case 4:
+                    ((GradientDrawable)backgroundActiveBtn2_4).setColor(((GradientDrawable)background).getColor());
+                case 5:
+                    ((GradientDrawable)backgroundActiveBtn3_1).setColor(((GradientDrawable)background).getColor());
+            }
+
         }
 
     }
 
 
+
+
     private void onTouchCircleArctiveBtn(View v, Drawable background1){
 
-        if (!onClicker){
+        if (onClicker){
+            Log.d("Мітка", "Onclick: " + onClicker);
             v.setScaleX(1.1f);
             v.setScaleY(1.1f);
             ((GradientDrawable)background1).setStroke(10, Color.WHITE);
-            onClicker = true;
+
         }
         else{
             v.setScaleX(1.0f);
             v.setScaleY(1.0f);
             ((GradientDrawable)background1).setStroke(3, Color.WHITE);
             disablePrevCircleBtn();
-            onClicker = false;
+
        }
     }
 }
