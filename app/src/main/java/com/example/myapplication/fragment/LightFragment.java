@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment;
 
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_BRIGHTNESS_CHARACTERISTIC_UUID;
+import static com.example.myapplication.ble.BluetoothHandler.LAMP_MODE_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
 
@@ -73,12 +74,51 @@ public class LightFragment extends Fragment {
             if (intent.getAction().equals(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION)) {
                 String brightnessStr = intent.getStringExtra(BluetoothHandler.EXTRA_BRIGHTNESS);
                 int brightness = Integer.valueOf(brightnessStr);
-                updateVisual(brightness);
+                updateVisualBar(brightness);
             }
         }
     };
 
-    private void updateVisual(int brightness) {
+    private final BroadcastReceiver modeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothHandler.MODE_UPDATE_ACTION)) {
+                String modeStr = intent.getStringExtra(BluetoothHandler.EXTRA_MODE);
+                int mode = Integer.valueOf(modeStr);
+                updateVisualMode(mode);
+            }
+        }
+    };
+
+    private void updateVisualMode(int mode) {
+        LampViewState.setNumberMode(mode);
+        Log.d("MODE", String.valueOf(mode));
+        if(mode == 0) {
+            groupActiveLayout1.setVisibility(View.VISIBLE);
+            groupActiveLayout2.setVisibility(View.INVISIBLE);
+            groupActiveLayout3.setVisibility(View.INVISIBLE);
+
+            imageViewMode.setImageResource(R.drawable.mode_one_on);
+        }
+        else if(mode == 1){
+            imageViewMode.setImageResource(R.drawable.mode_one_on);
+            groupActiveLayout1.setVisibility(View.INVISIBLE);
+            groupActiveLayout2.setVisibility(View.VISIBLE);
+            groupActiveLayout3.setVisibility(View.INVISIBLE);
+
+            imageViewMode.setImageResource(R.drawable.mode_two_on);
+        }
+        else if(mode == 2){
+            imageViewMode.setImageResource(R.drawable.mode_one_on);
+            groupActiveLayout1.setVisibility(View.INVISIBLE);
+            groupActiveLayout2.setVisibility(View.INVISIBLE);
+            groupActiveLayout3.setVisibility(View.VISIBLE);
+
+            imageViewMode.setImageResource(R.drawable.mode_three_on);
+        }
+    }
+
+    private void updateVisualBar(int brightness) {
         Log.d("Brightness", String.valueOf(brightness));
 
         int currentPosition = seekBar.getProgress();
@@ -87,7 +127,6 @@ public class LightFragment extends Fragment {
 
         if(calculatedPosition != currentPosition){
             LampViewState.setSeekBarPos(calculatedPosition);
-            Log.d("UPDAAAATE", "UPDAAAATE");
             seekBar.setProgress(calculatedPosition);
         }
 
@@ -159,6 +198,10 @@ public class LightFragment extends Fragment {
     private void readLampState() throws BluetoothNotConnectedException, CharacteristicNotFoundException {
         BluetoothHandler bluetoothHandler = BluetoothHandler.getInstance(getContext());
         bluetoothHandler.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
+    }
+    private void writeMode(byte[] newValue) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
+        BluetoothHandler bluetoothHandler = BluetoothHandler.getInstance(getContext());
+        bluetoothHandler.writeCharacteristic(LC_SERVICE_UUID, LAMP_MODE_CHARACTERISTIC_UUID, newValue, WriteType.WITH_RESPONSE);
     }
     private void writeBrightness(byte[] newValue) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
         BluetoothHandler bluetoothHandler = BluetoothHandler.getInstance(getContext());
@@ -251,6 +294,18 @@ public class LightFragment extends Fragment {
 
             imageViewMode.setImageResource(R.drawable.mode_one_on);
             LampViewState.setNumberMode(0);
+
+            try {
+                readLampState();
+                if(LampViewState.getIsLampOn() == Lamp.ON){
+                    int i = 0;
+                    byte[] mode = new byte[]{(byte) i};
+                    writeMode(mode);
+                }
+            } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
         });
 
         btnMode2.setOnClickListener(v -> {
@@ -261,6 +316,17 @@ public class LightFragment extends Fragment {
 
             imageViewMode.setImageResource(R.drawable.mode_two_on);
             LampViewState.setNumberMode(1);
+
+            try {
+                readLampState();
+                if(LampViewState.getIsLampOn() == Lamp.ON){
+                    int i = 1;
+                    byte[] mode = new byte[]{(byte) i};
+                    writeMode(mode);
+                }
+            } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         btnMode3.setOnClickListener(v -> {
@@ -271,6 +337,17 @@ public class LightFragment extends Fragment {
 
             imageViewMode.setImageResource(R.drawable.mode_three_on);
             LampViewState.setNumberMode(2);
+
+            try {
+                readLampState();
+                if(LampViewState.getIsLampOn() == Lamp.ON){
+                    int i = 2;
+                    byte[] mode = new byte[]{(byte) i};
+                    writeMode(mode);
+                }
+            } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         button_add_color.setOnClickListener(new View.OnClickListener() {
@@ -298,10 +375,14 @@ public class LightFragment extends Fragment {
     private void registerReceivers() {
         IntentFilter filter1 = new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION);
         getActivity().registerReceiver(brightnessReceiver, filter1);
+
+        IntentFilter filter2 = new IntentFilter(BluetoothHandler.MODE_UPDATE_ACTION);
+        getActivity().registerReceiver(modeReceiver, filter2);
     }
 
     private void unRegisterReceivers() {
         getActivity().unregisterReceiver(brightnessReceiver);
+        getActivity().unregisterReceiver(modeReceiver);
     }
 
     private void saveMode(int numbermode){
