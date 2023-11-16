@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frame.WifiFrame">
+    tools:context=".fragment.WifiFragment">
 
     <FrameLayout
-        android:id="@+id/mainLayout3"
+        android:id="@+id/connectionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -1,14 +1,9 @@
 package com.example.myapplication;
 
-import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
-import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,105 +13,58 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.ble.BluetoothHandler;
-import com.example.myapplication.frame.HomeFrame;
-import com.example.myapplication.frame.LightFrame;
-import com.example.myapplication.frame.WifiFrame;
-import com.welie.blessed.BluetoothCentralManager;
-import com.welie.blessed.BluetoothPeripheral;
-import com.welie.blessed.WriteType;
+import com.example.myapplication.constant.FragmentType;
+import com.example.myapplication.fragment.HomeFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    Button btnToggleLamp;
+    private final Map<String, Fragment> fragmentCache = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.home);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout1, new HomeFrame())
+                .replace(R.id.homeLayout, new HomeFragment())
                 .commit();
     }
 
-
-    public void showFromLightToHomeFragment() {
-        Log.d("AAAA ", "showHome");
+    public void navigateToFragment(int layoutId, FragmentType fragmentType) {
+        Fragment newFragment = FragmentType.createFragment(fragmentType);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout2, new HomeFrame())
+                .replace(layoutId, newFragment)
                 .commit();
     }
 
-    public void showFromWifiToHomeFragment() {
-        Log.d("AAAA ", "showHome");
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout3, new HomeFrame())
-                .commit();
-    }
-
-    public void showFromHomeToLightFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout1, new LightFrame())
-                .commit();
-    }
-
-    public void showFromWifiToLightFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout3, new LightFrame())
-                .commit();
-    }
-
-    public void showFromHomeToWifiFragment() {
-        Log.d("AAAA ", "showWifi");
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout1, new WifiFrame())
-                .commit();
-    }
-
-    public void showFromLightToWifiFragment() {
-        Log.d("AAAA ", "showWifi");
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout2, new WifiFrame())
-                .commit();
-    }
 
     private final ActivityResultLauncher<String[]> blePermissionRequest = registerForActivityResult(
             new ActivityResultContracts.RequestMultiplePermissions(),
-            new ActivityResultCallback<Map<String, Boolean>>() {
-                @Override
-                public void onActivityResult(Map<String, Boolean> result) {
-                    for(String key : result.keySet()) {
-//                        Timber.d("%s, %s", key, result);
-
-                    }
+            result -> {
+                for(String key : result.keySet()) {
+                        Log.d("ActivityResultLauncher", String.format("%s, %s", key, result));
                 }
             });
 
     private final ActivityResultLauncher<Intent> enableBleRequest = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        onResume();
-                    }
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    onResume();
                 }
             });
 
@@ -149,14 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
     @NotNull
     private BluetoothManager getBluetoothManager() {
-
         return Objects.requireNonNull((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE),"cannot get BluetoothManager");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        unregisterReceiver(locationServiceStateReceiver);
     }
 
     private void checkPermissions() {
