@@ -173,7 +173,7 @@ public class LightFrame extends Fragment {
             }
         });
 
-      
+
 
         IntentFilter filter1 = new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION);
         getActivity().registerReceiver(brightnessReceiver, filter1);
