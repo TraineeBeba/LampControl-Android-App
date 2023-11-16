@@ -6,4 +6,5 @@ public abstract class State {
     public static int seekBarposition = 4;
 
     public static int numberMode = 0;
+
 }
