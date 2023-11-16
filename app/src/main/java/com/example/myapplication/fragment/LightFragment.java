@@ -180,8 +180,14 @@ public class LightFragment extends Fragment {
         btnMode2 = view.findViewById(R.id.button_rainbow);
         btnMode3 = view.findViewById(R.id.button_data_night);
 
+
         button_ActiveColor1_1 = view.findViewById(R.id.activeColorBtnMode1_1);
         button_add_color = view.findViewById(R.id.addColorBtn);
+
+
+        groupActiveLayout1 = view.findViewById(R.id.groupActiveColors1);
+        groupActiveLayout2 = view.findViewById(R.id.groupActiveColors2);
+        groupActiveLayout3 = view.findViewById(R.id.groupActiveColors3);
 
 
         //        textView.setText(LampViewState.getBrightnessPercentageText());
