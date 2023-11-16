@@ -1,34 +1,34 @@
 package com.example.myapplication.constant;
 
 public abstract class LampViewState {
-    private static boolean isLampOn = false;
-    private static int valueBrightnessText = 10;
-    private static int seekBarPosition = 0;
+    private static Lamp isLampOn = Lamp.OFF;
+    private static int brightnessPercentageText = 10;
+    private static int seekBarPos = 0;
+    private static int prevSeekBarPos = 0;
     private static int numberMode = 0;
-    private static int previousProgress = 0;
 
-    public static boolean isIsLampOn() {
+    public static Lamp getIsLampOn() {
         return isLampOn;
     }
 
-    public static void setIsLampOn(boolean isLampOn) {
+    public static void setIsLampOn(Lamp isLampOn) {
         LampViewState.isLampOn = isLampOn;
     }
 
-    public static int getValueBrightnessText() {
-        return valueBrightnessText;
+    public static int getBrightnessPercentageText() {
+        return brightnessPercentageText;
     }
 
-    public static void setValueBrightnessText(int valueBrightnessText) {
-        LampViewState.valueBrightnessText = valueBrightnessText;
+    public static void setBrightnessPercentageText(int brightnessPercentageText) {
+        LampViewState.brightnessPercentageText = brightnessPercentageText;
     }
 
-    public static int getSeekBarPosition() {
-        return seekBarPosition;
+    public static int getSeekBarPos() {
+        return seekBarPos;
     }
 
-    public static void setSeekBarPosition(int seekBarPosition) {
-        LampViewState.seekBarPosition = seekBarPosition;
+    public static void setSeekBarPos(int seekBarPos) {
+        LampViewState.seekBarPos = seekBarPos;
     }
 
     public static int getNumberMode() {
@@ -39,11 +39,11 @@ public abstract class LampViewState {
         LampViewState.numberMode = numberMode;
     }
 
-    public static int getPreviousProgress() {
-        return previousProgress;
+    public static int getPrevSeekBarPos() {
+        return prevSeekBarPos;
     }
 
-    public static void setPreviousProgress(int previousProgress) {
-        LampViewState.previousProgress = previousProgress;
+    public static void setPrevSeekBarPos(int prevSeekBarPos) {
+        LampViewState.prevSeekBarPos = prevSeekBarPos;
     }
 }

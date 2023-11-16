@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
+import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
+import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.welie.blessed.BluetoothBytesParser;
 import com.welie.blessed.BluetoothCentralManager;
 import com.welie.blessed.BluetoothCentralManagerCallback;
@@ -20,11 +22,13 @@ import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 import com.welie.blessed.BondState;
 import com.welie.blessed.ConnectionPriority;
+import com.welie.blessed.ConnectionState;
 import com.welie.blessed.GattStatus;
 import com.welie.blessed.HciStatus;
 import com.welie.blessed.PhyOptions;
 import com.welie.blessed.PhyType;
 import com.welie.blessed.ScanFailure;
+import com.welie.blessed.WriteType;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -54,7 +58,7 @@ public class BluetoothHandler {
     private  Context context;
     private final Handler handler = new Handler();
 
-    public static String address;
+    private BluetoothPeripheral peripheral = null;
 
     private void sendLampStateUpdateBroadcast(String lampState) {
         Intent intent = new Intent(LAMP_STATE_UPDATE_ACTION);
@@ -72,6 +76,19 @@ public class BluetoothHandler {
         intent.putExtra(EXTRA_BRIGHTNESS, brightness);
         context.sendBroadcast(intent);
     }
+    public BluetoothGattCharacteristic getCharacteristic(UUID serviceUUID, UUID characteristicUUID) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
+        if (this.peripheral == null || this.peripheral.getState() != ConnectionState.CONNECTED) {
+            throw new BluetoothNotConnectedException("Bluetooth device not connected");
+        }
+
+        BluetoothGattCharacteristic characteristic = this.peripheral.getCharacteristic(serviceUUID, characteristicUUID);
+        if (characteristic == null) {
+            throw new CharacteristicNotFoundException("Characteristic not found");
+        }
+
+        return characteristic;
+    }
+
     // Callback for peripherals
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
         @Override
@@ -149,22 +166,28 @@ public class BluetoothHandler {
 
         @Override
         public void onConnectedPeripheral(@NotNull BluetoothPeripheral peripheral) {
-            address = peripheral.getAddress();
+            synchronized (BluetoothHandler.this) {
+                BluetoothHandler.getInstance(context).peripheral = peripheral;
+            }
             Log.d("Scan",String.format("connected to '%s'", peripheral.getName()));
         }
 
         @Override
         public void onConnectionFailed(@NotNull BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
-            address = null;
+            BluetoothHandler.getInstance(context).peripheral = null;
             Log.d("Scan",String.format("connection '%s' failed with status %s", peripheral.getName(), status));
         }
 
         @Override
         public void onDisconnectedPeripheral(@NotNull final BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
-            //TODO
+            synchronized (BluetoothHandler.this) {
+                if (BluetoothHandler.getInstance(context).peripheral != null && BluetoothHandler.getInstance(context).peripheral.equals(peripheral)) {
+                    BluetoothHandler.getInstance(context).peripheral = null;
+                }
+            }
             sendDisconnectLampStateUpdateBroadcast();
-            address = null;
             Log.d("Scan",String.format("disconnected '%s' with status %s", peripheral.getName(), status));
+
             // Reconnect to this device when it becomes available again
             handler.postDelayed(new Runnable() {
                 @Override
@@ -225,5 +248,15 @@ public class BluetoothHandler {
                         LC_SERVICE_UUID,
                 }
         ),1000);
+    }
+
+    public void readCharacteristic(UUID serviceUUID, UUID characteristicUUID) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
+        getCharacteristic(serviceUUID, characteristicUUID);
+        peripheral.readCharacteristic(serviceUUID, characteristicUUID);
+    }
+
+    public void writeCharacteristic(UUID serviceUUID, UUID characteristicUUID, byte[] newValue, WriteType writeType) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
+        BluetoothGattCharacteristic characteristic = getCharacteristic(serviceUUID, characteristicUUID);
+        peripheral.writeCharacteristic(characteristic, newValue, writeType);
     }
 }
