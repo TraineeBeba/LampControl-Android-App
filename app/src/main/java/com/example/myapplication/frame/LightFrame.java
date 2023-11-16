@@ -21,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
+
+
 
 import androidx.fragment.app.Fragment;
 import com.example.myapplication.MainActivity;
@@ -33,6 +37,7 @@ import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.ConnectionState;
 import com.welie.blessed.WriteType;
 
+import android.graphics.drawable.GradientDrawable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
@@ -43,10 +48,23 @@ public class LightFrame extends Fragment {
     private Button button_mode1;
     private Button button_mode2;
     private Button button_mode3;
+    private Button button_add_color;
+    private Button button_ActiveColor1_1;
+    private Button button_ActiveColor2_1;
+    private Button button_ActiveColor2_2;
+    private Button button_ActiveColor2_3;
+    private Button button_ActiveColor2_4;
+    private Button button_ActiveColor3_1;
 
+    private GradientDrawable drawable;
     private ImageView imageViewMode;
 
-    private int maxOld = 9;
+    private LinearLayout groupActiveLayout1;
+
+    private LinearLayout groupActiveLayout2;
+    private LinearLayout groupActiveLayout3;
+
+    private int maxOld = 9; // count step for bringe
     private int positionBar;
     SeekBar seekBar;
     TextView textView;
@@ -117,6 +135,12 @@ public class LightFrame extends Fragment {
         textView.setText(String.valueOf(State.valueBrightnessText + " %"));
         seekBar.setProgress(State.seekBarposition);
 
+        groupActiveLayout1 = view.findViewById(R.id.groupActiveColors1);
+        groupActiveLayout2 = view.findViewById(R.id.groupActiveColors2);
+        groupActiveLayout3 = view.findViewById(R.id.groupActiveColors3);
+
+
+
 
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -169,6 +193,9 @@ public class LightFrame extends Fragment {
             @Override
             public void onClick(View v) {
                 imageViewMode.setImageResource(R.drawable.mode_one_on);
+                groupActiveLayout1.setVisibility(View.VISIBLE);
+                groupActiveLayout2.setVisibility(View.INVISIBLE);
+                groupActiveLayout3.setVisibility(View.INVISIBLE);
                 State.numberMode = 0;
             }
         });
@@ -178,6 +205,9 @@ public class LightFrame extends Fragment {
             @Override
             public void onClick(View v) {
                 imageViewMode.setImageResource(R.drawable.mode_two_on);
+                groupActiveLayout1.setVisibility(View.INVISIBLE);
+                groupActiveLayout2.setVisibility(View.VISIBLE);
+                groupActiveLayout3.setVisibility(View.INVISIBLE);
                 State.numberMode = 1;
             }
         });
@@ -187,6 +217,9 @@ public class LightFrame extends Fragment {
             @Override
             public void onClick(View v) {
                 imageViewMode.setImageResource(R.drawable.mode_three_on);
+                groupActiveLayout1.setVisibility(View.INVISIBLE);
+                groupActiveLayout2.setVisibility(View.INVISIBLE);
+                groupActiveLayout3.setVisibility(View.VISIBLE);
                 State.numberMode = 2;
             }
         });
@@ -194,6 +227,23 @@ public class LightFrame extends Fragment {
         IntentFilter filter1 = new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION);
         getActivity().registerReceiver(brightnessReceiver, filter1);
 
+
+        button_add_color = view.findViewById(R.id.addColorBtn);
+        button_add_color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        button_ActiveColor1_1 = view.findViewById(R.id.activeColorBtnMode1_1);
+        button_ActiveColor1_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return view;
     }
 
