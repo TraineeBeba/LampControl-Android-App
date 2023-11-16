@@ -41,11 +41,13 @@ public class LightFragment extends Fragment {
     private Button btnMode2;
     private Button btnMode3;
 
+    private Button button_ActiveColor1_1;
     private Button button_ActiveColor2_1;
     private Button button_ActiveColor2_2;
     private Button button_ActiveColor2_3;
     private Button button_ActiveColor2_4;
     private Button button_ActiveColor3_1;
+    private Button button_add_color;
 
     private LinearLayout groupActiveLayout1;
 
@@ -178,6 +180,10 @@ public class LightFragment extends Fragment {
         btnMode2 = view.findViewById(R.id.button_rainbow);
         btnMode3 = view.findViewById(R.id.button_data_night);
 
+        button_ActiveColor1_1 = view.findViewById(R.id.activeColorBtnMode1_1);
+        button_add_color = view.findViewById(R.id.addColorBtn);
+
+
         //        textView.setText(LampViewState.getBrightnessPercentageText());
     }
 
@@ -232,18 +238,47 @@ public class LightFragment extends Fragment {
         });
 
         btnMode1.setOnClickListener(v -> {
+
+            groupActiveLayout1.setVisibility(View.VISIBLE);
+            groupActiveLayout2.setVisibility(View.INVISIBLE);
+            groupActiveLayout3.setVisibility(View.INVISIBLE);
+
             imageViewMode.setImageResource(R.drawable.mode_one_on);
             LampViewState.setNumberMode(0);
         });
 
         btnMode2.setOnClickListener(v -> {
+            imageViewMode.setImageResource(R.drawable.mode_one_on);
+            groupActiveLayout1.setVisibility(View.INVISIBLE);
+            groupActiveLayout2.setVisibility(View.VISIBLE);
+            groupActiveLayout3.setVisibility(View.INVISIBLE);
+
             imageViewMode.setImageResource(R.drawable.mode_two_on);
             LampViewState.setNumberMode(1);
         });
 
         btnMode3.setOnClickListener(v -> {
+            imageViewMode.setImageResource(R.drawable.mode_one_on);
+            groupActiveLayout1.setVisibility(View.INVISIBLE);
+            groupActiveLayout2.setVisibility(View.INVISIBLE);
+            groupActiveLayout3.setVisibility(View.VISIBLE);
+
             imageViewMode.setImageResource(R.drawable.mode_three_on);
             LampViewState.setNumberMode(2);
+        });
+
+        button_add_color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        button_ActiveColor1_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
         });
     }
 
