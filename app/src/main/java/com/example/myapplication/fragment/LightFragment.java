@@ -442,29 +442,7 @@ public class LightFragment extends Fragment {
 
     private void disablePrevActiveCircleBtnMode2(){
 
-        button_ActiveColor1_1.setScaleX(1f);
-        button_ActiveColor1_1.setScaleY(1f);
-        ((GradientDrawable)backgroundActiveBtn1_1).setStroke(3, Color.WHITE);
-
-        button_ActiveColor2_1.setScaleX(1f);
-        button_ActiveColor2_1.setScaleY(1f);
-        ((GradientDrawable)backgroundActiveBtn2_1).setStroke(3, Color.WHITE);
-
-        button_ActiveColor2_2.setScaleX(1f);
-        button_ActiveColor2_2.setScaleY(1f);
-        ((GradientDrawable)backgroundActiveBtn2_2).setStroke(3, Color.WHITE);
-
-        button_ActiveColor2_3.setScaleX(1f);
-        button_ActiveColor2_3.setScaleY(1f);
-        ((GradientDrawable)backgroundActiveBtn2_3).setStroke(3, Color.WHITE);
-
-        button_ActiveColor2_4.setScaleX(1f);
-        button_ActiveColor2_4.setScaleY(1f);
-        ((GradientDrawable)backgroundActiveBtn2_4).setStroke(3, Color.WHITE);
-
-        button_ActiveColor1_1.setScaleX(1f);
-        button_ActiveColor1_1.setScaleY(1f);
-        ((GradientDrawable)backgroundActiveBtn3_1).setStroke(3, Color.WHITE);
+       
 
     }
 
@@ -475,6 +453,12 @@ public class LightFragment extends Fragment {
         v.setScaleX(1.1f);
         v.setScaleY(1.1f);
         ((GradientDrawable)background).setStroke(3, Color.YELLOW);
+    }
+
+    private void writeVariableOnClicker(int now, int prev){
+        if (now != prev){
+
+        }
     }
 
     private void onTouchCircleArctiveBtn(View v, Drawable background){
