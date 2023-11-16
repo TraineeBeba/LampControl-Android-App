@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,17 @@ public class LightFragment extends Fragment {
     private Button btnMode1;
     private Button btnMode2;
     private Button btnMode3;
+
+    private Button button_ActiveColor2_1;
+    private Button button_ActiveColor2_2;
+    private Button button_ActiveColor2_3;
+    private Button button_ActiveColor2_4;
+    private Button button_ActiveColor3_1;
+
+    private LinearLayout groupActiveLayout1;
+
+    private LinearLayout groupActiveLayout2;
+    private LinearLayout groupActiveLayout3;
 
     private boolean isSeekBarDisabled = false; // Add this flag
     private ImageView imageViewMode;

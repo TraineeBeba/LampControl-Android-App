@@ -1,7 +1,6 @@
 package com.example.myapplication.frame;
 
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_BRIGHTNESS_CHARACTERISTIC_UUID;
-import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
 
 import androidx.fragment.app.Fragment;
@@ -21,25 +20,18 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 
 
-
-import androidx.fragment.app.Fragment;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.State;
 import com.example.myapplication.ble.BluetoothHandler;
-import com.welie.blessed.BluetoothBytesParser;
 import com.welie.blessed.BluetoothCentralManager;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.ConnectionState;
 import com.welie.blessed.WriteType;
 
 import android.graphics.drawable.GradientDrawable;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
 
 public class LightFrame extends Fragment {
     private Button buttonHome;
@@ -50,19 +42,12 @@ public class LightFrame extends Fragment {
     private Button button_mode3;
     private Button button_add_color;
     private Button button_ActiveColor1_1;
-    private Button button_ActiveColor2_1;
-    private Button button_ActiveColor2_2;
-    private Button button_ActiveColor2_3;
-    private Button button_ActiveColor2_4;
-    private Button button_ActiveColor3_1;
+
 
     private GradientDrawable drawable;
     private ImageView imageViewMode;
 
-    private LinearLayout groupActiveLayout1;
 
-    private LinearLayout groupActiveLayout2;
-    private LinearLayout groupActiveLayout3;
 
     private int maxOld = 9; // count step for bringe
     private int positionBar;
@@ -188,41 +173,7 @@ public class LightFrame extends Fragment {
             }
         });
 
-        button_mode1 = view.findViewById(R.id.button_one_color);
-        button_mode1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewMode.setImageResource(R.drawable.mode_one_on);
-                groupActiveLayout1.setVisibility(View.VISIBLE);
-                groupActiveLayout2.setVisibility(View.INVISIBLE);
-                groupActiveLayout3.setVisibility(View.INVISIBLE);
-                State.numberMode = 0;
-            }
-        });
-
-        button_mode2 = view.findViewById(R.id.button_rainbow);
-        button_mode2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewMode.setImageResource(R.drawable.mode_two_on);
-                groupActiveLayout1.setVisibility(View.INVISIBLE);
-                groupActiveLayout2.setVisibility(View.VISIBLE);
-                groupActiveLayout3.setVisibility(View.INVISIBLE);
-                State.numberMode = 1;
-            }
-        });
-
-        button_mode3 = view.findViewById(R.id.button_data_night);
-        button_mode3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewMode.setImageResource(R.drawable.mode_three_on);
-                groupActiveLayout1.setVisibility(View.INVISIBLE);
-                groupActiveLayout2.setVisibility(View.INVISIBLE);
-                groupActiveLayout3.setVisibility(View.VISIBLE);
-                State.numberMode = 2;
-            }
-        });
+      
 
         IntentFilter filter1 = new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION);
         getActivity().registerReceiver(brightnessReceiver, filter1);
