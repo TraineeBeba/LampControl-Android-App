@@ -85,7 +85,7 @@
                         android:layout_marginLeft="110dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/circle_fone" />
+                        android:background="@drawable/circle_fone1" />
 
                 </LinearLayout>
 
@@ -167,35 +167,35 @@
                             android:id="@+id/colorBtn1"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone1" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn2"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone2" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn3"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone3" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn4"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone4" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn5"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone5" />
 
                     </LinearLayout>
 
@@ -211,35 +211,35 @@
                             android:id="@+id/colorBtn6"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone6" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn7"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone7" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn8"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone8" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn9"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone9" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn10"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone10" />
 
                     </LinearLayout>
 
@@ -255,35 +255,35 @@
                             android:id="@+id/colorBtn11"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone11" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn12"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone12" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn13"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone13" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn14"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone14" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/colorBtn15"
                             android:layout_marginLeft="30dp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/circle_fone" />
+                            android:background="@drawable/circle_fone15" />
 
                     </LinearLayout>
 

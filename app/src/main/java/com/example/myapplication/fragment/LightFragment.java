@@ -24,6 +24,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// Для зміни фону кнопок
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.widget.Button;
+
+
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
@@ -48,12 +57,27 @@ public class LightFragment extends Fragment {
     private Button button_ActiveColor2_3;
     private Button button_ActiveColor2_4;
     private Button button_ActiveColor3_1;
+    private Drawable backgroundActiveBtn1_1;
+    private Drawable backgroundActiveBtn2_1;
+    private Drawable backgroundActiveBtn2_2;
+    private Drawable backgroundActiveBtn2_3;
+    private Drawable backgroundActiveBtn2_4;
+    private Drawable backgroundActiveBtn3_1;
+
+
+    private boolean onClicker = false;
+
+
+    private Button[] colorCircleButtons = new Button[15];
+
     private Button button_add_color;
 
     private LinearLayout groupActiveLayout1;
 
     private LinearLayout groupActiveLayout2;
     private LinearLayout groupActiveLayout3;
+
+    Drawable background;
 
     private boolean isSeekBarDisabled = false; // Add this flag
     private ImageView imageViewMode;
@@ -169,6 +193,8 @@ public class LightFragment extends Fragment {
 
         registerReceivers();
 
+        // ((ShapeDrawable)background).getPaint().setColor(Color.RED);
+
         return view;
     }
 
@@ -223,14 +249,34 @@ public class LightFragment extends Fragment {
         btnMode2 = view.findViewById(R.id.button_rainbow);
         btnMode3 = view.findViewById(R.id.button_data_night);
 
-
-        button_ActiveColor1_1 = view.findViewById(R.id.activeColorBtnMode1_1);
-        button_add_color = view.findViewById(R.id.addColorBtn);
-
-
         groupActiveLayout1 = view.findViewById(R.id.groupActiveColors1);
         groupActiveLayout2 = view.findViewById(R.id.groupActiveColors2);
         groupActiveLayout3 = view.findViewById(R.id.groupActiveColors3);
+
+
+
+        button_add_color = view.findViewById(R.id.addColorBtn);
+
+        // background = button_ActiveColor1_1.getBackground();
+
+        initCircleBtn(view);
+
+        button_ActiveColor1_1 = view.findViewById(R.id.activeColorBtnMode1_1);
+        button_ActiveColor2_1 = view.findViewById(R.id.activeColorBtnMode2_1);
+        button_ActiveColor2_2 = view.findViewById(R.id.activeColorBtnMode2_2);
+        button_ActiveColor2_3 = view.findViewById(R.id.activeColorBtnMode2_3);
+        button_ActiveColor2_4 = view.findViewById(R.id.activeColorBtnMode2_4);
+        button_ActiveColor3_1 = view.findViewById(R.id.activeColorBtnMode3_1);
+
+        backgroundActiveBtn1_1 = button_ActiveColor1_1.getBackground();
+        backgroundActiveBtn2_1 = button_ActiveColor2_1.getBackground();
+        backgroundActiveBtn2_2 = button_ActiveColor2_2.getBackground();
+        backgroundActiveBtn2_3 = button_ActiveColor2_3.getBackground();
+        backgroundActiveBtn2_4 = button_ActiveColor2_4.getBackground();
+        backgroundActiveBtn3_1 = button_ActiveColor3_1.getBackground();
+
+
+
 
 
         //        textView.setText(LampViewState.getBrightnessPercentageText());
@@ -293,6 +339,8 @@ public class LightFragment extends Fragment {
             groupActiveLayout3.setVisibility(View.INVISIBLE);
 
             imageViewMode.setImageResource(R.drawable.mode_one_on);
+
+            writePrevStateMode(0);
             LampViewState.setNumberMode(0);
 
             try {
@@ -315,6 +363,7 @@ public class LightFragment extends Fragment {
             groupActiveLayout3.setVisibility(View.INVISIBLE);
 
             imageViewMode.setImageResource(R.drawable.mode_two_on);
+            writePrevStateMode(1);
             LampViewState.setNumberMode(1);
 
             try {
@@ -336,6 +385,7 @@ public class LightFragment extends Fragment {
             groupActiveLayout3.setVisibility(View.VISIBLE);
 
             imageViewMode.setImageResource(R.drawable.mode_three_on);
+            writePrevStateMode(2);
             LampViewState.setNumberMode(2);
 
             try {
@@ -350,19 +400,49 @@ public class LightFragment extends Fragment {
             }
         });
 
-        button_add_color.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        for (int i = 0; i < colorCircleButtons.length; i++) {
+            int index = i;
+            colorCircleButtons[i].setOnClickListener(v -> {
+                buttonClick(index, v);
 
-            }
+            });
+        }
+
+        button_add_color.setOnClickListener(v -> {
+
         });
 
-        button_ActiveColor1_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
+        button_ActiveColor1_1.setOnClickListener(v -> {
+            disablePrevActiveCircleBtnMode2();
+            onTouchCircleArctiveBtn(v, backgroundActiveBtn1_1);
         });
+
+        button_ActiveColor2_1.setOnClickListener(v -> {
+            disablePrevActiveCircleBtnMode2();
+            onTouchCircleArctiveBtn(v, backgroundActiveBtn2_1);
+        });
+
+        button_ActiveColor2_2.setOnClickListener(v -> {
+            disablePrevActiveCircleBtnMode2();
+            onTouchCircleArctiveBtn(v, backgroundActiveBtn2_2);
+        });
+
+        button_ActiveColor2_3.setOnClickListener(v -> {
+            disablePrevActiveCircleBtnMode2();
+            onTouchCircleArctiveBtn(v, backgroundActiveBtn2_3);
+        });
+
+        button_ActiveColor2_4.setOnClickListener(v -> {
+            disablePrevActiveCircleBtnMode2();
+            onTouchCircleArctiveBtn(v, backgroundActiveBtn2_4);
+        });
+
+        button_ActiveColor3_1.setOnClickListener(v -> {
+            disablePrevActiveCircleBtnMode2();
+            onTouchCircleArctiveBtn(v, backgroundActiveBtn3_1);
+        });
+
+
     }
 
     @Override
@@ -398,5 +478,102 @@ public class LightFragment extends Fragment {
                 break;
         }
     }
+
+    private void initCircleBtn(View view){
+        for (int i = 0; i < colorCircleButtons.length; i++) {
+            String buttonID = "colorBtn" + (i + 1);
+            int resID = getResources().getIdentifier(buttonID, "id", getContext().getPackageName());
+            colorCircleButtons[i] = view.findViewById(resID);
+        }
+
+    }
+
+    private void buttonClick(int buttonIndex, View v) {
+        onTouchCircleBtn(v);
+
+//        switch (buttonIndex) {
+//            case 0:
+//
+//                break;
+//            case 1:
+//                break;
+//
+//        }
+    }
+
+    private void writePrevStateMode(int numberMode){
+        if (LampViewState.getPrevNumberMode() != numberMode){
+            LampViewState.setPrevNumberMode(LampViewState.getNumberMode());
+        }
+
+    }
+
+    private void disablePrevCircleBtn(){
+
+        for (int i = 0; i < colorCircleButtons.length; i++) {
+
+            Drawable background = colorCircleButtons[i].getBackground();
+            colorCircleButtons[i].setScaleX(1f);
+            colorCircleButtons[i].setScaleY(1f);
+            ((GradientDrawable)background).setStroke(3, Color.WHITE);
+
+        }
+    }
+
+    private void disablePrevActiveCircleBtnMode2(){
+
+        button_ActiveColor1_1.setScaleX(1f);
+        button_ActiveColor1_1.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn1_1).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_1.setScaleX(1f);
+        button_ActiveColor2_1.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_1).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_2.setScaleX(1f);
+        button_ActiveColor2_2.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_2).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_3.setScaleX(1f);
+        button_ActiveColor2_3.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_3).setStroke(3, Color.WHITE);
+
+        button_ActiveColor2_4.setScaleX(1f);
+        button_ActiveColor2_4.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn2_4).setStroke(3, Color.WHITE);
+
+        button_ActiveColor1_1.setScaleX(1f);
+        button_ActiveColor1_1.setScaleY(1f);
+        ((GradientDrawable)backgroundActiveBtn3_1).setStroke(3, Color.WHITE);
+
+    }
+
+    private void onTouchCircleBtn(View v){
+        disablePrevCircleBtn();
+
+        Drawable background = v.getBackground();
+        v.setScaleX(1.1f);
+        v.setScaleY(1.1f);
+        ((GradientDrawable)background).setStroke(3, Color.YELLOW);
+    }
+
+    private void onTouchCircleArctiveBtn(View v, Drawable background){
+
+        if (!onClicker){
+            v.setScaleX(1.1f);
+            v.setScaleY(1.1f);
+            ((GradientDrawable)background).setStroke(3, Color.YELLOW);
+            onClicker = true;
+        }
+        else{
+            v.setScaleX(1.0f);
+            v.setScaleY(1.0f);
+            ((GradientDrawable)background).setStroke(3, Color.WHITE);
+            onClicker = false;
+        }
+    }
+
+
+
 
 }
