@@ -33,7 +33,6 @@ import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
-    private final Map<String, Fragment> fragmentCache = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,19 +170,14 @@ public class MainActivity extends AppCompatActivity {
             new AlertDialog.Builder(com.example.myapplication.MainActivity.this)
                     .setTitle("Location services are not enabled")
                     .setMessage("Scanning for Bluetooth peripherals requires locations services to be enabled.") // Want to enable?
-                    .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
+                    .setPositiveButton("Enable", (dialogInterface, i) -> {
+                        dialogInterface.cancel();
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // if this button is clicked, just close
-                            // the dialog box and do nothing
-                            dialog.cancel();
-                        }
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
                     })
                     .create()
                     .show();

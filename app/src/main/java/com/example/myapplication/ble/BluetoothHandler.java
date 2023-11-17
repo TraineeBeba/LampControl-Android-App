@@ -45,6 +45,8 @@ public class BluetoothHandler {
     public static final String DISCONNECT_LAMP_STATE_UPDATE_ACTION = "com.example.myapplication.DISCONNECT_LAMP_STATE_UPDATE_ACTION";
     public static final String BRIGHTNESS_UPDATE_ACTION = "com.example.myapplication.BRIGHTNESS_UPDATE_ACTION";
     public static final String EXTRA_BRIGHTNESS = "EXTRA_BRIGHTNESS";
+    public static final String MODE_UPDATE_ACTION = "com.example.myapplication.MODE_UPDATE_ACTION";
+    public static final String EXTRA_MODE = "EXTRA_MODE";
 
 
     public static final UUID LC_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
@@ -74,6 +76,12 @@ public class BluetoothHandler {
     private void sendBrightnessUpdateBroadcast(String brightness) {
         Intent intent = new Intent(BRIGHTNESS_UPDATE_ACTION);
         intent.putExtra(EXTRA_BRIGHTNESS, brightness);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendModeUpdateBroadcast(String modeStr) {
+        Intent intent = new Intent(MODE_UPDATE_ACTION);
+        intent.putExtra(EXTRA_MODE, modeStr);
         context.sendBroadcast(intent);
     }
     public BluetoothGattCharacteristic getCharacteristic(UUID serviceUUID, UUID characteristicUUID) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
@@ -137,11 +145,11 @@ public class BluetoothHandler {
             BluetoothBytesParser parser = new BluetoothBytesParser(value);
 
             if (characteristicUUID.equals(LAMP_SWITCH_CHARACTERISTIC_UUID)) {
-                Log.d("CharacteristicUpdate", new String(value));
+//                Log.d("CharacteristicUpdate", new String(value));
                 String lampState = new String(value);
                 sendLampStateUpdateBroadcast(lampState);
             } else if(characteristicUUID.equals(LAMP_BRIGHTNESS_CHARACTERISTIC_UUID)){
-                Log.d("CharacteristicUpdate", "BRIGHTNESS CHANGED");
+//                Log.d("CharacteristicUpdate", "BRIGHTNESS CHANGED");
 
                 int brightness = parser.getUInt8();
                 Log.d("BLE", "Brightness value: " + brightness);
@@ -149,7 +157,10 @@ public class BluetoothHandler {
                 String brightnessStr = String.valueOf(brightness);
                 sendBrightnessUpdateBroadcast(brightnessStr);
             } else if(characteristicUUID.equals(LAMP_MODE_CHARACTERISTIC_UUID)){
-                Log.d("CharacteristicUpdate", new String(value));
+                Log.d("MODECharacteristicUpdate", new String(value));
+                int mode = parser.getUInt8();
+                String modeStr = String.valueOf(mode);
+                sendModeUpdateBroadcast(modeStr);
             }
 
         }
@@ -159,6 +170,8 @@ public class BluetoothHandler {
             Log.d("Scan",String.format("new MTU set: %d", mtu));
         }
     };
+
+
 
     // Callback for central
     private final BluetoothCentralManagerCallback bluetoothCentralManagerCallback = new BluetoothCentralManagerCallback() {
