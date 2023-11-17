@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.RelativeLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,7 +30,7 @@ import android.widget.Toast;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-
+import com.github.mata1.simpledroidcolorpicker.pickers.CircleColorPicker;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.ModeTab;
@@ -56,7 +57,15 @@ public class LightFragment extends Fragment {
 
     List<LinearLayout> modeTabsVisual = new ArrayList<>();
 
-    private Button button_add_color;
+    private Button button_add_color; // Btn next panel add color
+    private Button buttonChangeColor; // Btn change color in paliter
+    private Button backToPanelModeBtn; // Btn back
+    private Button fixColor;
+
+    private RelativeLayout panelAddColor;
+    private RelativeLayout panelMode;
+    private CircleColorPicker ccp; // picker
+
 
     private List<ModeTab> modeTabs = new ArrayList<>();
 
@@ -201,11 +210,21 @@ public class LightFragment extends Fragment {
         modeTabsVisual.add((LinearLayout) view.findViewById(R.id.groupActiveColors2));
         modeTabsVisual.add((LinearLayout) view.findViewById(R.id.groupActiveColors3));
 
+        ///////
+
+        button_add_color = view.findViewById(R.id.addColorBtn);
+        buttonChangeColor = view.findViewById(R.id.buttonChangeColor);
+        backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
+        panelAddColor = view.findViewById(R.id.panelAddColor);
+        panelMode = view.findViewById(R.id.panelMode);
+        ccp = (CircleColorPicker)view.findViewById(R.id.rcp1);
+        buttonChangeColor = view.findViewById(R.id.buttonChangeColor);
+        fixColor = view.findViewById(R.id.fixColor);
+
+
 //        modeTab1Visual = );
 //        modeTab2Visual = view.findViewById(R.id.groupActiveColors2);
 //        modeTab3Visual = view.findViewById(R.id.groupActiveColors3);
-
-        button_add_color = view.findViewById(R.id.addColorBtn);
 
         // background = button_ActiveColor1_1.getBackground();
 
@@ -290,6 +309,23 @@ public class LightFragment extends Fragment {
         disableAllActiveColorButtons();
         disableAllColorPickerBtn();
 
+        button_add_color.setOnClickListener(v -> {
+            panelMode.setVisibility(View.INVISIBLE);
+            panelAddColor.setVisibility(View.VISIBLE);
+
+        });
+
+        backToPanelModeBtn.setOnClickListener(v -> {
+            panelMode.setVisibility(View.VISIBLE);
+            panelAddColor.setVisibility(View.INVISIBLE);
+
+        });
+
+        buttonChangeColor.setOnClickListener(v -> {
+            // змінюєм колір кружбалика в палітрі
+
+        });
+
     }
 
     private void changeTab(int modeNumber, int drawableResId) {
@@ -345,7 +381,7 @@ public class LightFragment extends Fragment {
 
     private void initColorPickerButtons(View view) {
         for (int i = 1; i <= ModeTab.COLOR_PICKER_BUTTONS_COUNT; i++) {
-            int buttonId = getResources().getIdentifier("colorBtn" + i, "id", getContext().getPackageName());
+            int buttonId = getResources().getIdentifier("colorBtn" + i + "_1", "id", getContext().getPackageName());
             Button button = view.findViewById(buttonId);
             button.setOnClickListener(this::onColorPickerButtonClick);
             ModeTab.getColorPickerButtons().add(button);
@@ -429,6 +465,7 @@ public class LightFragment extends Fragment {
 
             Drawable activeColorBackground = activeColorButton.getBackground();
             if (activeColorBackground instanceof GradientDrawable) {
+
                 ((GradientDrawable) activeColorBackground).setColor(color);
             }
 

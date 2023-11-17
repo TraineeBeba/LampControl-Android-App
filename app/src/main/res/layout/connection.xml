@@ -7,31 +7,66 @@
     tools:context=".fragment.WifiFragment">
 
     <FrameLayout
-        android:id="@+id/connectionLayout"
+        android:id="@+id/wifiLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/search_lamp_background">
+
+        <RelativeLayout
+            android:id="@+id/panel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="80dp">
+
+                <Button
+                    android:id="@+id/search_lamp"
+                    android:layout_width="220dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/aa"
+                    android:background="#00FFFFFF" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/panel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="200dp">
+            </ListView>
+
+        </RelativeLayout>
+
+
 
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fone_for_wifi">
-
+            android:layout_height="match_parent">
 
             <RelativeLayout
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-
                 <ImageView
-
                     android:layout_width="wrap_content"
                     android:layout_height="150dp"
                     android:layout_alignParentBottom="true"
-
                     android:src="@drawable/wifi_menu" />
-
 
                 <View
                     android:layout_width="wrap_content"
@@ -74,14 +109,8 @@
                     android:layout_height="140dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF"
-                    />
+                    android:background="#00FFFFFF" />
             </LinearLayout>
-
         </RelativeLayout>
-
     </FrameLayout>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
