@@ -85,7 +85,7 @@
                         android:layout_marginLeft="110dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/circle_fone1" />
+                        android:background="@drawable/circle_fone" />
 
                 </LinearLayout>
 
