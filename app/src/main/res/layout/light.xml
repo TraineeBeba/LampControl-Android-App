@@ -19,34 +19,9 @@
 
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/fone_for_wifi">
-
-
-            <RelativeLayout
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="150dp"
-                    android:layout_alignParentBottom="true"
-
-                    android:src="@drawable/mode_menu" />
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="#2A2C34" />
-
-
-            </RelativeLayout>
 
             <RelativeLayout
 
@@ -55,9 +30,11 @@
                 android:visibility="visible">
 
                 <RelativeLayout
+                    android:id="@+id/panelMoveActiveColorAddBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-230dp">
+                    android:layout_marginTop="-230dp"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:id="@+id/modeImage"
@@ -68,93 +45,177 @@
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="0dp"
                         android:src="@drawable/mode_one_on" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="0dp"
+                        android:paddingTop="320dp">
+
+                        <Button
+                            android:id="@+id/button_one_color"
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="#00FFFFFF"
+                            android:contentDescription="@string/aa"
+
+                            />
+
+                        <Button
+                            android:id="@+id/button_rainbow"
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="#00FFFFFF"
+                            android:contentDescription="@string/aa"
+
+                            />
+
+                        <Button
+                            android:id="@+id/button_data_night"
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="#00FFFFFF"
+                            android:contentDescription="@string/aa" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/groupActiveColors1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="190dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingTop="220dp"
+                        android:visibility="visible">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/activeColorBtnMode1_1"
+                            android:layout_marginLeft="110dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/circle_fone1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/groupActiveColors2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="190dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingTop="220dp"
+                        android:visibility="invisible">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/activeColorBtnMode2_1"
+                            android:layout_marginLeft="230dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/circle_fone" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/activeColorBtnMode2_2"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/circle_fone" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/activeColorBtnMode2_3"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/circle_fone" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/activeColorBtnMode2_4"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/circle_fone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/groupActiveColors3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="190dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingTop="220dp"
+                        android:visibility="invisible">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/activeColorBtnMode3_1"
+                            android:layout_marginLeft="110dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/circle_fone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/addColorBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="210dp"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginRight="50dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#00FFFFFF"
+                            android:contentDescription="@string/aa" />
+
+                    </LinearLayout>
+
                 </RelativeLayout>
 
-
-                <LinearLayout
-                    android:id="@+id/groupActiveColors1"
+                <RelativeLayout
+                    android:id="@+id/addColorPanel"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="190dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
                     android:visibility="visible">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/activeColorBtnMode1_1"
-                        android:layout_marginLeft="110dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/circle_fone1" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/panel_add_color" />
 
-                </LinearLayout>
+                    <com.github.mata1.simpledroidcolorpicker.pickers.CircleColorPicker
+                        custom:hue="120"
+                        custom:saturation="1.0"
+                        custom:value="1.0"
 
-                <LinearLayout
-                    android:id="@+id/groupActiveColors2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="190dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:visibility="invisible">
+                        android:id="@+id/ccp"
+                        android:visibility="gone"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/activeColorBtnMode2_1"
-                        android:layout_marginLeft="230dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/circle_fone" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/activeColorBtnMode2_2"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/circle_fone" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/activeColorBtnMode2_3"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/circle_fone" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/activeColorBtnMode2_4"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/circle_fone" />
-
-                </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/groupActiveColors3"
+                    android:id="@+id/PanelColorCircle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="190dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:visibility="invisible">
+                    android:layout_marginTop="60dp"
+                    android:orientation="vertical">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/activeColorBtnMode3_1"
-                        android:layout_marginLeft="110dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/circle_fone" />
-
-                </LinearLayout>
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="275dp"
-                    android:orientation="vertical"
-                    >
-
-                    <!-- Перший Рядок з 5 Кнопками -->
                     <LinearLayout
 
                         android:layout_width="match_parent"
@@ -289,83 +350,7 @@
 
                 </LinearLayout>
 
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="0dp"
-                    android:paddingTop="90dp">
-
-                    <Button
-                        android:id="@+id/button_one_color"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        android:contentDescription="@string/aa"
-
-                        />
-
-                    <Button
-                        android:id="@+id/button_rainbow"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        android:contentDescription="@string/aa"
-
-                        />
-
-                    <Button
-                        android:id="@+id/button_data_night"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        android:contentDescription="@string/aa" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/addColorBtn"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="95dp"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginRight="50dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#00FFFFFF"
-                        android:contentDescription="@string/aa" />
-
-                </LinearLayout>
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/addColorPanel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
-                android:visibility="invisible">
-
-                <ImageView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:src="@drawable/panel_add_color" />
-
-
-            </RelativeLayout>
-
-
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -411,51 +396,70 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
                     />
-
-
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="150dp"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/mode_menu" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="bottom"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingBottom="10dp">
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#2A2C34" />
 
-                <Button
-                    android:id="@+id/button_home"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF"
-                    />
+                </RelativeLayout>
 
-                <Button
-                    android:id="@+id/button_light"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF"
-                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:paddingLeft="60dp"
+                    android:paddingRight="60dp"
+                    android:paddingBottom="10dp">
 
-                <Button
-                    android:id="@+id/button_wifi"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF"
-                    />
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/button_home"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/aa"
+                        android:background="#00FFFFFF"
+                        />
 
+                    <Button
+                        android:id="@+id/button_light"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/aa"
+                        android:background="#00FFFFFF"
+                        />
+
+                    <Button
+                        android:id="@+id/button_wifi"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/aa"
+                        android:background="#00FFFFFF"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
-
     </FrameLayout>
 
 
