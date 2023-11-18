@@ -23,6 +23,8 @@ import com.example.myapplication.ble.BluetoothHandler;
 import com.example.myapplication.constant.FragmentType;
 import com.example.myapplication.fragment.HomeFragment;
 
+import com.example.myapplication.fragment.WifiFragment;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

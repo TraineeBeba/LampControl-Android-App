@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.example.myapplication"
-    compileSdk = 34
+    compileSdk = 34 // переконайтеся, що ви використовуєте правильну версію
 
     defaultConfig {
         applicationId = "com.example.myapplication"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 34 // використання останньої доступної версії target SDK
         versionCode = 1
         versionName = "1.0"
 
@@ -26,11 +26,12 @@ android {
         }
     }
 
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    buildToolsVersion = "34.0.0"
 }
 
 dependencies {
@@ -40,9 +41,15 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("androidx.lifecycle:lifecycle-viewmodel:2.6.2")
+    implementation("com.github.mata1:SimpleDroidColorPicker:v0.3")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
+
+
+
 
 
