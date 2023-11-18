@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.github.mata1:SimpleDroidColorPicker:v0.3")
     implementation("com.github.weliem:blessed-android:2.5.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
