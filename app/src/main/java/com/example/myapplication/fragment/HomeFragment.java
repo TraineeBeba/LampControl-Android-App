@@ -1,16 +1,6 @@
 package com.example.myapplication.fragment;
 
-import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
-import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
-
-import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,93 +17,73 @@ import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.FragmentType;
 import com.example.myapplication.constant.Lamp;
-import com.example.myapplication.constant.LampViewState;
-import com.example.myapplication.ble.BluetoothHandler;
-import com.welie.blessed.WriteType;
-
+import com.example.myapplication.constant.LampCache;
+import com.example.myapplication.util.BLECommunicationUtil;
+import com.example.myapplication.util.BroadcastReceiverUtil;
 
 public class HomeFragment extends Fragment {
+    private BLECommunicationUtil bluetoothComm;
     private FrameLayout homeLayout;
     private ImageView toggleView;
-    private Button btnToggleLamp;
-    private Button btnNavWifi;
-    private Button btnNavLight;
-
-    private final BroadcastReceiver lampStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BluetoothHandler.LAMP_STATE_UPDATE_ACTION)) {
-                String lampState = intent.getStringExtra(BluetoothHandler.EXTRA_LAMP_STATE);
-                updateVisual(Lamp.valueOf(lampState));
-            }
-        }
-    };
-
-
-    private final BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION)) {
-                updateVisual(Lamp.OFF);
-            }
-        }
-    };
+    private Button btnNavWifi, btnNavLight, btnToggleLamp;
+    private BroadcastReceiverUtil receiverUtil;
+    Lamp currentState = Lamp.OFF;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.home, container, false);
+        bluetoothComm = new BLECommunicationUtil(getContext());
 
         initView(view);
         initBtnListeners();
-        registerReceivers();
-        setUpLamp();
+        initBroadcastReceiver();
+        loadState();
 
         return view;
     }
 
-    private void setUpLamp() {
+    private void loadState() {
+        updateVisual(LampCache.isOn());
         try {
-            readLampState();
+            bluetoothComm.readLampState();
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void toggleLampState() {
+        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
+        updateVisual(currentState); // Update UI immediately
+
         try {
-            readLampState();
-            Lamp toggleState = Lamp.getToggle(LampViewState.getIsLampOn());
-            writeLampState(toggleState.name().getBytes());
+            bluetoothComm.readLampState();
+            Lamp toggleState = Lamp.getToggle(LampCache.isOn());
+            bluetoothComm.writeLampState(toggleState.name().getBytes());
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void updateVisual(Lamp lampState) {
-        if (lampState == Lamp.OFF){
-            toggleView.setImageResource(R.drawable.turn_off_image); // changes  picture for button
-            homeLayout.setBackgroundResource(R.drawable.homescreen__background_off);
-        } else if (lampState == Lamp.ON){
-            toggleView.setImageResource(R.drawable.turn_on_image); // changes  picture for button
-            homeLayout.setBackgroundResource(R.drawable.homescreen__background_on);
+        if (lampState == currentState) {
+            return;
         }
 
-        LampViewState.setIsLampOn(lampState);
-        Log.d("LAMP STATE", lampState.name());
+        switch (lampState) {
+            case OFF:
+                toggleView.setImageResource(R.drawable.turn_off_image);
+                homeLayout.setBackgroundResource(R.drawable.homescreen__background_off);
+                currentState = Lamp.OFF;
+                break;
+            case ON:
+                toggleView.setImageResource(R.drawable.turn_on_image);
+                homeLayout.setBackgroundResource(R.drawable.homescreen__background_on);
+                currentState = Lamp.ON;
+                break;
+        }
+        LampCache.setIsOn(lampState);
     }
-
-    private void writeLampState(byte[] newValue) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
-        BluetoothHandler bluetoothHandler = BluetoothHandler.getInstance(getContext());
-        bluetoothHandler.writeCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID, newValue, WriteType.WITH_RESPONSE);
-    }
-
-    private void readLampState() throws BluetoothNotConnectedException, CharacteristicNotFoundException {
-        BluetoothHandler bluetoothHandler = BluetoothHandler.getInstance(getContext());
-        bluetoothHandler.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
-    }
-
 
     private void initBtnListeners() {
         btnToggleLamp.setOnClickListener(v -> toggleLampState());
@@ -140,23 +110,25 @@ public class HomeFragment extends Fragment {
         btnNavWifi = view.findViewById(R.id.button_wifi);
     }
 
+    private void initBroadcastReceiver() {
+        receiverUtil = new BroadcastReceiverUtil(getContext(), new BroadcastReceiverUtil.Callback() {
+            @Override
+            public void onLampStateUpdate(Lamp lampState) {
+                updateVisual(lampState);
+            }
+            @Override
+            public void onDisconnect() {
+                updateVisual(Lamp.OFF);
+            }
+        });
+
+        receiverUtil.registerReceivers();
+    }
+
     @Override
     public void onDestroyView() {
+//        Log.d("HOME", "DESTROY");
         super.onDestroyView();
-        unRegisterReceivers();
+        receiverUtil.unregisterReceivers();
     }
-
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    private void registerReceivers() {
-        IntentFilter filter = new IntentFilter(BluetoothHandler.LAMP_STATE_UPDATE_ACTION);
-        IntentFilter filter1 = new IntentFilter(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION);
-        getActivity().registerReceiver(lampStateReceiver, filter);
-        getActivity().registerReceiver(disconnectReceiver, filter1);
-    }
-
-    private void unRegisterReceivers() {
-        getActivity().unregisterReceiver(lampStateReceiver);
-        getActivity().unregisterReceiver(disconnectReceiver);
-    }
-
 }

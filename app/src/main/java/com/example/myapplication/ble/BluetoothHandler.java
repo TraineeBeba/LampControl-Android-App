@@ -108,9 +108,9 @@ public class BluetoothHandler {
             peripheral.setPreferredPhy(PhyType.LE_2M, PhyType.LE_2M, PhyOptions.S2);
             peripheral.readPhy();
 
-            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
-            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID);
-            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_MODE_CHARACTERISTIC_UUID);
+//            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
+//            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID);
+//            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_MODE_CHARACTERISTIC_UUID);
 
             peripheral.setNotify(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID, true);
             peripheral.setNotify(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID, true);
@@ -145,19 +145,19 @@ public class BluetoothHandler {
             BluetoothBytesParser parser = new BluetoothBytesParser(value);
 
             if (characteristicUUID.equals(LAMP_SWITCH_CHARACTERISTIC_UUID)) {
-//                Log.d("CharacteristicUpdate", new String(value));
+                Log.d("CharacteristicUpdate", new String(value));
                 String lampState = new String(value);
                 sendLampStateUpdateBroadcast(lampState);
             } else if(characteristicUUID.equals(LAMP_BRIGHTNESS_CHARACTERISTIC_UUID)){
 //                Log.d("CharacteristicUpdate", "BRIGHTNESS CHANGED");
 
                 int brightness = parser.getUInt8();
-                Log.d("BLE", "Brightness value: " + brightness);
+//                Log.d("BLE", "Brightness value: " + brightness);
 
                 String brightnessStr = String.valueOf(brightness);
                 sendBrightnessUpdateBroadcast(brightnessStr);
             } else if(characteristicUUID.equals(LAMP_MODE_CHARACTERISTIC_UUID)){
-                Log.d("MODECharacteristicUpdate", new String(value));
+//                Log.d("MODECharacteristicUpdate", new String(value));
                 int mode = parser.getUInt8();
                 String modeStr = String.valueOf(mode);
                 sendModeUpdateBroadcast(modeStr);
@@ -179,6 +179,7 @@ public class BluetoothHandler {
 
         @Override
         public void onConnectedPeripheral(@NotNull BluetoothPeripheral peripheral) {
+            peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
             synchronized (BluetoothHandler.this) {
                 BluetoothHandler.getInstance(context).peripheral = peripheral;
             }
