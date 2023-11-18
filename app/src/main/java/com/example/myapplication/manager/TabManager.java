@@ -21,6 +21,8 @@ public class TabManager {
     private List<TabInfo> tabInfoList;
     private ImageView currentImageView;
     private static ActiveButtonsManager colorBtnManager;
+    private Mode lastVisibleMode = null; // Store the last visible mode
+
 
     private List<ModeTab> modeTabs;
 
@@ -29,21 +31,22 @@ public class TabManager {
         this.tabInfoList = tabInfoList;
         this.currentImageView = currentImageView;
         this.modeTabs = modeTabs;
-        initColorPicker(parentView);
-        initActiveButtonManager();
+
+        initActiveButtonManager(parentView);
     }
 
     public ActiveButtonsManager getActiveButtonsManager() {
         return colorBtnManager;
     }
 
-    private void initActiveButtonManager() {
+    private void initActiveButtonManager(View parentView) {
+        initColorPicker(parentView);
         colorBtnManager = new ActiveButtonsManager(modeTabs, ModeTab.getColorPickerButtons());
     }
 
     private void initColorPicker(View parentView) {
         for (int i = 1; i <= ModeTab.COLOR_PICKER_BUTTONS_COUNT; i++) {
-            int buttonId = parentView.getResources().getIdentifier("colorBtn" + i, "id", parentView.getContext().getPackageName());
+            int buttonId = parentView.getResources().getIdentifier("colorBtn" + i + "_1", "id", parentView.getContext().getPackageName());
             Button button = parentView.findViewById(buttonId);
             ModeTab.getColorPickerButtons().add(button);
         }
@@ -77,6 +80,23 @@ public class TabManager {
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Log.e("LightFragment", "Error updating lamp mode", e);
 //            Toast.makeText(getContext(), "Error updating mode: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void disableAllTabs() {
+        for (int i = 0; i < tabInfoList.size(); i++) {
+            if (tabInfoList.get(i).getTabLayout().getVisibility() == View.VISIBLE) {
+                lastVisibleMode = Mode.fromModeNumber(i); // Save the last visible mode
+                tabInfoList.get(i).getTabLayout().setVisibility(View.INVISIBLE);
+            }
+        }
+        currentImageView.setImageResource(0); // Remove any image resource
+    }
+
+    public void restoreLastVisibleTab() {
+        if (lastVisibleMode != null) {
+            changeTab(lastVisibleMode);
+            lastVisibleMode = null; // Reset the last visible mode
         }
     }
 }

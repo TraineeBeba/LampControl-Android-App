@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -37,14 +38,11 @@ import java.util.List;
 
 public class LightFragment extends Fragment {
     private BroadcastReceiverUtil receiverUtil;
-    private ActiveButtonsManager colorBtnManager;
     private BLECommunicationUtil bluetoothComm;
     private final List<ModeTab> modeTabs = new ArrayList<>();
-    private List<TabInfo> tabInfoList = new ArrayList<>();
-    private ImageView currentImageView;
-    private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3, button_add_color;
-
-    private boolean isSeekBarDisabled = false; // Add this flag
+    private RelativeLayout panelAddColor;
+    private final List<TabInfo> tabInfoList = new ArrayList<>();
+    private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3, button_add_color, backToPanelModeBtn;
     private SeekBar seekBar;
     private TextView percentageText;
 
@@ -80,12 +78,12 @@ public class LightFragment extends Fragment {
     private void initView(View view) {
         seekBar = view.findViewById(R.id.seekBar);
         percentageText = view.findViewById(R.id.textviewbar);
-        currentImageView = view.findViewById(R.id.modeImage);
         btnNavHome = view.findViewById(R.id.button_home);
         btnNavWifi = view.findViewById(R.id.button_wifi);
         btnMode1 = view.findViewById(R.id.button_one_color);
         btnMode2 = view.findViewById(R.id.button_rainbow);
         btnMode3 = view.findViewById(R.id.button_data_night);
+        button_add_color = view.findViewById(R.id.addColorBtn);
 
         for (Mode mode : Mode.values()) {
             int tabLayoutId = getResources().getIdentifier("groupActiveColors" + (mode.getModeNumber() + 1), "id", getContext().getPackageName());
@@ -93,6 +91,8 @@ public class LightFragment extends Fragment {
         }
 
         button_add_color = view.findViewById(R.id.addColorBtn);
+        panelAddColor = view.findViewById(R.id.panelAddColor);
+        backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
 
         for (int i = 0; i < 3; i++) {
             modeTabs.add(new ModeTab());
@@ -166,6 +166,18 @@ public class LightFragment extends Fragment {
 
         btnMode3.setOnClickListener(v -> {
             tabManager.changeTab(Mode.MODE_THREE);
+        });
+
+        button_add_color.setOnClickListener(v -> {
+            tabManager.disableAllTabs();
+            panelAddColor.setVisibility(View.VISIBLE);
+
+        });
+
+        backToPanelModeBtn.setOnClickListener(v -> {
+            tabManager.restoreLastVisibleTab();
+            panelAddColor.setVisibility(View.INVISIBLE);
+
         });
 
     }
