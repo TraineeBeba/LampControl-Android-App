@@ -25,6 +25,7 @@ public class WifiFragment extends Fragment {
     private Button buttonHome;
     private Button buttonLight;
     private Button search_lamp;
+    private Button back_to_conn_btn;
     private ListView listView;
     private RelativeLayout panel1;
     private RelativeLayout panel2;
@@ -81,6 +82,17 @@ public class WifiFragment extends Fragment {
                 wifilayout.setBackgroundResource(R.drawable.lamps_near_background);
                 panel1.setVisibility(View.INVISIBLE);
                 panel2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
+        back_to_conn_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("asd", "HUY2");
+                wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
+                panel1.setVisibility(View.VISIBLE);
+                panel2.setVisibility(View.INVISIBLE);
             }
         });
 

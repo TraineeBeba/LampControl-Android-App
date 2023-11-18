@@ -48,6 +48,17 @@
                 android:layout_marginTop="200dp">
             </ListView>
 
+            <Button
+                android:id="@+id/back_to_conn_btn"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="400dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/aa" />
+
         </RelativeLayout>
 
 
