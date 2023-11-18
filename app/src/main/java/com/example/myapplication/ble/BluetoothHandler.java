@@ -53,6 +53,7 @@ public class BluetoothHandler {
     public static final UUID LAMP_SWITCH_CHARACTERISTIC_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8");
     public static final UUID LAMP_BRIGHTNESS_CHARACTERISTIC_UUID = UUID.fromString("c8caddf7-38c7-4b6e-891e-5550e4776a79");
     public static final UUID LAMP_MODE_CHARACTERISTIC_UUID = UUID.fromString("1f9df20a-949d-4278-8051-72a01b6a7ca3");
+    public static final UUID LAMP_COLOR_CHARACTERISTIC_UUID = UUID.fromString("6421350a-fe82-480f-af3f-5c24925ec0ae");
 
     // Local variables
     public BluetoothCentralManager central;

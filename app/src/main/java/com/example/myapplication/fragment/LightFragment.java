@@ -20,6 +20,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.Mode;
 import com.example.myapplication.manager.ActiveButtonsManager;
+import com.example.myapplication.manager.ColorPanelManager;
 import com.example.myapplication.manager.SeekBarManager;
 import com.example.myapplication.manager.TabManager;
 import com.example.myapplication.model.ModeTab;
@@ -32,6 +33,7 @@ import com.example.myapplication.model.TabInfo;
 import com.example.myapplication.util.BLECommunicationUtil;
 import com.example.myapplication.util.BrightnessModeUtil;
 import com.example.myapplication.util.BroadcastReceiverUtil;
+import com.github.mata1.simpledroidcolorpicker.pickers.CircleColorPicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +47,14 @@ public class LightFragment extends Fragment {
     private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3, button_add_color, backToPanelModeBtn;
     private SeekBar seekBar;
     private TextView percentageText;
+    private ColorPanelManager colorPanelManager;
+
+    CircleColorPicker rcp1;
 
     private TabManager tabManager;
     private SeekBarManager seekBarManager;
 
     private Handler debounceHandler = new Handler();
-    private Runnable debounceRunnable;
 
 
 
@@ -64,18 +68,35 @@ public class LightFragment extends Fragment {
         initBtnListeners();
         initBroadcastReceiver();
 
-        tabManager = new TabManager(bluetoothComm, modeTabs, tabInfoList, view.findViewById(R.id.modeImage), view);
+        initColorPickerButtons(view);
+        ActiveButtonsManager activeButtonsManager = new ActiveButtonsManager(getContext(), bluetoothComm, modeTabs);
+        tabManager = new TabManager(bluetoothComm, getContext(), modeTabs, tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
+        colorPanelManager = new ColorPanelManager(getContext(), view, rcp1, activeButtonsManager);
         seekBarManager = new SeekBarManager(seekBar, percentageText, bluetoothComm);
 
         seekBarManager.setupSeekBar();
         seekBarManager.setupListeners();
 
-//        tabManager.getActiveButtonsManager().resetAll();
+        tabManager.getActiveButtonsManager().resetAll();
+
 
         return view;
     }
 
+    private void initColorPickerButtons(View parentView) {
+        ModeTab.colorPickerButtons = new ArrayList<>();
+            for (int i = 1; i <= ModeTab.COLOR_PICKER_BUTTONS_COUNT; i++) {
+                int buttonId = parentView.getResources().getIdentifier("colorBtn" + i + "_1", "id", parentView.getContext().getPackageName());
+                Button button = parentView.findViewById(buttonId);
+                if (button != null) {
+                    ModeTab.colorPickerButtons.add(button);
+                }
+            }
+    }
+
+
     private void initView(View view) {
+        rcp1 = view.findViewById(R.id.rcp1);
         seekBar = view.findViewById(R.id.seekBar);
         percentageText = view.findViewById(R.id.textviewbar);
         btnNavHome = view.findViewById(R.id.button_home);
@@ -87,7 +108,7 @@ public class LightFragment extends Fragment {
 
         for (Mode mode : Mode.values()) {
             int tabLayoutId = getResources().getIdentifier("groupActiveColors" + (mode.getModeNumber() + 1), "id", getContext().getPackageName());
-            tabInfoList.add(new TabInfo((LinearLayout) view.findViewById(tabLayoutId), mode.getDrawableResId()));
+            tabInfoList.add(new TabInfo(view.findViewById(tabLayoutId), mode.getDrawableResId()));
         }
 
         button_add_color = view.findViewById(R.id.addColorBtn);
@@ -169,13 +190,21 @@ public class LightFragment extends Fragment {
         });
 
         button_add_color.setOnClickListener(v -> {
-            tabManager.disableAllTabs();
+            btnMode1.setEnabled(false);
+            btnMode2.setEnabled(false);
+            btnMode3.setEnabled(false);
+
+//            tabManager.disableAllTabs();
             panelAddColor.setVisibility(View.VISIBLE);
 
         });
 
         backToPanelModeBtn.setOnClickListener(v -> {
-            tabManager.restoreLastVisibleTab();
+            btnMode1.setEnabled(true);
+            btnMode2.setEnabled(true);
+            btnMode3.setEnabled(true);
+
+//            tabManager.restoreLastVisibleTab();
             panelAddColor.setVisibility(View.INVISIBLE);
 
         });
@@ -185,7 +214,6 @@ public class LightFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        debounceHandler.removeCallbacks(debounceRunnable);
         receiverUtil.unregisterReceivers();
     }
 

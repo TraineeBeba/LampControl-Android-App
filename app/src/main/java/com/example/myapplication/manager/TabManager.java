@@ -1,5 +1,6 @@
 package com.example.myapplication.manager;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,32 +26,21 @@ public class TabManager {
 
 
     private List<ModeTab> modeTabs;
+    private Context context;
 
-    public TabManager(BLECommunicationUtil bluetoothComm, List<ModeTab> modeTabs, List<TabInfo> tabInfoList, ImageView currentImageView, View parentView) {
+    public TabManager(BLECommunicationUtil bluetoothComm, Context context, List<ModeTab> modeTabs, List<TabInfo> tabInfoList, ImageView currentImageView, ActiveButtonsManager activeButtonsManager) {
+        this.context = context;
         this.bluetoothComm = bluetoothComm;
         this.tabInfoList = tabInfoList;
         this.currentImageView = currentImageView;
-        this.modeTabs = modeTabs;
-
-        initActiveButtonManager(parentView);
+        colorBtnManager = activeButtonsManager; // Use passed instance
+        // ... other initializations ...
     }
 
     public ActiveButtonsManager getActiveButtonsManager() {
         return colorBtnManager;
     }
 
-    private void initActiveButtonManager(View parentView) {
-        initColorPicker(parentView);
-        colorBtnManager = new ActiveButtonsManager(modeTabs, ModeTab.getColorPickerButtons());
-    }
-
-    private void initColorPicker(View parentView) {
-        for (int i = 1; i <= ModeTab.COLOR_PICKER_BUTTONS_COUNT; i++) {
-            int buttonId = parentView.getResources().getIdentifier("colorBtn" + i + "_1", "id", parentView.getContext().getPackageName());
-            Button button = parentView.findViewById(buttonId);
-            ModeTab.getColorPickerButtons().add(button);
-        }
-    }
     public void updateVisualMode(int modeNumber) {
         Mode mode = Mode.fromModeNumber(modeNumber);
         if (tabInfoList.get(mode.getModeNumber()).getTabLayout().getVisibility() != View.VISIBLE) {

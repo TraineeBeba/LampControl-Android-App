@@ -1,6 +1,7 @@
 package com.example.myapplication.util;
 
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_BRIGHTNESS_CHARACTERISTIC_UUID;
+import static com.example.myapplication.ble.BluetoothHandler.LAMP_COLOR_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_MODE_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
@@ -45,6 +46,10 @@ public class BLECommunicationUtil {
 
     public void readBrightness() throws BluetoothNotConnectedException, CharacteristicNotFoundException {
         bluetoothHandler.readCharacteristic(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID);
+    }
+
+    public void writeColor(byte[] newValue) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
+        bluetoothHandler.writeCharacteristic(LC_SERVICE_UUID, LAMP_COLOR_CHARACTERISTIC_UUID, newValue, WriteType.WITH_RESPONSE);
     }
 
 }

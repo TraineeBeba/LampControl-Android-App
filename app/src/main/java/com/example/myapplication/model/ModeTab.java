@@ -7,11 +7,11 @@ import java.util.List;
 
 public class ModeTab {
     public static final int COLOR_PICKER_BUTTONS_COUNT = 15;
-    static private Button selectedColorPickerBtn;
+//    static private Button selectedColorPickerBtn;
     private Button selectedActiveColorBtn;
-    private List<Button> activeColorButtons = new ArrayList<>(COLOR_PICKER_BUTTONS_COUNT);
+    private List<Button> activeColorButtons = new ArrayList<>();
 
-    static private List<Button> colorPickerButtons = new ArrayList<>();
+    public static List<Button> colorPickerButtons;
 
 
     public List<Button> getActiveColorButtons() {
@@ -19,13 +19,13 @@ public class ModeTab {
     }
 
 
-    public static Button getSelectedColorPickerBtn() {
-        return selectedColorPickerBtn;
-    }
-
-    public static void setSelectedColorPickerBtn(Button selectedColorPickerBtn) {
-        ModeTab.selectedColorPickerBtn = selectedColorPickerBtn;
-    }
+//    public static Button getSelectedColorPickerBtn() {
+//        return selectedColorPickerBtn;
+//    }
+//
+//    public static void setSelectedColorPickerBtn(Button selectedColorPickerBtn) {
+//        ModeTab.selectedColorPickerBtn = selectedColorPickerBtn;
+//    }
 
     public Button getSelectedActiveColorBtn() {
         return selectedActiveColorBtn;
@@ -41,10 +41,6 @@ public class ModeTab {
 
     public static void setColorPickerButtons(List<Button> colorPickerButtons) {
         ModeTab.colorPickerButtons = colorPickerButtons;
-    }
-
-    public static List<Button> getColorPickerButtons() {
-        return colorPickerButtons;
     }
 
 //    public static void setColorPickerButtons(List<Button> colorPickerButtons) {
