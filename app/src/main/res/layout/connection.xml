@@ -54,10 +54,23 @@
                 android:layout_height="70dp"
 
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="400dp"
+                android:layout_marginTop="480dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
-                android:contentDescription="@string/aa" />
+                android:contentDescription="@string/aa"
+                android:background="#00FFFFFF"/>
+
+            <Button
+                android:id="@+id/update_btn"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="100dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/aa"
+                android:background="#00FFFFFF"/>
 
         </RelativeLayout>
 

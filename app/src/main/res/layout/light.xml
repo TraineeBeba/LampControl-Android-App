@@ -420,7 +420,6 @@
                             android:layout_weight="5"
                             android:clickable="false"
                             android:focusable="false"
-
                             android:contentDescription="@string/aa" />
 
                     </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.view.WindowManager;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TODO versions'
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
 
         setContentView(R.layout.home);
         getSupportFragmentManager().beginTransaction()

@@ -253,8 +253,8 @@ public class BluetoothHandler {
     private BluetoothHandler(Context context) {
         this.context = context;
         central = new BluetoothCentralManager(context, bluetoothCentralManagerCallback, new Handler());
-        central.startPairingPopupHack();
-        startScan();
+//        central.startPairingPopupHack();
+//        startScan();
     }
 
     private void startScan() {

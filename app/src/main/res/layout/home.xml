@@ -20,6 +20,63 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/cloud_left_white"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/cloud_right_white"
+
+                    android:visibility="visible"
+                    />
+
+                <ImageView
+                    android:id="@+id/cloud_right_white"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="160dp"
+                    android:layout_marginTop="90dp"
+                    android:src="@drawable/cloud_left_white"
+                    android:visibility="visible"
+                    />
+
+                <ImageView
+                    android:id="@+id/cloud_left_black"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/cloud_right_black"
+                    android:visibility="visible"
+                    />
+
+                <ImageView
+                    android:id="@+id/cloud_right_black"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="160dp"
+                    android:layout_marginTop="90dp"
+                    android:src="@drawable/cloud_left_black"
+                    android:visibility="visible"
+                    />
+
+                <ImageView
+                    android:id="@+id/sunshine"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginTop="90dp"
+                    android:src="@drawable/sunshine"
+                    android:visibility="invisible"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true">
