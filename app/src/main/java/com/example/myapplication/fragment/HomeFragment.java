@@ -34,6 +34,8 @@ public class HomeFragment extends Fragment {
     private Button btnNavWifi, btnNavLight, btnToggleLamp;
     private BroadcastReceiverUtil receiverUtil;
     private ImageView cloudImageLeftBlack;
+
+    private ImageView Sunshine;
     private ImageView cloudImageLeftWhite;
     private ImageView cloudImageRightBlack;
     private ImageView cloudImageRightWhite;
@@ -150,6 +152,7 @@ public class HomeFragment extends Fragment {
         btnNavLight = view.findViewById(R.id.button_light);
         btnNavWifi = view.findViewById(R.id.button_wifi);
 
+        Sunshine = view.findViewById(R.id.sunshine);
         cloudImageLeftBlack = view.findViewById(R.id.cloud_left_black);
         cloudImageLeftWhite = view.findViewById(R.id.cloud_left_white);
         cloudImageRightBlack = view.findViewById(R.id.cloud_right_black);
@@ -184,6 +187,7 @@ public class HomeFragment extends Fragment {
         animateCloud(cloudImageLeftWhite, "translationX", finalX_Left, finalX_Left - 400, 0.0f, 1.0f); // Змініть значення за потребою
         animateCloud(cloudImageRightBlack, "translationX", finalX_Left, finalX_Left + 300, 1.0f, 0.0f);
         animateCloud(cloudImageRightWhite, "translationX", finalX_Left, finalX_Left + 300, 0.0f, 1.0f);
+        animateCloud(Sunshine, "translationX", finalX_Left, finalX_Left , 0.0f, 1.0f);
 
 
     }
@@ -194,6 +198,9 @@ public class HomeFragment extends Fragment {
         animateCloud(cloudImageLeftWhite, "translationX", finalX_Left - 400, finalX_Left, 1.0f, 0.0f); // Повернення до первісного положення
         animateCloud(cloudImageRightBlack, "translationX", finalX_Left + 300, finalX_Left,0.0f, 1.0f);
         animateCloud(cloudImageRightWhite, "translationX", finalX_Left + 300, finalX_Left, 1.0f, 0.0f);
+        animateCloud(Sunshine, "translationX", finalX_Left, finalX_Left , 1.0f, 0.0f);
+
+
 
     }
 

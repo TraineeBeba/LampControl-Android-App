@@ -23,6 +23,18 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/sunshine"
+                    android:layout_width="230dp"
+                    android:layout_height="230dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginTop="70dp"
+                    android:src="@drawable/sunshine"
+                    android:visibility="visible"
+                    android:alpha="0"
+                    />
+
+                <ImageView
                     android:id="@+id/cloud_left_white"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
@@ -63,16 +75,7 @@
                     android:visibility="visible"
                     />
 
-                <ImageView
-                    android:id="@+id/sunshine"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="60dp"
-                    android:layout_marginTop="90dp"
-                    android:src="@drawable/sunshine"
-                    android:visibility="invisible"
-                    />
+
             </RelativeLayout>
 
             <RelativeLayout
