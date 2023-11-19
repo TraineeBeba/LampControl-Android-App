@@ -75,21 +75,21 @@ public class HomeFragment extends Fragment {
     }
 
     private void toggleLampState() {
-//        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
-//        updateVisual(currentState); // Update UI immediately
-//
-//        try {
-//            bluetoothComm.readLampState();
-//            Lamp toggleState = Lamp.getToggle(LampCache.isOn());
-//            bluetoothComm.writeLampState(toggleState.name().getBytes());
-//        } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-        if(Lamp.OFF == currentState){
-            updateVisual(Lamp.ON);
-        } else{
-            updateVisual(Lamp.OFF);
+        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
+        updateVisual(currentState); // Update UI immediately
+
+        try {
+            bluetoothComm.readLampState();
+            Lamp toggleState = Lamp.getToggle(LampCache.isOn());
+            bluetoothComm.writeLampState(toggleState.name().getBytes());
+        } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+//        if(Lamp.OFF == currentState){
+//            updateVisual(Lamp.ON);
+//        } else{
+//            updateVisual(Lamp.OFF);
+//        }
     }
 
     public void updateVisual(Lamp lampState) {

@@ -28,7 +28,7 @@ public class TabManager {
     private List<ModeTab> modeTabs;
     private Context context;
 
-    public TabManager(BLECommunicationUtil bluetoothComm, Context context, List<ModeTab> modeTabs, List<TabInfo> tabInfoList, ImageView currentImageView, ActiveButtonsManager activeButtonsManager) {
+    public TabManager(BLECommunicationUtil bluetoothComm, Context context, List<TabInfo> tabInfoList, ImageView currentImageView, ActiveButtonsManager activeButtonsManager) {
         this.context = context;
         this.bluetoothComm = bluetoothComm;
         this.tabInfoList = tabInfoList;
@@ -59,6 +59,8 @@ public class TabManager {
         for (int i = 0; i < tabInfoList.size(); i++) {
             tabInfoList.get(i).getTabLayout().setVisibility(i == activeMode.getModeNumber() ? View.VISIBLE : View.INVISIBLE);
         }
+
+        ModeTab.currentMode = activeMode;
         currentImageView.setImageResource(activeMode.getDrawableResId());
     }
     private void updateLampMode(int modeNumber) {

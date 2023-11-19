@@ -2,6 +2,8 @@ package com.example.myapplication.model;
 
 import android.widget.Button;
 
+import com.example.myapplication.constant.Mode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class ModeTab {
     private Button selectedActiveColorBtn;
     private List<Button> activeColorButtons = new ArrayList<>();
 
+    public static Mode currentMode = Mode.MODE_ONE;
     public static List<Button> colorPickerButtons;
 
 

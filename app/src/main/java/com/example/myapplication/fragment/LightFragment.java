@@ -70,7 +70,7 @@ public class LightFragment extends Fragment {
 
         initColorPickerButtons(view);
         ActiveButtonsManager activeButtonsManager = new ActiveButtonsManager(getContext(), bluetoothComm, modeTabs);
-        tabManager = new TabManager(bluetoothComm, getContext(), modeTabs, tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
+        tabManager = new TabManager(bluetoothComm, getContext(), tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
         colorPanelManager = new ColorPanelManager(getContext(), view, rcp1, activeButtonsManager);
         seekBarManager = new SeekBarManager(seekBar, percentageText, bluetoothComm);
 
