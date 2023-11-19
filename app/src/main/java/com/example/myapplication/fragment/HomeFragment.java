@@ -63,9 +63,6 @@ public class HomeFragment extends Fragment {
         initBroadcastReceiver();
         loadState();
 
-
-
-
         return view;
     }
 
@@ -79,8 +76,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void toggleLampState() {
-        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
-        updateVisual(currentState); // Update UI immediately
+//        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
+//        updateVisual(currentState); // Update UI immediately
 
         try {
             bluetoothComm.readLampState();
@@ -101,15 +98,22 @@ public class HomeFragment extends Fragment {
             return;
         }
 
+        Log.d("updateVisual", "Pisun");
+        Log.d("LetfCloudPosition", String.valueOf(StateAnimation.finalX_Left) );
         switch (lampState) {
             case OFF:
                 toggleView.setImageResource(R.drawable.turn_off_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_off);
 
-                animationBtnOff();
 
-                StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()+400;
-                StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()-300;
+                if (StateAnimation.finalX_Left != 0){
+                    animationBtnOff();
+                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()+400;
+                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()-300;
+                }
+                else{
+                    animationStopBtnOff();
+                }
 
                 currentState = Lamp.OFF;
                 break;
@@ -132,7 +136,17 @@ public class HomeFragment extends Fragment {
                 break;
         }
 
-        LampCache.setIsOn(lampState);
+//        LampCache.setIsOn(lampState);
+    }
+
+    public void animationStopBtnOff() {
+
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 1.0f, 1.0f);
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left , 0.0f, 0.0f);
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
+        animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 0.0f);
+
     }
 
     private void initBtnListeners() {
@@ -140,7 +154,7 @@ public class HomeFragment extends Fragment {
             toggleLampState();
             btnToggleLamp.setEnabled(false);
 
-            new Handler(Looper.getMainLooper()).postDelayed(() -> btnToggleLamp.setEnabled(true), 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> btnToggleLamp.setEnabled(true), 1100);
         });
 
         btnNavLight.setOnClickListener(v -> {
