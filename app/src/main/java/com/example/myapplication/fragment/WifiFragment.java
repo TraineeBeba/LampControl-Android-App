@@ -25,6 +25,8 @@ public class WifiFragment extends Fragment {
     private Button buttonHome;
     private Button buttonLight;
     private Button search_lamp;
+    private Button back_to_conn_btn;
+    private Button update_btn;
     private ListView listView;
     private RelativeLayout panel1;
     private RelativeLayout panel2;
@@ -45,7 +47,7 @@ public class WifiFragment extends Fragment {
         wifilayout = view.findViewById(R.id.wifiLayout);
         panel1 = view.findViewById(R.id.panel1);
         panel2 = view.findViewById(R.id.panel2);
-        Log.d("asd", "HUY");
+
         listView = view.findViewById(R.id.listView);
         context = getActivity();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, catNames);
@@ -55,7 +57,7 @@ public class WifiFragment extends Fragment {
         buttonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("asd", "HUY4");
+
                 if (getActivity() instanceof MainActivity) {
                     ((MainActivity) getActivity()).navigateToFragment(R.id.wifiLayout, FragmentType.HOME);
                 }
@@ -66,7 +68,6 @@ public class WifiFragment extends Fragment {
         buttonLight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("asd", "HUY3");
                 if (getActivity() instanceof MainActivity) {
                     ((MainActivity) getActivity()).navigateToFragment(R.id.wifiLayout, FragmentType.LIGHT);
                 }
@@ -77,13 +78,39 @@ public class WifiFragment extends Fragment {
         search_lamp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("asd", "HUY2");
                 wifilayout.setBackgroundResource(R.drawable.lamps_near_background);
                 panel1.setVisibility(View.INVISIBLE);
                 panel2.setVisibility(View.VISIBLE);
             }
         });
 
+        back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
+        back_to_conn_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
+                panel1.setVisibility(View.VISIBLE);
+                panel2.setVisibility(View.INVISIBLE);
+            }
+        });
+        back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
+        back_to_conn_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
+                panel1.setVisibility(View.VISIBLE);
+                panel2.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        update_btn = view.findViewById(R.id.update_btn);
+        update_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
         return view;
     }
 
