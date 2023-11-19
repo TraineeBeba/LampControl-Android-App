@@ -1,8 +1,12 @@
 package com.example.myapplication.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,6 +28,7 @@ import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.FragmentType;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.LampCache;
+import com.example.myapplication.constant.StateAnimation;
 import com.example.myapplication.util.BLECommunicationUtil;
 import com.example.myapplication.util.BroadcastReceiverUtil;
 
@@ -40,8 +45,8 @@ public class HomeFragment extends Fragment {
     private ImageView cloudImageRightBlack;
     private ImageView cloudImageRightWhite;
 
-    private float finalX_Left, finalY_Left;
-    private float finalX_Right, finalY_Right;
+    private float finalX_Left=0, finalY_Left;
+    private float finalX_Right=0, finalY_Right;
 
     Animation fadeTransition;
     Lamp currentState = Lamp.OFF;
@@ -57,7 +62,6 @@ public class HomeFragment extends Fragment {
         initBtnListeners();
         initBroadcastReceiver();
         loadState();
-
 
 
 
@@ -104,7 +108,8 @@ public class HomeFragment extends Fragment {
 
                 animationBtnOff();
 
-
+                StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()+400;
+                StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()-300;
 
                 currentState = Lamp.OFF;
                 break;
@@ -113,23 +118,30 @@ public class HomeFragment extends Fragment {
                 toggleView.setImageResource(R.drawable.turn_on_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_on);
 
-
-                animationBtnOn();
-
-
-
+                // 0 start position
+                if (StateAnimation.finalX_Left == 0){
+                    animationBtnOn();
+                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()-400;
+                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()+300;
+                }
+                else{
+                    animationStopBtnOn();
+                }
 
                 currentState = Lamp.ON;
                 break;
         }
 
-
-
         LampCache.setIsOn(lampState);
     }
 
     private void initBtnListeners() {
-        btnToggleLamp.setOnClickListener(v -> toggleLampState());
+        btnToggleLamp.setOnClickListener(v ->{
+            toggleLampState();
+            btnToggleLamp.setEnabled(false);
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> btnToggleLamp.setEnabled(true), 1000);
+        });
 
         btnNavLight.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
@@ -183,38 +195,48 @@ public class HomeFragment extends Fragment {
 
     public void animationBtnOn() {
 
-        animateCloud(cloudImageLeftBlack, "translationX", finalX_Left, finalX_Left - 400, 1.0f, 0.0f); // Змініть значення за потребою
-        animateCloud(cloudImageLeftWhite, "translationX", finalX_Left, finalX_Left - 400, 0.0f, 1.0f); // Змініть значення за потребою
-        animateCloud(cloudImageRightBlack, "translationX", finalX_Left, finalX_Left + 300, 1.0f, 0.0f);
-        animateCloud(cloudImageRightWhite, "translationX", finalX_Left, finalX_Left + 300, 0.0f, 1.0f);
-        animateCloud(Sunshine, "translationX", finalX_Left, finalX_Left , 0.0f, 1.0f);
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - 400, 1.0f, 0.0f);
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - 400, 0.0f, 1.0f);
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + 300, 1.0f, 0.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + 300, 0.0f, 1.0f);
+        animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 1.0f);
 
+
+    }
+
+    public void animationStopBtnOn() {
+
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 0.0f, 0.0f);
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left , 1.0f, 1.0f);
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
+        animateCloud(Sunshine, "translationX", 0, 0 , 1.0f, 1.0f);
 
     }
 
     public void animationBtnOff() {
 
-        animateCloud(cloudImageLeftBlack, "translationX", finalX_Left - 400, finalX_Left, 0.0f, 1.0f); // Повернення до первісного положення
-        animateCloud(cloudImageLeftWhite, "translationX", finalX_Left - 400, finalX_Left, 1.0f, 0.0f); // Повернення до первісного положення
-        animateCloud(cloudImageRightBlack, "translationX", finalX_Left + 300, finalX_Left,0.0f, 1.0f);
-        animateCloud(cloudImageRightWhite, "translationX", finalX_Left + 300, finalX_Left, 1.0f, 0.0f);
-        animateCloud(Sunshine, "translationX", finalX_Left, finalX_Left , 1.0f, 0.0f);
-
-
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+400, 0.0f, 1.0f); // Повернення до первісного положення
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+400, 1.0f, 0.0f); // Повернення до первісного положення
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-300,0.0f, 1.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-300, 1.0f, 0.0f);
+        animateCloud(Sunshine, "translationX", 0, 0 , 1.0f, 0.0f);
 
     }
 
 
     private void animateCloud(ImageView cloud, String property, float startValue, float endValue, float startAlpha, float endAlpha) {
+
         ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(cloud, property, startValue, endValue);
-        translationAnimator.setDuration(2000); // Тривалість анімації переміщення
+        translationAnimator.setDuration(1000); // Тривалість анімації переміщення
 
         ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(cloud, "alpha", startAlpha, endAlpha);
-        alphaAnimator.setDuration(2000); // Тривалість анімації прозорості
+        alphaAnimator.setDuration(1000); // Тривалість анімації прозорості
 
         // Виконання обох анімацій одночасно
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(translationAnimator, alphaAnimator);
+
         animatorSet.start();
     }
 
