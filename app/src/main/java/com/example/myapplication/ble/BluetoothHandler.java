@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class BluetoothHandler {
@@ -48,6 +50,9 @@ public class BluetoothHandler {
     public static final String MODE_UPDATE_ACTION = "com.example.myapplication.MODE_UPDATE_ACTION";
     public static final String EXTRA_MODE = "EXTRA_MODE";
 
+    public static final String COLOR_DATA_UPDATE_ACTION = "com.example.myapplication.COLOR_DATA_UPDATE_ACTION";
+    public static final String EXTRA_COLOR_DATA = "EXTRA_COLOR_DATA";
+
 
     public static final UUID LC_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
     public static final UUID LAMP_SWITCH_CHARACTERISTIC_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8");
@@ -60,9 +65,28 @@ public class BluetoothHandler {
     private static BluetoothHandler instance = null;
     private  Context context;
     private final Handler handler = new Handler();
+    private Map<String, BluetoothPeripheral> discoveredPeripherals = new HashMap<>();
 
     private BluetoothPeripheral peripheral = null;
 
+
+    public interface BluetoothScanCallback {
+        void onDeviceDiscovered(String deviceName);
+    }
+
+    private BluetoothScanCallback scanCallback;
+
+    public BluetoothPeripheral getDiscoveredPeripheral(String deviceName) {
+        return discoveredPeripherals.get(deviceName);
+    }
+
+    public void connectPeripheral(BluetoothPeripheral peripheral) {
+        central.connectPeripheral(peripheral, peripheralCallback);
+    }
+
+    public void setBluetoothScanCallback(BluetoothScanCallback callback) {
+        this.scanCallback = callback;
+    }
     private void sendLampStateUpdateBroadcast(String lampState) {
         Intent intent = new Intent(LAMP_STATE_UPDATE_ACTION);
         intent.putExtra(EXTRA_LAMP_STATE, lampState);
@@ -85,6 +109,12 @@ public class BluetoothHandler {
         intent.putExtra(EXTRA_MODE, modeStr);
         context.sendBroadcast(intent);
     }
+
+//    private void sendColorUpdateBroadcast(String modeStr) {
+//        Intent intent = new Intent(COLOR_UPDATE_ACTION);
+//        intent.putExtra(EXTRA_COLOR, modeStr);
+//        context.sendBroadcast(intent);
+//    }
     public BluetoothGattCharacteristic getCharacteristic(UUID serviceUUID, UUID characteristicUUID) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
         if (this.peripheral == null || this.peripheral.getState() != ConnectionState.CONNECTED) {
             throw new BluetoothNotConnectedException("Bluetooth device not connected");
@@ -162,6 +192,11 @@ public class BluetoothHandler {
                 int mode = parser.getUInt8();
                 String modeStr = String.valueOf(mode);
                 sendModeUpdateBroadcast(modeStr);
+            } if (characteristicUUID.equals(LAMP_COLOR_CHARACTERISTIC_UUID)) {
+                // Handle the color data as per the format
+                Intent intent = new Intent(COLOR_DATA_UPDATE_ACTION);
+                intent.putExtra(EXTRA_COLOR_DATA, value); // Send the raw byte array
+                context.sendBroadcast(intent);
             }
 
         }
@@ -214,16 +249,9 @@ public class BluetoothHandler {
 
         @Override
         public void onDiscoveredPeripheral(@NotNull BluetoothPeripheral peripheral, @NotNull ScanResult scanResult) {
-            Log.d("Scan","FOUND peripheral");
-            central.stopScan();
-
-            //TODO
-            if (peripheral.getName().contains("LampControl") && peripheral.getBondState() == BondState.NONE) {
-                // Create a bond immediately to avoid double pairing popups
-                central.createBond(peripheral, peripheralCallback);
-            } else {
-                Log.d("Scan","CONNECT");
-                central.connectPeripheral(peripheral, peripheralCallback);
+            discoveredPeripherals.put(peripheral.getName(), peripheral);
+            if (scanCallback != null) {
+                scanCallback.onDeviceDiscovered(peripheral.getName());
             }
         }
 
@@ -240,6 +268,7 @@ public class BluetoothHandler {
 
         @Override
         public void onScanFailed(@NotNull ScanFailure scanFailure) {
+            sendDisconnectLampStateUpdateBroadcast();
             Log.d("Scan","scanning failed with error " + scanFailure);
         }
     };
@@ -254,11 +283,11 @@ public class BluetoothHandler {
     private BluetoothHandler(Context context) {
         this.context = context;
         central = new BluetoothCentralManager(context, bluetoothCentralManagerCallback, new Handler());
-        central.startPairingPopupHack();
-        startScan();
+//        central.startPairingPopupHack();
+//        startScan();
     }
 
-    private void startScan() {
+    public void startScan() {
         handler.postDelayed(() -> central.scanForPeripheralsWithServices(new UUID[]{
                         LC_SERVICE_UUID,
                 }

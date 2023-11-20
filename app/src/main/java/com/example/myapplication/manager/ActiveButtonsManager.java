@@ -32,7 +32,10 @@ public class ActiveButtonsManager {
         this.modeTabs = modeTabs;
         initActiveColorButtonsListeners();
         initColorPickerButtonsListeners();
+
+
     }
+
 
     // Modify onColorPickerButtonClick method
     private void onColorPickerButtonClick(View v) {
@@ -114,56 +117,6 @@ public class ActiveButtonsManager {
             updateColorPickerButtonState();
         }
     }
-
-//    private void changeActiveColorButtonColor(Button activeColorButton, Button colorPickerButton) {
-//        Drawable colorPickerBackground = colorPickerButton.getBackground();
-//        if (colorPickerBackground instanceof GradientDrawable) {
-//            int color = ((GradientDrawable) colorPickerBackground).getColor().getDefaultColor();
-//            Drawable activeColorBackground = activeColorButton.getBackground();
-//            if (activeColorBackground instanceof GradientDrawable) {
-//
-//                // Extract RGB values
-//                int red = Color.red(color);
-//                int green = Color.green(color);
-//                int blue = Color.blue(color);
-//
-//                // Log or use the RGB values as needed
-//                Log.d("ColorPicker", "R: " + red + ", G: " + green + ", B: " + blue);
-//                ((GradientDrawable) activeColorBackground).setColor(color);
-//                int modeNumber = ModeTab.currentMode.getModeNumber();
-//                int activeButtonIndex;
-//                for (int i = 0; i < modeTabs.get(modeNumber).getActiveColorButtons().size(); i++) {
-//                    if (modeTabs.get(modeNumber).getActiveColorButtons().get(i) == activeColorButton){
-//                        activeButtonIndex = i;
-//                    }
-//                }
-//
-//                try {
-//                    byte[] data = new byte[2 + 2 * 3];
-//                    data[0] = (byte) modeNumber; // First byte is the mode
-//                    data[1] = (byte) 2; // Second byte is the number of colors
-//
-//                    data[2] = (byte) red; // Red component
-//                    data[3] = (byte) green; // Green component
-//                    data[4] = (byte) blue; // Blue component
-//
-//
-////                        byte[] colorData = new byte[]{(byte) value};
-//                        bluetoothComm.writeColor(data);
-//
-//                } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-//                    Log.d("Color", e.getMessage());
-//                }
-//
-//            }
-//
-//            saveActiveColorToPreferences(activeColorButton.getId(), color);
-//
-//            Log.d("Change Btn color", "Color changed to: " + Integer.toHexString(color));
-//        }
-//    }
-
-
 
     @Nullable
     private ModeTab getTabByButton(Button clickedButton) {
@@ -284,5 +237,19 @@ public class ActiveButtonsManager {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("pickerColor" + buttonId, color);
         editor.apply();
+    }
+
+    public void setAllActiveColorButtonsEnabled(boolean isEnabled) {
+        for (ModeTab modeTab : modeTabs) {
+            for (Button activeColorButton : modeTab.getActiveColorButtons()) {
+                activeColorButton.setEnabled(isEnabled);
+
+                // Reset appearance if disabling
+                if (!isEnabled) {
+                    resetButtonAppearance(activeColorButton);
+
+                }
+            }
+        }
     }
 }

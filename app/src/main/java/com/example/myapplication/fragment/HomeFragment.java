@@ -3,7 +3,10 @@ package com.example.myapplication.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,8 +24,10 @@ import androidx.fragment.app.Fragment;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.myapplication.FragmentBroadcastListener;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.ble.BluetoothHandler;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.FragmentType;
@@ -32,7 +37,7 @@ import com.example.myapplication.constant.StateAnimation;
 import com.example.myapplication.util.BLECommunicationUtil;
 import com.example.myapplication.util.BroadcastReceiverUtil;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements FragmentBroadcastListener {
     private BLECommunicationUtil bluetoothComm;
     private FrameLayout homeLayout;
     private ImageView toggleView;
@@ -44,23 +49,20 @@ public class HomeFragment extends Fragment {
     private ImageView cloudImageLeftWhite;
     private ImageView cloudImageRightBlack;
     private ImageView cloudImageRightWhite;
-
-    private float finalX_Left=0, finalY_Left;
-    private float finalX_Right=0, finalY_Right;
-
-    Animation fadeTransition;
     Lamp currentState = Lamp.OFF;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.d("HOME", "onCreateView " + this);
 
         View view = inflater.inflate(R.layout.home, container, false);
         bluetoothComm = new BLECommunicationUtil(getContext());
 
         initView(view);
         initBtnListeners();
-        initBroadcastReceiver();
         loadState();
 
         return view;
@@ -76,8 +78,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void toggleLampState() {
-//        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
-//        updateVisual(currentState); // Update UI immediately
+        currentState = Lamp.getToggle(LampCache.isOn()); // Expected state after toggle
+        updateVisual(currentState); // Update UI immediately
 
         try {
             bluetoothComm.readLampState();
@@ -94,12 +96,12 @@ public class HomeFragment extends Fragment {
     }
 
     public void updateVisual(Lamp lampState) {
+        Log.d("updateVisual", "Before");
         if (lampState == currentState) {
             return;
         }
 
-        Log.d("updateVisual", "Pisun");
-        Log.d("LetfCloudPosition", String.valueOf(StateAnimation.finalX_Left) );
+        Log.d("updateVisual", "After");
         switch (lampState) {
             case OFF:
                 toggleView.setImageResource(R.drawable.turn_off_image);
@@ -135,18 +137,14 @@ public class HomeFragment extends Fragment {
                 currentState = Lamp.ON;
                 break;
         }
-
-//        LampCache.setIsOn(lampState);
     }
 
     public void animationStopBtnOff() {
-
         animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 1.0f, 1.0f);
         animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left , 0.0f, 0.0f);
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 0.0f);
-
     }
 
     private void initBtnListeners() {
@@ -187,62 +185,32 @@ public class HomeFragment extends Fragment {
         cloudImageRightWhite = view.findViewById(R.id.cloud_right_white);
     }
 
-    private void initBroadcastReceiver() {
-        receiverUtil = new BroadcastReceiverUtil(getContext(), new BroadcastReceiverUtil.Callback() {
-            @Override
-            public void onLampStateUpdate(Lamp lampState) {
-                updateVisual(lampState);
-            }
-            @Override
-            public void onDisconnect() {
-                updateVisual(Lamp.OFF);
-            }
-        });
-
-        receiverUtil.registerReceivers();
-    }
-
-    @Override
-    public void onDestroyView() {
-//        Log.d("HOME", "DESTROY");
-        super.onDestroyView();
-        receiverUtil.unregisterReceivers();
-    }
-
     public void animationBtnOn() {
-
         animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - 400, 1.0f, 0.0f);
         animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - 400, 0.0f, 1.0f);
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + 300, 1.0f, 0.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + 300, 0.0f, 1.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 1.0f);
-
-
     }
 
     public void animationStopBtnOn() {
-
         animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 0.0f, 0.0f);
-        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left , 1.0f, 1.0f);
-        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
-        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
-        animateCloud(Sunshine, "translationX", 0, 0 , 1.0f, 1.0f);
-
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 1.0f, 1.0f);
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right, 0.0f, 0.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right, 1.0f, 1.0f);
+        animateCloud(Sunshine, "translationX", 0, 0, 1.0f, 1.0f);
     }
 
     public void animationBtnOff() {
-
         animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+400, 0.0f, 1.0f); // Повернення до первісного положення
         animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+400, 1.0f, 0.0f); // Повернення до первісного положення
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-300,0.0f, 1.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-300, 1.0f, 0.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 1.0f, 0.0f);
-
     }
 
 
     private void animateCloud(ImageView cloud, String property, float startValue, float endValue, float startAlpha, float endAlpha) {
-
         ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(cloud, property, startValue, endValue);
         translationAnimator.setDuration(1000); // Тривалість анімації переміщення
 
@@ -256,9 +224,38 @@ public class HomeFragment extends Fragment {
         animatorSet.start();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("HOME", "DESTROY " + this.toString());
+    }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setCurrentFragmentListener(this);
+        }
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setCurrentFragmentListener(null);
+        }
+    }
+
+    @Override
+    public void onLampStateUpdate(Lamp state) {
+        updateVisual(state);
+    }
+
+    @Override
+    public void onDisconnect() {
+        updateVisual(Lamp.OFF);
+    }
 }
 
 

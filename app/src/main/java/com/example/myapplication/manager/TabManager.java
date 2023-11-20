@@ -34,7 +34,17 @@ public class TabManager {
         this.tabInfoList = tabInfoList;
         this.currentImageView = currentImageView;
         colorBtnManager = activeButtonsManager; // Use passed instance
-        // ... other initializations ...
+        loadColorData();
+
+    }
+
+    private void loadColorData() {
+        try {
+            Log.d("COLOR READ", "COLOR READ");
+            bluetoothComm.readActiveColors();
+        } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+            Log.d("LightFragment", "Error loading color data", e);
+        }
     }
 
     public ActiveButtonsManager getActiveButtonsManager() {

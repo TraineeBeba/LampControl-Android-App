@@ -48,8 +48,11 @@ public class BLECommunicationUtil {
         bluetoothHandler.readCharacteristic(LC_SERVICE_UUID, LAMP_BRIGHTNESS_CHARACTERISTIC_UUID);
     }
 
+    public void readActiveColors() throws BluetoothNotConnectedException, CharacteristicNotFoundException {
+        bluetoothHandler.readCharacteristic(LC_SERVICE_UUID, LAMP_COLOR_CHARACTERISTIC_UUID);
+    }
+
     public void writeColor(byte[] newValue) throws BluetoothNotConnectedException, CharacteristicNotFoundException {
         bluetoothHandler.writeCharacteristic(LC_SERVICE_UUID, LAMP_COLOR_CHARACTERISTIC_UUID, newValue, WriteType.WITH_RESPONSE);
     }
-
 }
