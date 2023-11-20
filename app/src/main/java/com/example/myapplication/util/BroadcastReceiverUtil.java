@@ -52,12 +52,12 @@ public class BroadcastReceiverUtil {
                 if (intent.getAction().equals(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION)) {
                     String brightnessStr = intent.getStringExtra(BluetoothHandler.EXTRA_BRIGHTNESS);
                     int brightness = Integer.valueOf(brightnessStr);
+                    Log.d("brightnessReceiver", "Brightness: " + brightness);
                     callback.onBrightnessUpdate(brightness);
 
                     LampCache.setBrightness(brightness);
                     LampCache.setSeekBarPos(getSeekBarPosition(brightness));
 
-                    Log.d("GET", "Brightness: " + brightness);
                 }
             }
         };
@@ -68,9 +68,9 @@ public class BroadcastReceiverUtil {
                 if (intent.getAction().equals(BluetoothHandler.MODE_UPDATE_ACTION)) {
                     String modeStr = intent.getStringExtra(BluetoothHandler.EXTRA_MODE);
                     int mode = Integer.valueOf(modeStr);
+                    Log.d("modeReceiver", "Mode: " + Mode.fromModeNumber(mode));
                     callback.onModeUpdate(mode);
 
-                    Log.d("GET", "Mode: " + Mode.fromModeNumber(mode));
                 }
             }
         };
@@ -82,10 +82,10 @@ public class BroadcastReceiverUtil {
                     String lampStateStr = intent.getStringExtra(BluetoothHandler.EXTRA_LAMP_STATE);
                     Lamp lampState = Lamp.valueOf(lampStateStr);
                     LampCache.setIsOn(lampState);
+                    Log.d("GET", "State: " + lampState.name() + " " + this.toString());
 
                     callback.onLampStateUpdate(lampState);
 
-                    Log.d("GET", "State: " + lampState.name());
                 }
             }
         };
@@ -94,8 +94,8 @@ public class BroadcastReceiverUtil {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION)) {
+                    Log.d("disconnectReceiver", "Disconnect: ");
                     callback.onDisconnect();
-                    Log.d("GET", "Disconnect: ");
                 }
             }
         };

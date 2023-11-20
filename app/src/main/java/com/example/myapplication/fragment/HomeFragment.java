@@ -160,12 +160,14 @@ public class HomeFragment extends Fragment {
         btnNavLight.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).navigateToFragment(R.id.homeLayout, FragmentType.LIGHT);
+
             }
         });
 
         btnNavWifi.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).navigateToFragment(R.id.homeLayout, FragmentType.WIFI);
+
             }
         });
     }
