@@ -1,5 +1,9 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.util.BrightnessModeUtil.getSeekBarPosition;
+
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.view.WindowManager;
 import android.Manifest;
 import android.app.Activity;
@@ -7,7 +11,6 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -22,20 +25,48 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.ble.BluetoothHandler;
 import com.example.myapplication.constant.FragmentType;
+import com.example.myapplication.constant.Lamp;
+import com.example.myapplication.constant.LampCache;
+import com.example.myapplication.constant.Mode;
 import com.example.myapplication.fragment.HomeFragment;
-
-import com.example.myapplication.fragment.WifiFragment;
+import com.example.myapplication.model.ModeColorData;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private FragmentBroadcastListener currentFragmentListener;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(lampStateReceiver, new IntentFilter(BluetoothHandler.LAMP_STATE_UPDATE_ACTION));
+        registerReceiver(brightnessReceiver, new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION));
+        registerReceiver(modeReceiver, new IntentFilter(BluetoothHandler.MODE_UPDATE_ACTION));
+        registerReceiver(disconnectReceiver, new IntentFilter(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION));
+        registerReceiver(colorDataReceiver, new IntentFilter(BluetoothHandler.COLOR_DATA_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(lampStateReceiver);
+        unregisterReceiver(brightnessReceiver);
+        unregisterReceiver(modeReceiver);
+        unregisterReceiver(disconnectReceiver);
+        unregisterReceiver(colorDataReceiver);
+
+    }
+
+    public void setCurrentFragmentListener(FragmentBroadcastListener listener) {
+        this.currentFragmentListener = listener;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,5 +225,74 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    private BroadcastReceiver lampStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (currentFragmentListener != null) {
+                String lampStateStr = intent.getStringExtra(BluetoothHandler.EXTRA_LAMP_STATE);
+                Lamp lampState = Lamp.valueOf(lampStateStr);
+                LampCache.setIsOn(lampState);
+                currentFragmentListener.onLampStateUpdate(lampState);
+            }
+        }
+    };
+
+    private BroadcastReceiver brightnessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION)) {
+                String brightnessStr = intent.getStringExtra(BluetoothHandler.EXTRA_BRIGHTNESS);
+                int brightness = Integer.valueOf(brightnessStr);
+                Log.d("Brightness", "Brightness: " + brightness);
+                currentFragmentListener.onBrightnessUpdate(brightness);
+
+                LampCache.setBrightness(brightness);
+                LampCache.setSeekBarPos(getSeekBarPosition(brightness));
+
+            }
+        }
+    };
+
+    private BroadcastReceiver modeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothHandler.MODE_UPDATE_ACTION)) {
+                String modeStr = intent.getStringExtra(BluetoothHandler.EXTRA_MODE);
+                int mode = Integer.valueOf(modeStr);
+                Log.d("Mode", "Mode: " + Mode.fromModeNumber(mode));
+                currentFragmentListener.onModeUpdate(mode);
+
+            }
+        }
+    };
+
+
+    private BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION)) {
+                Log.d("Disconnect", "Disconnect: ");
+                currentFragmentListener.onDisconnect();
+            }
+        }
+    };
+
+    private BroadcastReceiver colorDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothHandler.COLOR_DATA_UPDATE_ACTION)) {
+                Log.d("colorDataReceiver", "RECIEVED");
+                byte[] rawColorData = intent.getByteArrayExtra(BluetoothHandler.EXTRA_COLOR_DATA);
+
+                List<ModeColorData> colorData = ModeColorData.parseColorData(rawColorData);
+
+                if (currentFragmentListener != null) {
+                    currentFragmentListener.onColorDataUpdate(colorData);
+                }
+            }
+        }
+    };
+
 
 }

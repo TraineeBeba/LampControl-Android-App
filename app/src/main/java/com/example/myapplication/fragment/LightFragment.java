@@ -2,6 +2,10 @@ package com.example.myapplication.fragment;
 
 import androidx.fragment.app.Fragment;
 
+import android.content.BroadcastReceiver;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -9,13 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 
+import com.example.myapplication.FragmentBroadcastListener;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.Mode;
@@ -23,6 +26,7 @@ import com.example.myapplication.manager.ActiveButtonsManager;
 import com.example.myapplication.manager.ColorPanelManager;
 import com.example.myapplication.manager.SeekBarManager;
 import com.example.myapplication.manager.TabManager;
+import com.example.myapplication.model.ModeColorData;
 import com.example.myapplication.model.ModeTab;
 import com.example.myapplication.R;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
@@ -31,14 +35,13 @@ import com.example.myapplication.constant.FragmentType;
 import com.example.myapplication.constant.LampCache;
 import com.example.myapplication.model.TabInfo;
 import com.example.myapplication.util.BLECommunicationUtil;
-import com.example.myapplication.util.BrightnessModeUtil;
 import com.example.myapplication.util.BroadcastReceiverUtil;
 import com.github.mata1.simpledroidcolorpicker.pickers.CircleColorPicker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LightFragment extends Fragment {
+public class LightFragment extends Fragment implements FragmentBroadcastListener {
     private BroadcastReceiverUtil receiverUtil;
     private BLECommunicationUtil bluetoothComm;
     private final List<ModeTab> modeTabs = new ArrayList<>();
@@ -53,7 +56,12 @@ public class LightFragment extends Fragment {
 
     private TabManager tabManager;
     private SeekBarManager seekBarManager;
-
+    // Broadcast Receivers
+    private BroadcastReceiver brightnessUpdateReceiver;
+    private BroadcastReceiver modeUpdateReceiver;
+    private BroadcastReceiver lampStateUpdateReceiver;
+    private BroadcastReceiver disconnectReceiver;
+    ActiveButtonsManager activeButtonsManager;
     private Handler debounceHandler = new Handler();
 
 
@@ -62,14 +70,19 @@ public class LightFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.light, container, false);
+
+        Log.d("LIGHT", "CREATE " + this);
         bluetoothComm = new BLECommunicationUtil(getContext());
+
+//        registerReceivers();
 
         initView(view);
         initBtnListeners();
-        initBroadcastReceiver();
+//        initBroadcastReceiver();
 
         initColorPickerButtons(view);
-        ActiveButtonsManager activeButtonsManager = new ActiveButtonsManager(getContext(), bluetoothComm, modeTabs);
+
+        activeButtonsManager = new ActiveButtonsManager(getContext(), bluetoothComm, modeTabs);
         tabManager = new TabManager(bluetoothComm, getContext(), tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
         colorPanelManager = new ColorPanelManager(getContext(), view, rcp1, activeButtonsManager);
         seekBarManager = new SeekBarManager(seekBar, percentageText, bluetoothComm);
@@ -78,7 +91,7 @@ public class LightFragment extends Fragment {
         seekBarManager.setupListeners();
 
         tabManager.getActiveButtonsManager().resetAll();
-
+        activeButtonsManager.setAllActiveColorButtonsEnabled(false); // Disable all active color buttons
 
         return view;
     }
@@ -93,7 +106,6 @@ public class LightFragment extends Fragment {
                 }
             }
     }
-
 
     private void initView(View view) {
         rcp1 = view.findViewById(R.id.rcp1);
@@ -128,42 +140,6 @@ public class LightFragment extends Fragment {
         modeTabs.get(2).getActiveColorButtons().add(view.findViewById(R.id.activeColorBtnMode3_1));
     }
 
-    private void initBroadcastReceiver() {
-        receiverUtil = new BroadcastReceiverUtil(getContext(), new BroadcastReceiverUtil.Callback() {
-            @Override
-            public void onBrightnessUpdate(int brightness) {
-                seekBarManager.updateVisualBar(brightness);
-            }
-            @Override
-            public void onModeUpdate(int mode) {
-                tabManager.updateVisualMode(mode);
-            }
-            @Override
-            public void onLampStateUpdate(Lamp lampState) {
-                switch (lampState) {
-                    case OFF:
-                        seekBarManager.getSeekBar().setEnabled(false);
-                        percentageText.setText(LampCache.getBrightnessText() + " %");
-                        break;
-                    case ON:
-                        seekBarManager.getSeekBar().setEnabled(true);
-                        try {
-                            bluetoothComm.readBrightness();
-                        } catch (BluetoothNotConnectedException |
-                                 CharacteristicNotFoundException e) {
-                            Log.d("Exc", "Exc");
-                        }
-                        break;
-                }
-            }
-            @Override
-            public void onDisconnect() {
-                seekBarManager.getSeekBar().setEnabled(false);
-            }
-        });
-
-        receiverUtil.registerReceivers();
-    }
     private void initBtnListeners() {
         btnNavHome.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
@@ -213,8 +189,140 @@ public class LightFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        Log.d("LIGHT", "DESTROY " + this);
+//        bluetoothComm = null;
+//        unregisterReceivers();
         super.onDestroyView();
-        receiverUtil.unregisterReceivers();
+//        receiverUtil.unregisterReceivers();
     }
+
+
+//    private void registerReceivers() {
+//        // Initialize and register Brightness Update Receiver
+//        brightnessUpdateReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                int brightness = intent.getIntExtra(BluetoothHandler.EXTRA_BRIGHTNESS, 0);
+//                seekBarManager.updateVisualBar(brightness);
+//            }
+//        };
+//        requireActivity().registerReceiver(brightnessUpdateReceiver, new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION));
+//
+//        // Initialize and register Mode Update Receiver
+//        modeUpdateReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                int mode = intent.getIntExtra(BluetoothHandler.EXTRA_MODE, 0);
+//                tabManager.updateVisualMode(mode);
+//            }
+//        };
+//        requireActivity().registerReceiver(modeUpdateReceiver, new IntentFilter(BluetoothHandler.MODE_UPDATE_ACTION));
+//
+//        // Initialize and register Lamp State Update Receiver
+//        lampStateUpdateReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                String lampStateStr = intent.getStringExtra(BluetoothHandler.EXTRA_LAMP_STATE);
+//                Lamp lampState = Lamp.valueOf(lampStateStr);
+//                Log.d("Light LampStateReceiver", "State: " + lampState.name());
+//                // Handle lamp state update
+//                // ...
+//            }
+//        };
+//        requireActivity().registerReceiver(lampStateUpdateReceiver, new IntentFilter(BluetoothHandler.LAMP_STATE_UPDATE_ACTION));
+//
+//        // Initialize and register Disconnect Receiver
+//        disconnectReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                // Handle disconnect event
+//                // ...
+//            }
+//        };
+//        getActivity().registerReceiver(disconnectReceiver, new IntentFilter(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION));
+//    }
+//    @Override
+//    public void onPause() {
+//        Log.d("Pause", "LIGHT PAUSE");
+//        super.onPause();
+//        unregisterReceivers();
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        Log.d("Resume", "LIGHT RESUME");
+//        super.onResume();
+//        registerReceivers();
+//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setCurrentFragmentListener(this);
+        }
+
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setCurrentFragmentListener(null);
+        }
+    }
+
+    @Override
+    public void onBrightnessUpdate(int brightness) {
+        seekBarManager.updateVisualBar(brightness);
+    }
+    @Override
+    public void onModeUpdate(int mode) {
+        tabManager.updateVisualMode(mode);
+    }
+    @Override
+    public void onLampStateUpdate(Lamp lampState) {
+        switch (lampState) {
+            case OFF:
+                seekBarManager.getSeekBar().setEnabled(false);
+                percentageText.setText(LampCache.getBrightnessText() + " %");
+                activeButtonsManager.setAllActiveColorButtonsEnabled(false); // Disable all active color buttons
+                break;
+            case ON:
+                seekBarManager.getSeekBar().setEnabled(true);
+                activeButtonsManager.setAllActiveColorButtonsEnabled(true); // Enable all active color buttons
+                try {
+                    bluetoothComm.readBrightness();
+                    bluetoothComm.readMode();
+                    bluetoothComm.readActiveColors();
+                } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+                    Log.d("Exc", "Exc");
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onColorDataUpdate(List<ModeColorData> colorDataList) {
+        Log.d("onColorDataUpdate", "onColorDataUpdate");
+        for (ModeColorData colorData : colorDataList) {
+            int modeIndex = colorData.modeIndex;
+            List<ModeColorData.RGBColor> colors = colorData.colors;
+
+            if (modeIndex >= 0 && modeIndex < modeTabs.size()) {
+                ModeTab tab = modeTabs.get(modeIndex);
+                Log.d("Tab", String.valueOf(modeIndex));
+                tab.updateActiveButtonColors(getContext(), colors);
+            }
+        }
+    }
+
+
+    @Override
+    public void onDisconnect() {
+        seekBarManager.getSeekBar().setEnabled(false);
+        activeButtonsManager.setAllActiveColorButtonsEnabled(false); // Disable all active color buttons
+    }
+
 
 }
