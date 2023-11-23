@@ -61,6 +61,7 @@ public class BluetoothHandler {
     public static final UUID LAMP_COLOR_CHARACTERISTIC_UUID = UUID.fromString("6421350a-fe82-480f-af3f-5c24925ec0ae");
 
     // Local variables
+    private static final long SCAN_PERIOD = 10000; // 10 seconds
     public BluetoothCentralManager central;
     private static BluetoothHandler instance = null;
     private  Context context;
@@ -216,6 +217,7 @@ public class BluetoothHandler {
         @Override
         public void onConnectedPeripheral(@NotNull BluetoothPeripheral peripheral) {
             peripheral.readCharacteristic(LC_SERVICE_UUID, LAMP_SWITCH_CHARACTERISTIC_UUID);
+            //Todo check if this is needed and correct
             synchronized (BluetoothHandler.this) {
                 BluetoothHandler.getInstance(context).peripheral = peripheral;
             }
@@ -224,12 +226,14 @@ public class BluetoothHandler {
 
         @Override
         public void onConnectionFailed(@NotNull BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
+            //Todo check if this is needed and correct
             BluetoothHandler.getInstance(context).peripheral = null;
             Log.d("Scan",String.format("connection '%s' failed with status %s", peripheral.getName(), status));
         }
 
         @Override
         public void onDisconnectedPeripheral(@NotNull final BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
+            //Todo check if this is needed and correct
             synchronized (BluetoothHandler.this) {
                 if (BluetoothHandler.getInstance(context).peripheral != null && BluetoothHandler.getInstance(context).peripheral.equals(peripheral)) {
                     BluetoothHandler.getInstance(context).peripheral = null;
@@ -239,20 +243,25 @@ public class BluetoothHandler {
             Log.d("Scan",String.format("disconnected '%s' with status %s", peripheral.getName(), status));
 
             // Reconnect to this device when it becomes available again
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    central.autoConnectPeripheral(peripheral, peripheralCallback);
-                }
-            }, 5000);
+            handler.postDelayed(() -> central.autoConnectPeripheral(peripheral, peripheralCallback), 5000);
         }
 
         @Override
         public void onDiscoveredPeripheral(@NotNull BluetoothPeripheral peripheral, @NotNull ScanResult scanResult) {
+            Log.d("onDiscoveredPeripheral",String.format("Found peripheral '%s'", peripheral.getName()));
             discoveredPeripherals.put(peripheral.getName(), peripheral);
             if (scanCallback != null) {
                 scanCallback.onDeviceDiscovered(peripheral.getName());
             }
+            // Removed the stopScan() call
+
+            //Todo check if this is needed
+//            if (peripheral.getName().contains("Contour") && peripheral.getBondState() == BondState.NONE) {
+//                // Create a bond immediately to avoid double pairing popups
+//                central.createBond(peripheral, peripheralCallback);
+//            } else {
+//                central.connectPeripheral(peripheral, peripheralCallback);
+//            }
         }
 
         @Override
@@ -261,8 +270,10 @@ public class BluetoothHandler {
             if (state == BluetoothAdapter.STATE_ON) {
                 // Bluetooth is on now, start scanning again
                 // Scan for peripherals with a certain service UUIDs
-                central.startPairingPopupHack();
-                startScan();
+//                central.startPairingPopupHack();
+//                startScan();
+            } else if (state == BluetoothAdapter.STATE_OFF) {
+                sendDisconnectLampStateUpdateBroadcast();
             }
         }
 
@@ -281,17 +292,37 @@ public class BluetoothHandler {
     }
 
     private BluetoothHandler(Context context) {
+        Log.d("Scan","BluetoothHandler constructor");
         this.context = context;
         central = new BluetoothCentralManager(context, bluetoothCentralManagerCallback, new Handler());
-//        central.startPairingPopupHack();
-//        startScan();
+//        findDevices();
     }
 
+    public void findDevices() {
+        if(central!=null){
+            central.startPairingPopupHack();
+            startScan();
+        }
+    }
+
+//    public void startScan() {
+//        handler.postDelayed(() -> central.scanForPeripheralsWithServices(new UUID[]{
+//                        LC_SERVICE_UUID,
+//                }
+//        ),1000);
+//    }
+
     public void startScan() {
-        handler.postDelayed(() -> central.scanForPeripheralsWithServices(new UUID[]{
-                        LC_SERVICE_UUID,
-                }
-        ),1000);
+        handler.postDelayed(() -> {
+            central.scanForPeripheralsWithServices(new UUID[]{LC_SERVICE_UUID});
+            handler.postDelayed(this::stopScanIfNeeded, SCAN_PERIOD); // Stop scanning after a period
+        }, 1000);
+    }
+
+    private void stopScanIfNeeded() {
+        if (central.isScanning()) {
+            central.stopScan();
+        }
     }
 
     public void readCharacteristic(UUID serviceUUID, UUID characteristicUUID) throws BluetoothNotConnectedException, CharacteristicNotFoundException {

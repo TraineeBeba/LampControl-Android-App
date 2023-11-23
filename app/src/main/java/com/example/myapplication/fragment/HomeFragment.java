@@ -38,7 +38,6 @@ import com.example.myapplication.util.BLECommunicationUtil;
 import com.example.myapplication.util.BroadcastReceiverUtil;
 
 public class HomeFragment extends Fragment implements FragmentBroadcastListener {
-    private BLECommunicationUtil bluetoothComm;
     private FrameLayout homeLayout;
     private ImageView toggleView;
     private Button btnNavWifi, btnNavLight, btnToggleLamp;
@@ -51,7 +50,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     private ImageView cloudImageRightWhite;
     Lamp currentState = Lamp.OFF;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,7 +57,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         Log.d("HOME", "onCreateView " + this);
 
         View view = inflater.inflate(R.layout.home, container, false);
-        bluetoothComm = new BLECommunicationUtil(getContext());
+//        bluetoothComm = new BLECommunicationUtil(getContext());
 
         initView(view);
         initBtnListeners();
@@ -68,11 +66,13 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         return view;
     }
 
+
+
     private void loadState() {
         updateVisual(LampCache.isOn());
         try {
-            bluetoothComm.readLampState();
-        } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+            MainActivity.getBleCommunicationUtil().readLampState();
+        } catch (NullPointerException | BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -82,9 +82,9 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         updateVisual(currentState); // Update UI immediately
 
         try {
-            bluetoothComm.readLampState();
+            MainActivity.getBleCommunicationUtil().readLampState();
             Lamp toggleState = Lamp.getToggle(LampCache.isOn());
-            bluetoothComm.writeLampState(toggleState.name().getBytes());
+            MainActivity.getBleCommunicationUtil().writeLampState(toggleState.name().getBytes());
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }

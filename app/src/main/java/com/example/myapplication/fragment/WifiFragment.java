@@ -1,5 +1,7 @@
 package com.example.myapplication.fragment;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -69,77 +71,54 @@ public class WifiFragment extends Fragment {
             }
         });
 
-        BluetoothHandler.getInstance(getContext()).setBluetoothScanCallback(new BluetoothHandler.BluetoothScanCallback() {
-            @Override
-            public void onDeviceDiscovered(String deviceName) {
-                handler.post(() -> {
-                    if (!catNames.contains(deviceName)) {
-                        catNames.add(deviceName);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+        BluetoothHandler.getInstance(getContext()).setBluetoothScanCallback(deviceName -> handler.post(() -> {
+            if (!catNames.contains(deviceName)) {
+                catNames.add(deviceName);
+                adapter.notifyDataSetChanged();
             }
-        });
+        }));
 
 
         buttonHome = view.findViewById(R.id.button_home);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).navigateToFragment(R.id.wifiLayout, FragmentType.HOME);
-                }
+        buttonHome.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).navigateToFragment(R.id.wifiLayout, FragmentType.HOME);
             }
         });
 
         buttonLight = view.findViewById(R.id.button_light);
-        buttonLight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).navigateToFragment(R.id.wifiLayout, FragmentType.LIGHT);
-                }
+        buttonLight.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).navigateToFragment(R.id.wifiLayout, FragmentType.LIGHT);
             }
         });
 
         search_lamp = view.findViewById(R.id.search_lamp);
-        search_lamp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wifilayout.setBackgroundResource(R.drawable.lamps_near_background);
-                panel1.setVisibility(View.INVISIBLE);
-                panel2.setVisibility(View.VISIBLE);
+        search_lamp.setOnClickListener(v -> {
+            wifilayout.setBackgroundResource(R.drawable.lamps_near_background);
+            panel1.setVisibility(View.INVISIBLE);
+            panel2.setVisibility(View.VISIBLE);
 
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // Add "LampControl" to the list and notify the adapter
-//                        catNames = new ArrayList<>();
-//                        catNames.add("LampControl");
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                }, 5000); // 5000 milliseconds delay
+            // Check permissions and initialize Bluetooth
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).tryToEnableBLEandStartScanning();
+            }
+            if(((MainActivity) getActivity()).getMissingPermissions(((MainActivity) getActivity()).getRequiredPermissions()).length == 0) {
+                BluetoothHandler.getInstance(context).findDevices();
             }
         });
 
         back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
-        back_to_conn_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
-                panel1.setVisibility(View.VISIBLE);
-                panel2.setVisibility(View.INVISIBLE);
-            }
+        back_to_conn_btn.setOnClickListener(v -> {
+            wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
+            panel1.setVisibility(View.VISIBLE);
+            panel2.setVisibility(View.INVISIBLE);
         });
         back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
-        back_to_conn_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
-                panel1.setVisibility(View.VISIBLE);
-                panel2.setVisibility(View.INVISIBLE);
-            }
+        back_to_conn_btn.setOnClickListener(v -> {
+            wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
+            panel1.setVisibility(View.VISIBLE);
+            panel2.setVisibility(View.INVISIBLE);
         });
 
         update_btn = view.findViewById(R.id.update_btn);
@@ -148,8 +127,13 @@ public class WifiFragment extends Fragment {
             catNames.clear();
             adapter.notifyDataSetChanged();
 
-            // Start scanning for devices
-            BluetoothHandler.getInstance(getContext()).startScan();
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).tryToEnableBLEandStartScanning();
+            }
+
+            if(((MainActivity) getActivity()).getMissingPermissions(((MainActivity) getActivity()).getRequiredPermissions()).length == 0) {
+                BluetoothHandler.getInstance(context).findDevices();
+            }
         });
         return view;
     }

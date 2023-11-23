@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.Lamp;
@@ -24,11 +25,9 @@ public class ActiveButtonsManager {
 
     private final List<ModeTab> modeTabs;
     private final Context context;
-    private final BLECommunicationUtil bluetoothComm;
 
-    public ActiveButtonsManager(Context context, BLECommunicationUtil bluetoothComm, List<ModeTab> modeTabs) {
+    public ActiveButtonsManager(Context context, List<ModeTab> modeTabs) {
         this.context = context;
-        this.bluetoothComm = bluetoothComm;
         this.modeTabs = modeTabs;
         initActiveColorButtonsListeners();
         initColorPickerButtonsListeners();
@@ -72,7 +71,7 @@ public class ActiveButtonsManager {
                             data[3] = (byte) green; // Green component
                             data[4] = (byte) blue; // Blue component
 
-                            bluetoothComm.writeColor(data);
+                            MainActivity.getBleCommunicationUtil().writeColor(data);
 
                         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
                             Log.d("Color", e.getMessage());

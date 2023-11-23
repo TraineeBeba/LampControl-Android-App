@@ -16,11 +16,9 @@ import com.welie.blessed.WriteType;
 
 public class BLECommunicationUtil {
     private BluetoothHandler bluetoothHandler;
-    private Context context;
 
-    public BLECommunicationUtil(Context context) {
-        this.context = context;
-        this.bluetoothHandler = BluetoothHandler.getInstance(context);
+    public BLECommunicationUtil(BluetoothHandler bluetoothHandler) {
+        this.bluetoothHandler = bluetoothHandler;
     }
 
     public void readLampState() throws BluetoothNotConnectedException, CharacteristicNotFoundException {

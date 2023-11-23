@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.Lamp;
@@ -18,7 +19,6 @@ import com.example.myapplication.util.BLECommunicationUtil;
 import java.util.List;
 
 public class TabManager {
-    private BLECommunicationUtil bluetoothComm;
     private List<TabInfo> tabInfoList;
     private ImageView currentImageView;
     private static ActiveButtonsManager colorBtnManager;
@@ -28,9 +28,8 @@ public class TabManager {
     private List<ModeTab> modeTabs;
     private Context context;
 
-    public TabManager(BLECommunicationUtil bluetoothComm, Context context, List<TabInfo> tabInfoList, ImageView currentImageView, ActiveButtonsManager activeButtonsManager) {
+    public TabManager( Context context, List<TabInfo> tabInfoList, ImageView currentImageView, ActiveButtonsManager activeButtonsManager) {
         this.context = context;
-        this.bluetoothComm = bluetoothComm;
         this.tabInfoList = tabInfoList;
         this.currentImageView = currentImageView;
         colorBtnManager = activeButtonsManager; // Use passed instance
@@ -41,7 +40,7 @@ public class TabManager {
     private void loadColorData() {
         try {
             Log.d("COLOR READ", "COLOR READ");
-            bluetoothComm.readActiveColors();
+            MainActivity.getBleCommunicationUtil().readActiveColors();
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Log.d("LightFragment", "Error loading color data", e);
         }
@@ -78,7 +77,7 @@ public class TabManager {
 
         try {
             byte[] mode = new byte[]{(byte) modeNumber};
-            bluetoothComm.writeMode(mode);
+            MainActivity.getBleCommunicationUtil().writeMode(mode);
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Log.e("LightFragment", "Error updating lamp mode", e);
 //            Toast.makeText(getContext(), "Error updating mode: " + e.getMessage(), Toast.LENGTH_SHORT).show();

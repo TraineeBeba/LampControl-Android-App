@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.Lamp;
@@ -15,14 +16,12 @@ import com.example.myapplication.util.BrightnessModeUtil;
 public class SeekBarManager {
     private SeekBar seekBar;
     private TextView percentageText;
-    private BLECommunicationUtil bluetoothComm;
     private Handler debounceHandler = new Handler();
     private Runnable debounceRunnable;
 
-    public SeekBarManager(SeekBar seekBar, TextView percentageText, BLECommunicationUtil bluetoothComm) {
+    public SeekBarManager(SeekBar seekBar, TextView percentageText) {
         this.seekBar = seekBar;
         this.percentageText = percentageText;
-        this.bluetoothComm = bluetoothComm;
 
         setupSeekBar();
     }
@@ -31,7 +30,7 @@ public class SeekBarManager {
         seekBar.setProgress(LampCache.getSeekBarPos());
         percentageText.setText(LampCache.getBrightnessText() + " %");
         try {
-            bluetoothComm.readLampState();
+            MainActivity.getBleCommunicationUtil().readLampState();
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             seekBar.setEnabled(false);
         }
@@ -41,7 +40,7 @@ public class SeekBarManager {
         try {
             if(LampCache.isOn() == Lamp.ON){
                 byte[] brightnessValue = new byte[]{(byte) value};
-                bluetoothComm.writeBrightness(brightnessValue);
+                MainActivity.getBleCommunicationUtil().writeBrightness(brightnessValue);
             }
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             updatePercentText(0);
@@ -66,7 +65,7 @@ public class SeekBarManager {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 try {
-                    bluetoothComm.readLampState();
+                    MainActivity.getBleCommunicationUtil().readLampState();
                 } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
                     seekBar.setEnabled(false);
                     Log.d("A", "A");

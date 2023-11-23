@@ -43,7 +43,7 @@ import java.util.List;
 
 public class LightFragment extends Fragment implements FragmentBroadcastListener {
     private BroadcastReceiverUtil receiverUtil;
-    private BLECommunicationUtil bluetoothComm;
+//    private BLECommunicationUtil bluetoothComm;
     private final List<ModeTab> modeTabs = new ArrayList<>();
     private RelativeLayout panelAddColor;
     private final List<TabInfo> tabInfoList = new ArrayList<>();
@@ -72,7 +72,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
         View view = inflater.inflate(R.layout.light, container, false);
 
         Log.d("LIGHT", "CREATE " + this);
-        bluetoothComm = new BLECommunicationUtil(getContext());
+//        bluetoothComm = new BLECommunicationUtil(getContext());
 
 //        registerReceivers();
 
@@ -82,10 +82,10 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
 
         initColorPickerButtons(view);
 
-        activeButtonsManager = new ActiveButtonsManager(getContext(), bluetoothComm, modeTabs);
-        tabManager = new TabManager(bluetoothComm, getContext(), tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
+        activeButtonsManager = new ActiveButtonsManager(getContext(), modeTabs);
+        tabManager = new TabManager(getContext(), tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
         colorPanelManager = new ColorPanelManager(getContext(), view, rcp1, activeButtonsManager);
-        seekBarManager = new SeekBarManager(seekBar, percentageText, bluetoothComm);
+        seekBarManager = new SeekBarManager(seekBar, percentageText);
 
         seekBarManager.setupSeekBar();
         seekBarManager.setupListeners();
@@ -292,9 +292,9 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
                 seekBarManager.getSeekBar().setEnabled(true);
                 activeButtonsManager.setAllActiveColorButtonsEnabled(true); // Enable all active color buttons
                 try {
-                    bluetoothComm.readBrightness();
-                    bluetoothComm.readMode();
-                    bluetoothComm.readActiveColors();
+                    MainActivity.getBleCommunicationUtil().readBrightness();
+                    MainActivity.getBleCommunicationUtil().readMode();
+                    MainActivity.getBleCommunicationUtil().readActiveColors();
                 } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
                     Log.d("Exc", "Exc");
                 }
