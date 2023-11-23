@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.MainActivity;
@@ -15,17 +14,17 @@ import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.LampCache;
 import com.example.myapplication.constant.Mode;
-import com.example.myapplication.manager.mode_tab.sub.TabActiveButtonsManager;
 import com.example.myapplication.manager.mode_tab.sub.ChangeColorTabManager;
 import com.example.myapplication.manager.mode_tab.sub.ColorPickerManager;
 import com.example.myapplication.manager.mode_tab.model.ModeTab;
+import com.example.myapplication.manager.mode_tab.sub.util.ButtonAppearanceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TabManager {
     private final Context context;
-    private AppCompatImageView currentImageView;
+    private ConstraintLayout currentImageView;
     private ChangeColorTabManager changeColorTabManager;
     private ColorPickerManager colorPickerManager;
     private List<ModeTab> modeTabs;
@@ -39,14 +38,15 @@ public class TabManager {
         initModeTabs(context, view);
         this.colorPickerManager = new ColorPickerManager(context, view, modeTabs);
         this.changeColorTabManager = new ChangeColorTabManager(context, view, colorPickerManager);
-        this.currentImageView = view.findViewById(R.id.imageView);
+        this.currentImageView = view.findViewById(R.id.modeImage);
         loadColorData();
-
+        resetAllBtns();
     }
 
-    public ColorPickerManager getColorPickerManager() {
-        return colorPickerManager;
+    public static Button getSelectedActiveColorBtn() {
+        return selectedActiveBtn;
     }
+
 
     private void initModeTabs(Context context, View view) {
         modeTabs = new ArrayList<>();
@@ -74,9 +74,18 @@ public class TabManager {
     }
 
     public void changeTab(Mode mode) {
-        colorPickerManager.resetAll();
+        resetAllBtns();
         updateTabVisibility(mode);
         updateLampMode(mode.getModeNumber());
+    }
+
+    private void resetAllBtns() {
+        colorPickerManager.resetAll();
+        for (ModeTab modeTab : modeTabs) {
+            for (Button activeColorButton : modeTab.getTabActiveButtonsManager().getActiveColorButtons()) {
+                ButtonAppearanceUtil.resetButtonAppearance(activeColorButton);
+            }
+        }
     }
 
     private void updateTabVisibility(Mode activeMode) {
@@ -86,8 +95,7 @@ public class TabManager {
         }
 
         ModeTab.currentMode = activeMode;
-        int drawableResId = activeMode.getDrawableResId();
-        currentImageView.setBackground(context.getDrawable(drawableResId));
+        currentImageView.setBackground(context.getDrawable(activeMode.getDrawableResId()));
     }
     private void updateLampMode(int modeNumber) {
         if (LampCache.isOn() == Lamp.OFF) return;

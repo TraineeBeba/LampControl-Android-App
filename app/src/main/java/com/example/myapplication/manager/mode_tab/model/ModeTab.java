@@ -1,25 +1,20 @@
 package com.example.myapplication.manager.mode_tab.model;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.constant.Mode;
-import com.example.myapplication.manager.mode_tab.sub.ColorPickerManager;
-import com.example.myapplication.manager.mode_tab.sub.TabActiveButtonsManager;
+import com.example.myapplication.manager.mode_tab.sub.ActiveButtonsManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModeTab {
-    private final TabActiveButtonsManager tabActiveButtonsManager;
+    private final ActiveButtonsManager activeButtonsManager;
     private Button selectedActiveColorBtn;
 
     public static Mode currentMode = Mode.MODE_ONE;
@@ -32,7 +27,7 @@ public class ModeTab {
     public ModeTab(Context context, View view, ConstraintLayout tabLayout, int drawableResId) {
         this.tabLayout = tabLayout;
         this.drawableResId = drawableResId;
-        this.tabActiveButtonsManager = new TabActiveButtonsManager(context, view);
+        this.activeButtonsManager = new ActiveButtonsManager(context, view);
         this.buttonColors = new ArrayList<>();
         // Initialize other ModeTab fields
     }
@@ -40,36 +35,6 @@ public class ModeTab {
     // Getters and setters for tabLayout and drawableResId
     public ConstraintLayout getTabLayout() {
         return tabLayout;
-    }
-
-
-
-//    public static Button getSelectedColorPickerBtn() {
-//        return selectedColorPickerBtn;
-//    }
-//
-//    public static void setSelectedColorPickerBtn(Button selectedColorPickerBtn) {
-//        ModeTab.selectedColorPickerBtn = selectedColorPickerBtn;
-//    }
-
-    public Button getSelectedActiveColorBtn() {
-        return selectedActiveColorBtn;
-    }
-
-    public void setSelectedActiveColorBtn(Button selectedActiveColorBtn) {
-        this.selectedActiveColorBtn = selectedActiveColorBtn;
-    }
-
-    public void setTabLayout(ConstraintLayout tabLayout) {
-        this.tabLayout = tabLayout;
-    }
-
-    public int getDrawableResId() {
-        return drawableResId;
-    }
-
-    public void setDrawableResId(int drawableResId) {
-        this.drawableResId = drawableResId;
     }
 
     public int getColorForButtonIndex(int index) {
@@ -87,12 +52,12 @@ public class ModeTab {
         }
     }
 
-    public TabActiveButtonsManager getTabActiveButtonsManager() {
-        return tabActiveButtonsManager;
+    public ActiveButtonsManager getTabActiveButtonsManager() {
+        return activeButtonsManager;
     }
 
     public void updateTabActiveButtonColors(List<ModeColorData.RGBColor> colors) {
-        tabActiveButtonsManager.updateActiveButtonColors(colors);
+        activeButtonsManager.updateActiveButtonColors(colors);
     }
 
 

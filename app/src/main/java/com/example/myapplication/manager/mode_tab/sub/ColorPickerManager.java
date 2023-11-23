@@ -72,18 +72,19 @@ public class ColorPickerManager {
 
             setActiveButtonAppearance(clickedButton);
 
-            for (ModeTab modeTab : modeTabs) {
-                Button selectedActiveButton = modeTab.getSelectedActiveColorBtn();
-                if (selectedActiveButton != null) {
-                    // Extract RGB values
-                    Drawable colorPickerBackground = clickedButton.getBackground();
-                    if (colorPickerBackground instanceof GradientDrawable) {
-                        int color = ((GradientDrawable) colorPickerBackground).getColor().getDefaultColor();
-                        int red = Color.red(color);
-                        int green = Color.green(color);
-                        int blue = Color.blue(color);
+            Button selectedActiveButton = TabManager.getSelectedActiveColorBtn();
+            if (selectedActiveButton != null) {
+                // Extract RGB values
+                Drawable colorPickerBackground = clickedButton.getBackground();
+                if (colorPickerBackground instanceof GradientDrawable) {
+                    int color = ((GradientDrawable) colorPickerBackground).getColor().getDefaultColor();
+                    int red = Color.red(color);
+                    int green = Color.green(color);
+                    int blue = Color.blue(color);
 
-                        // Find active color button index
+//                     Find active color button index
+                    ModeTab modeTab = findTabByActiveBtn(selectedActiveButton);
+                    if (modeTab != null){
                         List<Button> activeColorButtons = modeTab.getTabActiveButtonsManager().getActiveColorButtons();
                         int activeButtonIndex = activeColorButtons.indexOf(selectedActiveButton);
                         int modeNumber = ModeTab.currentMode.getModeNumber();
@@ -106,7 +107,17 @@ public class ColorPickerManager {
                     }
                 }
             }
+
         }
+    }
+
+    private ModeTab findTabByActiveBtn(Button selectedActiveButton) {
+        for (ModeTab modeTab : modeTabs) {
+            for (Button activeColorButton : modeTab.getTabActiveButtonsManager().getActiveColorButtons()) {
+                if(activeColorButton == selectedActiveButton) return modeTab;
+            }
+        }
+        return null;
     }
 
     public void updateColorPickerButtonColorAtIndex(int index, int color) {

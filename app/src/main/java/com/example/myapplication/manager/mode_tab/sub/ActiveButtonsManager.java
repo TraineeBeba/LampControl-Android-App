@@ -20,13 +20,13 @@ import com.example.myapplication.manager.mode_tab.sub.util.ButtonAppearanceUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabActiveButtonsManager {
+public class ActiveButtonsManager {
     private final Context context;
     private List<Button> activeColorButtons;
 
     private Button selectedActiveBtn = null;
 
-    public TabActiveButtonsManager(Context context, View view){
+    public ActiveButtonsManager(Context context, View view){
         this.context = context;
         initTabActiveColorButtons(view);
         initTabActiveColorButtonsListeners();
@@ -42,17 +42,18 @@ public class TabActiveButtonsManager {
         this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode3_1));
     }
 
-
     private void toggleActiveColorButton(Button button) {
         if (button.equals(selectedActiveBtn)) {
             resetButtonAppearance(button);
             TabManager.selectedActiveBtn = null;
+            selectedActiveBtn = null;
         } else {
             if (selectedActiveBtn != null) {
                 resetButtonAppearance(selectedActiveBtn);
             }
             setActiveButtonAppearance(button);
-            TabManager.selectedActiveBtn = selectedActiveBtn;
+            selectedActiveBtn = button;
+            TabManager.selectedActiveBtn = button;
             // Reset appearance of all color picker buttons
             for (Button colorPickerButton :  ColorPickerManager.getColorPickerButtons()) {
                 resetButtonAppearance(colorPickerButton);
@@ -62,10 +63,7 @@ public class TabActiveButtonsManager {
     }
 
     private boolean isAnyActiveColorButtonSelected() {
-        if (selectedActiveBtn != null) {
-            return true;
-        }
-        return false;
+        return selectedActiveBtn != null;
     }
 
     private void updateColorPickerButtonState() {
@@ -94,13 +92,6 @@ public class TabActiveButtonsManager {
             }
         }
     }
-
-
-//
-//    public void resetAll(){
-//        resetAllActiveColorButtons();
-//        resetAllColorPickerBtn();
-//    }
 
     public void updateActiveButtonColors(List<ModeColorData.RGBColor> colors) {
         SharedPreferences sharedPref = context.getSharedPreferences("MyApp", Context.MODE_PRIVATE);
@@ -147,18 +138,4 @@ public class TabActiveButtonsManager {
     public List<Button> getActiveColorButtons() {
         return activeColorButtons;
     }
-
-    //    public void setAllActiveColorButtonsEnabled(boolean isEnabled) {
-//        for (ModeTab modeTab : modeTabs) {
-//            for (Button activeColorButton : modeTab.getActiveColorButtons()) {
-//                activeColorButton.setEnabled(isEnabled);
-//
-//                // Reset appearance if disabling
-//                if (!isEnabled) {
-//                    resetButtonAppearance(activeColorButton);
-//
-//                }
-//            }
-//        }
-//    }
 }

@@ -4,7 +4,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
 
 
 import com.example.myapplication.listener.FragmentBroadcastListener;
@@ -54,8 +52,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
         tabManager = new TabManager(getContext(), view);
         seekBarManager = new SeekBarManager(view);
 
-//        tabManager.getActiveButtonsManager().resetAll();
-//        activeButtonsManager.setAllActiveColorButtonsEnabled(false); // Disable all active color buttons
+        tabManager.setAllActiveColorButtonsEnabled(false); // Disable all active color buttons
 
         return view;
     }
@@ -161,7 +158,6 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
                     BLECommunicationUtil bleCommunicationUtil = MainActivity.getBleCommunicationUtil();
                     bleCommunicationUtil.readBrightness();
                     bleCommunicationUtil.readMode();
-                    bleCommunicationUtil.readActiveColors();
                 } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
                     Log.d("Exc", "Exc");
                 }
@@ -172,18 +168,18 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     @Override
     public void onColorDataUpdate(List<ModeColorData> colorDataList) {
         Log.d("onColorDataUpdate", "onColorDataUpdate");
-//        for (ModeColorData colorData : colorDataList) {
-//            int modeIndex = colorData.modeIndex;
-//            List<ModeColorData.RGBColor> colors = colorData.colors;
-//
-//            List<ModeTab> tabs = tabManager.getTabs();
-//            if (modeIndex >= 0 && modeIndex < tabs.size()) {
-//                ModeTab tab = tabs.get(modeIndex);
-//                tab.updateTabActiveButtonColors(colors);
-//
-//                Log.d("Tab", String.valueOf(modeIndex));
-//            }
-//        }
+        for (ModeColorData colorData : colorDataList) {
+            int modeIndex = colorData.modeIndex;
+            List<ModeColorData.RGBColor> colors = colorData.colors;
+
+            List<ModeTab> tabs = tabManager.getTabs();
+            if (modeIndex >= 0 && modeIndex < tabs.size()) {
+                ModeTab tab = tabs.get(modeIndex);
+                tab.updateTabActiveButtonColors(colors);
+
+                Log.d("Tab", String.valueOf(modeIndex));
+            }
+        }
     }
 
 
@@ -191,6 +187,15 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     public void onDisconnect() {
         seekBarManager.getSeekBar().setEnabled(false);
         tabManager.setAllActiveColorButtonsEnabled(false); // Disable all active color buttons
+    }
+
+    @Override
+    public void onConnect() {
+        try {
+            MainActivity.getBleCommunicationUtil().readActiveColors();
+        } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+            Log.d("Exc", "Exc");
+        }
     }
 
 

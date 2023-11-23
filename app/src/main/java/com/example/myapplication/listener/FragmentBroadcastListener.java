@@ -26,4 +26,8 @@ public interface FragmentBroadcastListener {
     default void onColorDataUpdate(List<ModeColorData> colorData){
         // Default implementation (empty)
     }
+
+    default void onConnect(){
+        // Default implementation (empty)
+    }
 }
