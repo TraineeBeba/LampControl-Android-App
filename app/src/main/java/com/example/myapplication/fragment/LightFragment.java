@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 
 
 import com.example.myapplication.listener.FragmentBroadcastListener;
@@ -37,6 +39,10 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     private Button button_add_color;
     private TabManager tabManager;
     private SeekBarManager seekBarManager;
+
+    private TextView textViewOneMode;
+    private TextView textViewTwoMode;
+    private TextView textViewThreeMode;
 
 
     @Override
@@ -66,6 +72,27 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
         button_add_color = view.findViewById(R.id.addColorBtn);
         panelAddColor = view.findViewById(R.id.panelAddColor);
         backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
+        textViewOneMode = view.findViewById(R.id.textView2);
+        textViewTwoMode = view.findViewById(R.id.textView4);
+        textViewThreeMode = view.findViewById(R.id.textView3);
+    }
+
+    private void textWhite(TextView txt){
+        txt.setShadowLayer(
+                10,
+                0,
+                10,
+                0xAAFFFFFF
+        );
+    }
+
+    private void textBlack(TextView txt){
+        txt.setShadowLayer(
+                10,
+                0,
+                10,
+                0xAA000000
+        );
     }
 
     private void initBtnListeners() {
@@ -83,14 +110,25 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
 
         btnMode1.setOnClickListener(v -> {
             tabManager.changeTab(Mode.MODE_ONE);
+
+            textWhite(textViewOneMode);
+            textBlack(textViewTwoMode);
+            textBlack(textViewThreeMode);
+
         });
 
         btnMode2.setOnClickListener(v -> {
             tabManager.changeTab(Mode.MODE_TWO);
+            textBlack(textViewOneMode);
+            textWhite(textViewTwoMode);
+            textBlack(textViewThreeMode);
         });
 
         btnMode3.setOnClickListener(v -> {
             tabManager.changeTab(Mode.MODE_THREE);
+            textBlack(textViewOneMode);
+            textBlack(textViewTwoMode);
+            textWhite(textViewThreeMode);
         });
 
         button_add_color.setOnClickListener(v -> {

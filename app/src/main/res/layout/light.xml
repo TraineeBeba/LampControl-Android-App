@@ -60,9 +60,13 @@
                 android:gravity="center"
                 android:text="1-Колір"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
 
-                android:shadowColor="#40FFFFFF"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
+                android:shadowColor="#AAFFFFFF"
                 android:shadowDx="0"
                 android:shadowDy="10"
                 android:shadowRadius="10"
@@ -99,9 +103,13 @@
                 android:gravity="center"
                 android:text="Веселка"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
 
-                android:shadowColor="#50000000"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
+                android:shadowColor="#AA000000"
                 android:shadowDx="0"
                 android:shadowDy="10"
                 android:shadowRadius="10"
@@ -139,9 +147,13 @@
                 android:gravity="center"
                 android:text="День-Ніч"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
 
-                android:shadowColor="#50000000"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
+                android:shadowColor="#AA000000"
                 android:shadowDx="0"
                 android:shadowDy="10"
                 android:shadowRadius="10"
@@ -194,7 +206,12 @@
                 android:gravity="start|center"
                 android:text="Активні кольори"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
+
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
                 app:layout_constraintStart_toStartOf="@+id/line_text_activeColor1"
                 app:layout_constraintWidth_percent="0.42"/>
 
@@ -355,8 +372,13 @@
                 android:fontFamily="@font/robotomono_light"
                 android:gravity="start"
                 android:text="Панель кольорів"
+
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="1sp"
+
                 android:textColor="#FFFFFF"
-                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/line_text_activeColor2"
                 app:layout_constraintWidth_percent="0.52">
             </TextView>
