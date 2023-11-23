@@ -1,140 +1,420 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.WifiFragment">
+    android:background="@drawable/fone_for_con"
+    tools:context=".fragment.HomeFragment">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/wifiLayout"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/search_lamp_background">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
-            android:id="@+id/panel1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rectangle_connection1"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintTop_toTopOf="@+id/guideline_for_panel_connection"
+            app:layout_constraintWidth_percent="1">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RelativeLayout
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp">
-
-                <Button
-                    android:id="@+id/search_lamp"
-                    android:layout_width="220dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF" />
-
-            </RelativeLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/panel2"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_for_panel_connection"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible">
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
 
-            <ListView
-                android:id="@+id/listView"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="200dp">
-            </ListView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/panel_search_lamp1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_for_image_search_lamp"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintWidth_percent="1">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/search_lamp_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.5">
+
+            </ImageView>
 
             <Button
-                android:id="@+id/back_to_conn_btn"
-                android:layout_width="100dp"
-                android:layout_height="70dp"
+                android:id="@+id/search_lamp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.5">
 
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="480dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/aa"
-                android:background="#00FFFFFF"/>
-
-            <Button
-                android:id="@+id/update_btn"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="100dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/aa"
-                android:background="#00FFFFFF"/>
-
-        </RelativeLayout>
+            </Button>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_for_image_search_lamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <RelativeLayout
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panel_connection2"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rectangle_connection2"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintTop_toTopOf="@+id/guideline_for_panel_connection2"
+            app:layout_constraintWidth_percent="1">
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/robotomono_medium"
+                android:gravity="center"
+                android:text="Знайдені Пристрої"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintHeight_percent="0.17"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.7">
+
+            </TextView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout13"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.17"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="150dp"
-                    android:layout_alignParentBottom="true"
-                    android:src="@drawable/wifi_menu" />
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/rectangle_for_search_btn"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="#2A2C34" />
+                </ImageView>
 
-            </RelativeLayout>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/element_for_search"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+                </ImageView>
+
+                <Button
+                    android:id="@+id/update_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#00FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </Button>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintWidth_percent="0.4">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/back_image_to_conect"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintWidth_percent="0.8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                </ImageView>
+
+                <Button
+                    android:id="@+id/back_to_conn_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#00FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintWidth_percent="0.8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_for_panel_connection2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.13"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.18"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout7"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintWidth_percent="0.3">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/home_image_white"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_for_home"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.55" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/kyivtypeserif_bold"
+                android:gravity="center"
+                android:text="Головна"
+                android:textColor="#FFFFFF"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_text_main"
+                app:layout_constraintWidth_percent="1">
+
+            </TextView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_text_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <Button
+                android:id="@+id/button_home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#00FFFFFF">
+
+            </Button>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.3">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/light_image_white"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_for_light"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="bottom"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingBottom="10dp">
+                app:layout_constraintGuide_percent="0.55" />
 
-                <Button
-                    android:id="@+id/button_home"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF"
-                    />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/kyivtypeserif_bold"
+                android:gravity="center"
+                android:text="Освітлення"
+                android:textColor="#FFFFFF"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_text_light"
+                app:layout_constraintWidth_percent="1">
 
-                <Button
-                    android:id="@+id/button_light"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF"
-                    />
+            </TextView>
 
-                <Button
-                    android:id="@+id/button_wifi"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/aa"
-                    android:background="#00FFFFFF" />
-            </LinearLayout>
-        </RelativeLayout>
-    </FrameLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_text_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <Button
+                android:id="@+id/button_light"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF">
+
+            </Button>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
+            app:layout_constraintWidth_percent="0.3">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/bluetooth_image_white"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_for_bluetooth"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.23"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/on_active_element_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.55"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="1" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/bluetooth_image_yellow"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_for_bluetooth"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.33"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_bluetooth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/kyivtypeserif_bold"
+                android:gravity="center"
+                android:text="Підключення"
+                android:textColor="#FFFFFF"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_text_connect"
+                app:layout_constraintWidth_percent="1">
+
+            </TextView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_text_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <Button
+                android:id="@+id/button_wifi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF">
+
+            </Button>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
