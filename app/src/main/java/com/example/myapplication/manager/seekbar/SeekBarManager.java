@@ -1,32 +1,33 @@
-package com.example.myapplication.manager;
+package com.example.myapplication.manager.seekbar;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.LampCache;
-import com.example.myapplication.util.BLECommunicationUtil;
-import com.example.myapplication.util.BrightnessModeUtil;
+import com.example.myapplication.manager.seekbar.util.BrightnessModeUtil;
 
 public class SeekBarManager {
-    private SeekBar seekBar;
-    private TextView percentageText;
-    private Handler debounceHandler = new Handler();
+    private final SeekBar seekBar;
+    private final TextView percentageText;
+    private final Handler debounceHandler = new Handler();
     private Runnable debounceRunnable;
 
-    public SeekBarManager(SeekBar seekBar, TextView percentageText) {
-        this.seekBar = seekBar;
-        this.percentageText = percentageText;
-
+    public SeekBarManager(View view) {
+        this.seekBar = view.findViewById(com.example.myapplication.R.id.seekBar);
+        this.percentageText = view.findViewById(R.id.textviewbar);
         setupSeekBar();
+        setupListeners();
     }
 
-    public void setupSeekBar() {
+    private void setupSeekBar() {
         seekBar.setProgress(LampCache.getSeekBarPos());
         percentageText.setText(LampCache.getBrightnessText() + " %");
         try {
@@ -47,7 +48,7 @@ public class SeekBarManager {
         }
     }
 
-    public void setupListeners() {
+    private void setupListeners() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -93,5 +94,9 @@ public class SeekBarManager {
 
     public SeekBar getSeekBar() {
         return seekBar;
+    }
+
+    public void setPercentageText(String s) {
+        percentageText.setText(s);
     }
 }

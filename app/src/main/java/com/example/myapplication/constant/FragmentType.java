@@ -10,9 +10,7 @@ import com.example.myapplication.fragment.WifiFragment;
 
 public enum FragmentType {
     HOME, LIGHT, WIFI;
-    // Method to get the corresponding fragment instance
     public static Fragment createFragment(FragmentType type) {
-        Log.d("FRAGMENT", "Fragment сreated: " + type);
         switch (type) {
             case HOME:
                 return new HomeFragment();

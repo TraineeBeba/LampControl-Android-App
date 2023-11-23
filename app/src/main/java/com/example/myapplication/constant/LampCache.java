@@ -1,6 +1,6 @@
 package com.example.myapplication.constant;
 
-import com.example.myapplication.util.BrightnessModeUtil;
+import com.example.myapplication.manager.seekbar.util.BrightnessModeUtil;
 
 public abstract class LampCache {
     private static Lamp isOn = Lamp.OFF;

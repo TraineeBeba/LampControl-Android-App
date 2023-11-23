@@ -1,14 +1,10 @@
 package com.example.myapplication.fragment;
 
-import android.bluetooth.BluetoothAdapter;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -101,7 +97,7 @@ public class WifiFragment extends Fragment {
 
             // Check permissions and initialize Bluetooth
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).tryToEnableBLEandStartScanning();
+                ((MainActivity) getActivity()).tryToEnableBLEAndStartScanning();
             }
             if(((MainActivity) getActivity()).getMissingPermissions(((MainActivity) getActivity()).getRequiredPermissions()).length == 0) {
                 BluetoothHandler.getInstance(context).findDevices();
@@ -128,7 +124,7 @@ public class WifiFragment extends Fragment {
             adapter.notifyDataSetChanged();
 
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).tryToEnableBLEandStartScanning();
+                ((MainActivity) getActivity()).tryToEnableBLEAndStartScanning();
             }
 
             if(((MainActivity) getActivity()).getMissingPermissions(((MainActivity) getActivity()).getRequiredPermissions()).length == 0) {

@@ -8,7 +8,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import android.widget.Toast;
 
-import com.example.myapplication.FragmentBroadcastListener;
+import com.example.myapplication.listener.FragmentBroadcastListener;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
@@ -29,8 +28,6 @@ import com.example.myapplication.constant.FragmentType;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.LampCache;
 import com.example.myapplication.constant.StateAnimation;
-import com.example.myapplication.util.BLECommunicationUtil;
-import com.example.myapplication.util.BroadcastReceiverUtil;
 
 public class HomeFragment extends Fragment implements FragmentBroadcastListener {
     private ConstraintLayout homeLayout;
@@ -38,7 +35,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     private ImageView toggleView;
     private Button btnNavWifi, btnNavLight;
     private ImageButton btnToggleLamp;
-    private BroadcastReceiverUtil receiverUtil;
     private ImageView cloudImageLeftBlack;
 
     private ImageView Sunshine;
@@ -61,7 +57,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         Log.d("HOME", "onCreateView " + this);
 
         View view = inflater.inflate(R.layout.home, container, false);
-//        bluetoothComm = new BLECommunicationUtil(getContext());
 
         initView(view);
         initBtnListeners();
@@ -92,11 +87,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-//        if(Lamp.OFF == currentState){
-//            updateVisual(Lamp.ON);
-//        } else{
-//            updateVisual(Lamp.OFF);
-//        }
     }
 
     public void updateVisual(Lamp lampState) {

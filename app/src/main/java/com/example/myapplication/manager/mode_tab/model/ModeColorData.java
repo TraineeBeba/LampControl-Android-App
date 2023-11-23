@@ -1,6 +1,4 @@
-package com.example.myapplication.model;
-
-import android.util.Log;
+package com.example.myapplication.manager.mode_tab.model;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

@@ -1,9 +1,8 @@
-package com.example.myapplication;
+package com.example.myapplication.listener;
 
 import com.example.myapplication.constant.Lamp;
-import com.example.myapplication.model.ModeColorData;
+import com.example.myapplication.manager.mode_tab.model.ModeColorData;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface FragmentBroadcastListener {
@@ -19,9 +18,6 @@ public interface FragmentBroadcastListener {
         // Default implementation (empty)
     }
 
-    default  void onColorsUpdate(HashMap<Integer, HashMap<Integer, List<Integer>>> colorData) {
-        // Default implementation (empty)
-    }
 
     default  void onDisconnect() {
         // Default implementation (empty)
