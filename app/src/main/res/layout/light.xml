@@ -941,7 +941,6 @@
                 app:layout_constraintHeight_percent="0.6"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.2">
-
             </ImageButton>
 
             <androidx.constraintlayout.widget.Guideline
@@ -951,10 +950,7 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.9" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
