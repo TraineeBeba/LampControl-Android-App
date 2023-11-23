@@ -1,6 +1,6 @@
 package com.example.myapplication;
 
-import static com.example.myapplication.util.BrightnessModeUtil.getSeekBarPosition;
+import static com.example.myapplication.manager.seekbar.util.BrightnessModeUtil.getSeekBarPosition;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.view.WindowManager;
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -21,8 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,14 +32,14 @@ import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.LampCache;
 import com.example.myapplication.constant.Mode;
 import com.example.myapplication.fragment.HomeFragment;
-import com.example.myapplication.model.ModeColorData;
+import com.example.myapplication.listener.FragmentBroadcastListener;
+import com.example.myapplication.manager.mode_tab.model.ModeColorData;
 import com.example.myapplication.util.BLECommunicationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private BroadcastReceiver lampStateReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver lampStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (currentFragmentListener != null) {
@@ -133,13 +130,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver brightnessReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver brightnessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (currentFragmentListener != null) {
                 if (intent.getAction().equals(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION)) {
                     String brightnessStr = intent.getStringExtra(BluetoothHandler.EXTRA_BRIGHTNESS);
-                    int brightness = Integer.valueOf(brightnessStr);
+                    int brightness = Integer.parseInt(brightnessStr);
                     Log.d("Brightness", "Brightness: " + brightness);
                     currentFragmentListener.onBrightnessUpdate(brightness);
 
@@ -152,13 +149,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver modeReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver modeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (currentFragmentListener != null) {
                 if (intent.getAction().equals(BluetoothHandler.MODE_UPDATE_ACTION)) {
                     String modeStr = intent.getStringExtra(BluetoothHandler.EXTRA_MODE);
-                    int mode = Integer.valueOf(modeStr);
+                    int mode = Integer.parseInt(modeStr);
                     Log.d("Mode", "Mode: " + Mode.fromModeNumber(mode));
                     currentFragmentListener.onModeUpdate(mode);
 
@@ -168,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    private BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (currentFragmentListener != null) {
@@ -180,12 +177,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver colorDataReceiver = new BroadcastReceiver() {
+
+    private final BroadcastReceiver colorDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (currentFragmentListener != null) {
                 if (intent.getAction().equals(BluetoothHandler.COLOR_DATA_UPDATE_ACTION)) {
-                    Log.d("colorDataReceiver", "RECIEVED");
+                    Log.d("colorDataReceiver", "RECEIVED");
                     byte[] rawColorData = intent.getByteArrayExtra(BluetoothHandler.EXTRA_COLOR_DATA);
 
                     List<ModeColorData> colorData = ModeColorData.parseColorData(rawColorData);
@@ -227,13 +225,14 @@ public class MainActivity extends AppCompatActivity {
     public String[] getMissingPermissions(String[] requiredPermissions) {
         Log.d("getMissingPermissions","getMissingPermissions");
         List<String> missingPermissions = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        //TODO check if this is correct
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             for (String requiredPermission : requiredPermissions) {
                 if (getApplicationContext().checkSelfPermission(requiredPermission) != PackageManager.PERMISSION_GRANTED) {
                     missingPermissions.add(requiredPermission);
                 }
             }
-        }
+//        }
         return missingPermissions.toArray(new String[0]);
     }
 
@@ -287,9 +286,7 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Location services are not enabled")
                 .setMessage("Scanning for Bluetooth peripherals requires location services to be enabled.")
-                .setPositiveButton("Enable", (dialogInterface, i) -> {
-                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                })
+                .setPositiveButton("Enable", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
                 .create()
                 .show();
@@ -312,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
         return Objects.requireNonNull((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE),"cannot get BluetoothManager");
     }
 
-    public void tryToEnableBLEandStartScanning() {
+    public void tryToEnableBLEAndStartScanning() {
         Log.d("Enable BLE try","Trying to enable BLE");
         if (getBluetoothManager().getAdapter() != null) {
             if (!isBluetoothEnabled()) {
@@ -327,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkPermissions() {
         Log.d("checkPermissions","checkPermissions");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             String[] missingPermissions = getMissingPermissions(getRequiredPermissions());
             if (missingPermissions.length > 0) {
                 //What it do?
@@ -347,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("checkPermissions","else");
                 permissionsGranted();
             }
-        }
+//        }
     }
 
     private void showPermissionExplanation(String permission) {
@@ -357,14 +354,15 @@ public class MainActivity extends AppCompatActivity {
         // Customize the message based on the permission
         switch (permission) {
             case Manifest.permission.ACCESS_FINE_LOCATION:
-                title = "Location Permission Required";
-                message = "This app needs location access to scan for Bluetooth devices. Please enable Location in the app settings.";
+                title = "Потрібен дозвіл на розташування";
+                message = "Цій програмі потрібен доступ до місцезнаходження для пошуку пристроїв Bluetooth. Увімкніть розташування в налаштуваннях програми.";
                 break;
             case Manifest.permission.BLUETOOTH_SCAN:
-                title = "Bluetooth Scan Permission Required";
-                message = "This app needs Bluetooth scan permission to discover nearby Bluetooth devices. Please enable this permission in the app settings.";
+                title = "Потрібен дозвіл на сканування Bluetooth";
+                message = "Цій програмі потрібен дозвіл на сканування Bluetooth, щоб виявити пристрої Bluetooth поблизу. Увімкніть цей дозвіл у налаштуваннях програми.";
                 break;
-            // Add cases for other permissions if needed
+
+            //TODO check needed permissions
             default:
                 title = "Additional Permission Required";
                 message = "This app needs additional permissions to function correctly. Please check app settings.";

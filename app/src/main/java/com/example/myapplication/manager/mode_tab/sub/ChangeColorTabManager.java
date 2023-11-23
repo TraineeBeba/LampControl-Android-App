@@ -1,36 +1,33 @@
-package com.example.myapplication.manager;
+package com.example.myapplication.manager.mode_tab.sub;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.myapplication.R;
 import com.github.mata1.simpledroidcolorpicker.pickers.CircleColorPicker;
-import com.github.mata1.simpledroidcolorpicker.utils.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorPanelManager {
+public class ChangeColorTabManager {
     private final List<Button> colorButtons = new ArrayList<>();
     private final Context context;
     private final SharedPreferences sharedPref;
     private final CircleColorPicker circleColorPicker;
-    ActiveButtonsManager activeButtonsManager;
+    private final ColorPickerManager colorPickerManager;
     private Button selectedButton = null;
 
-    public ColorPanelManager(Context context, View parentView, CircleColorPicker circleColorPicker, ActiveButtonsManager activeButtonsManager) {
+    public ChangeColorTabManager(Context context, View view, ColorPickerManager colorPickerManager) {
         this.context = context;
+        this.colorPickerManager = colorPickerManager;
         this.sharedPref = context.getSharedPreferences("MyApp", Context.MODE_PRIVATE);
-        this.circleColorPicker = circleColorPicker;
-        this.activeButtonsManager = activeButtonsManager;
-        initColorButtons(parentView);
+        this.circleColorPicker = view.findViewById(R.id.rcp1);
+        initColorButtons(view);
         setupColorPickerListener();
     }
 
@@ -107,15 +104,9 @@ public class ColorPanelManager {
     private void setupColorPickerListener() {
         circleColorPicker.setOnColorChangedListener(color -> {
             if (selectedButton != null) {
-                // Apply the color change to the selected colorButton
                 ((GradientDrawable) selectedButton.getBackground()).setColor(color);
-
-                // Calculate the index for the corresponding colorPickerButton
                 int index = colorButtons.indexOf(selectedButton) + 5; // Shift of 5
-
-                // Update the color of the corresponding colorPickerButton
-                activeButtonsManager.updateColorPickerButtonColorAtIndex(index, color);
-                // Note: The saving of color is handled within ActiveButtonsManager
+                colorPickerManager.updateColorPickerButtonColorAtIndex(index, color);
             }
         });
     }

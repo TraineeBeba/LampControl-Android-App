@@ -6,7 +6,6 @@ import static com.example.myapplication.ble.BluetoothHandler.LAMP_MODE_CHARACTER
 import static com.example.myapplication.ble.BluetoothHandler.LAMP_SWITCH_CHARACTERISTIC_UUID;
 import static com.example.myapplication.ble.BluetoothHandler.LC_SERVICE_UUID;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.example.myapplication.ble.BluetoothHandler;
@@ -15,7 +14,7 @@ import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.welie.blessed.WriteType;
 
 public class BLECommunicationUtil {
-    private BluetoothHandler bluetoothHandler;
+    private final BluetoothHandler bluetoothHandler;
 
     public BLECommunicationUtil(BluetoothHandler bluetoothHandler) {
         this.bluetoothHandler = bluetoothHandler;
