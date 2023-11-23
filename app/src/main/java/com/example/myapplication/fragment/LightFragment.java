@@ -1,5 +1,8 @@
 package com.example.myapplication.fragment;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.BroadcastReceiver;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -46,9 +50,10 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     private BroadcastReceiverUtil receiverUtil;
 //    private BLECommunicationUtil bluetoothComm;
     private final List<ModeTab> modeTabs = new ArrayList<>();
-    private RelativeLayout panelAddColor;
+    private ConstraintLayout panelAddColor;
     private final List<TabInfo> tabInfoList = new ArrayList<>();
-    private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3, backToPanelModeBtn;
+    private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3;
+    AppCompatImageButton backToPanelModeBtn;
     private ImageButton button_add_color;
     private SeekBar seekBar;
     private TextView percentageText;
@@ -85,7 +90,8 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
         initColorPickerButtons(view);
 
         activeButtonsManager = new ActiveButtonsManager(getContext(), modeTabs);
-        tabManager = new TabManager(getContext(), tabInfoList, view.findViewById(R.id.modeImage), activeButtonsManager);
+        ConstraintLayout viewById = view.findViewById(R.id.modeImage);
+        tabManager = new TabManager(getContext(), tabInfoList, viewById, activeButtonsManager);
         colorPanelManager = new ColorPanelManager(getContext(), view, rcp1, activeButtonsManager);
         seekBarManager = new SeekBarManager(seekBar, percentageText);
 
@@ -110,7 +116,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     }
 
     private void initView(View view) {
-//        rcp1 = view.findViewById(R.id.rcp1);
+        rcp1 = view.findViewById(R.id.rcp1);
         seekBar = view.findViewById(R.id.seekBar);
         percentageText = view.findViewById(R.id.textviewbar);
         btnNavHome = view.findViewById(R.id.button_home);
@@ -122,12 +128,14 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
 
         for (Mode mode : Mode.values()) {
             int tabLayoutId = getResources().getIdentifier("groupActiveColors" + (mode.getModeNumber() + 1), "id", getContext().getPackageName());
-            tabInfoList.add(new TabInfo(view.findViewById(tabLayoutId), mode.getDrawableResId()));
+            ConstraintLayout viewById = view.findViewById(tabLayoutId);
+            int drawableResId = mode.getDrawableResId();
+            tabInfoList.add(new TabInfo(viewById, drawableResId));
         }
 
         button_add_color = view.findViewById(R.id.addColorBtn);
-//        panelAddColor = view.findViewById(R.id.panelAddColor);
-//        backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
+        panelAddColor = view.findViewById(R.id.panelAddColor);
+        backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
 
         for (int i = 0; i < 3; i++) {
             modeTabs.add(new ModeTab());

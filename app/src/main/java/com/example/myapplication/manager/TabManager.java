@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
@@ -20,7 +22,7 @@ import java.util.List;
 
 public class TabManager {
     private List<TabInfo> tabInfoList;
-    private ImageView currentImageView;
+    private ConstraintLayout currentImageView;
     private static ActiveButtonsManager colorBtnManager;
     private Mode lastVisibleMode = null; // Store the last visible mode
 
@@ -28,7 +30,7 @@ public class TabManager {
     private List<ModeTab> modeTabs;
     private Context context;
 
-    public TabManager( Context context, List<TabInfo> tabInfoList, ImageView currentImageView, ActiveButtonsManager activeButtonsManager) {
+    public TabManager(Context context, List<TabInfo> tabInfoList, ConstraintLayout currentImageView, ActiveButtonsManager activeButtonsManager) {
         this.context = context;
         this.tabInfoList = tabInfoList;
         this.currentImageView = currentImageView;
@@ -70,7 +72,7 @@ public class TabManager {
         }
 
         ModeTab.currentMode = activeMode;
-        currentImageView.setImageResource(activeMode.getDrawableResId());
+        currentImageView.setBackground(context.getDrawable(activeMode.getDrawableResId()));
     }
     private void updateLampMode(int modeNumber) {
         if (LampCache.isOn() == Lamp.OFF) return;
@@ -84,15 +86,15 @@ public class TabManager {
         }
     }
 
-    public void disableAllTabs() {
-        for (int i = 0; i < tabInfoList.size(); i++) {
-            if (tabInfoList.get(i).getTabLayout().getVisibility() == View.VISIBLE) {
-                lastVisibleMode = Mode.fromModeNumber(i); // Save the last visible mode
-                tabInfoList.get(i).getTabLayout().setVisibility(View.INVISIBLE);
-            }
-        }
-        currentImageView.setImageResource(0); // Remove any image resource
-    }
+//    public void disableAllTabs() {
+//        for (int i = 0; i < tabInfoList.size(); i++) {
+//            if (tabInfoList.get(i).getTabLayout().getVisibility() == View.VISIBLE) {
+//                lastVisibleMode = Mode.fromModeNumber(i); // Save the last visible mode
+//                tabInfoList.get(i).getTabLayout().setVisibility(View.INVISIBLE);
+//            }
+//        }
+//        currentImageView.setImageResource(0); // Remove any image resource
+//    }
 
     public void restoreLastVisibleTab() {
         if (lastVisibleMode != null) {

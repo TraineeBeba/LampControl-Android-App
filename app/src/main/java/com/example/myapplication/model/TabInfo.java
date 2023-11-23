@@ -2,20 +2,22 @@ package com.example.myapplication.model;
 
 import android.widget.LinearLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 public class TabInfo {
-    private LinearLayout tabLayout;
+    private ConstraintLayout tabLayout;
     private int drawableResId;
 
-    public TabInfo(LinearLayout tabLayout, int drawableResId) {
+    public TabInfo(ConstraintLayout tabLayout, int drawableResId) {
         this.tabLayout = tabLayout;
         this.drawableResId = drawableResId;
     }
 
-    public LinearLayout getTabLayout() {
+    public ConstraintLayout getTabLayout() {
         return tabLayout;
     }
 
-    public void setTabLayout(LinearLayout tabLayout) {
+    public void setTabLayout(ConstraintLayout tabLayout) {
         this.tabLayout = tabLayout;
     }
 
