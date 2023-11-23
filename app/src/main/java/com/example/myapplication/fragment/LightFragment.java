@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -47,7 +48,8 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     private final List<ModeTab> modeTabs = new ArrayList<>();
     private RelativeLayout panelAddColor;
     private final List<TabInfo> tabInfoList = new ArrayList<>();
-    private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3, button_add_color, backToPanelModeBtn;
+    private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3, backToPanelModeBtn;
+    private ImageButton button_add_color;
     private SeekBar seekBar;
     private TextView percentageText;
     private ColorPanelManager colorPanelManager;
@@ -108,7 +110,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     }
 
     private void initView(View view) {
-        rcp1 = view.findViewById(R.id.rcp1);
+//        rcp1 = view.findViewById(R.id.rcp1);
         seekBar = view.findViewById(R.id.seekBar);
         percentageText = view.findViewById(R.id.textviewbar);
         btnNavHome = view.findViewById(R.id.button_home);
@@ -124,8 +126,8 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
         }
 
         button_add_color = view.findViewById(R.id.addColorBtn);
-        panelAddColor = view.findViewById(R.id.panelAddColor);
-        backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
+//        panelAddColor = view.findViewById(R.id.panelAddColor);
+//        backToPanelModeBtn = view.findViewById(R.id.backToPanelModeBtn);
 
         for (int i = 0; i < 3; i++) {
             modeTabs.add(new ModeTab());

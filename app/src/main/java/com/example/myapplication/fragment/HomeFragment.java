@@ -1,33 +1,27 @@
 package com.example.myapplication.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.animation.ObjectAnimator;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import android.widget.FrameLayout;
+
 import android.widget.Toast;
 
 import com.example.myapplication.FragmentBroadcastListener;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.ble.BluetoothHandler;
 import com.example.myapplication.ble.exception.BluetoothNotConnectedException;
 import com.example.myapplication.ble.exception.CharacteristicNotFoundException;
 import com.example.myapplication.constant.FragmentType;
@@ -39,9 +33,10 @@ import com.example.myapplication.util.BroadcastReceiverUtil;
 
 public class HomeFragment extends Fragment implements FragmentBroadcastListener {
     private BLECommunicationUtil bluetoothComm;
-    private FrameLayout homeLayout;
+    private ConstraintLayout homeLayout;
     private ImageView toggleView;
-    private Button btnNavWifi, btnNavLight, btnToggleLamp;
+    private Button btnNavWifi, btnNavLight;
+    private ImageButton btnToggleLamp;
     private BroadcastReceiverUtil receiverUtil;
     private ImageView cloudImageLeftBlack;
 
@@ -51,6 +46,12 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     private ImageView cloudImageRightWhite;
     Lamp currentState = Lamp.OFF;
 
+
+    private int widthImageCloud;
+    private float widthDpCloud;
+    private int offset;
+
+    private int screenWidth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,14 +105,15 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         Log.d("updateVisual", "After");
         switch (lampState) {
             case OFF:
-                toggleView.setImageResource(R.drawable.turn_off_image);
+//                toggleView.setImageResource(R.drawable.turn_off_image);
+                btnToggleLamp.setBackgroundResource(R.drawable.turn_off_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_off);
 
 
                 if (StateAnimation.finalX_Left != 0){
                     animationBtnOff();
-                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()+400;
-                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()-300;
+                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()+offset;
+                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()-offset;
                 }
                 else{
                     animationStopBtnOff();
@@ -121,14 +123,15 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
                 break;
             case ON:
 
-                toggleView.setImageResource(R.drawable.turn_on_image);
+//                toggleView.setImageResource(R.drawable.turn_on_image);
+                btnToggleLamp.setBackgroundResource(R.drawable.turn_on_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_on);
 
                 // 0 start position
                 if (StateAnimation.finalX_Left == 0){
                     animationBtnOn();
-                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()-400;
-                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()+300;
+                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()-offset;
+                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()+offset;
                 }
                 else{
                     animationStopBtnOn();
@@ -139,13 +142,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         }
     }
 
-    public void animationStopBtnOff() {
-        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 1.0f, 1.0f);
-        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left , 0.0f, 0.0f);
-        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
-        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
-        animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 0.0f);
-    }
 
     private void initBtnListeners() {
         btnToggleLamp.setOnClickListener(v ->{
@@ -171,7 +167,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     }
 
     private void initView(View view) {
-        toggleView = view.findViewById(R.id.image_turn);
+//        toggleView = view.findViewById(R.id.image_turn);
         homeLayout = view.findViewById(R.id.homeLayout);
         btnToggleLamp = view.findViewById(R.id.Button_on);
         btnNavWifi = view.findViewById(R.id.button_wifi);
@@ -183,13 +179,31 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         cloudImageLeftWhite = view.findViewById(R.id.cloud_left_white);
         cloudImageRightBlack = view.findViewById(R.id.cloud_right_black);
         cloudImageRightWhite = view.findViewById(R.id.cloud_right_white);
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenWidth = displayMetrics.widthPixels;
+
+        cloudImageLeftBlack.post(new Runnable() {
+            @Override
+            public void run() {
+                widthImageCloud = cloudImageLeftBlack.getWidth();
+//                widthDpCloud = widthImageCloud / getResources().getDisplayMetrics().density;
+
+                offset = (int) (screenWidth*0.05 + widthImageCloud / 2);
+                Log.d("widthImageCloud", String.valueOf(widthImageCloud));
+                Log.d("screenWidth", String.valueOf(screenWidth));
+                Log.d("offset", String.valueOf(offset));
+            }
+        });
     }
 
     public void animationBtnOn() {
-        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - 400, 1.0f, 0.0f);
-        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - 400, 0.0f, 1.0f);
-        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + 300, 1.0f, 0.0f);
-        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + 300, 0.0f, 1.0f);
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - offset, 1.0f, 0.0f);
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left - offset, 0.0f, 1.0f);
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + offset, 1.0f, 0.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + offset, 0.0f, 1.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 1.0f);
     }
 
@@ -202,11 +216,19 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     }
 
     public void animationBtnOff() {
-        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+400, 0.0f, 1.0f); // Повернення до первісного положення
-        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+400, 1.0f, 0.0f); // Повернення до первісного положення
-        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-300,0.0f, 1.0f);
-        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-300, 1.0f, 0.0f);
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+offset, 0.0f, 1.0f); // Повернення до первісного положення
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left+offset, 1.0f, 0.0f); // Повернення до первісного положення
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-offset,0.0f, 1.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-offset, 1.0f, 0.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 1.0f, 0.0f);
+    }
+
+    public void animationStopBtnOff() {
+        animateCloud(cloudImageLeftBlack, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left, 1.0f, 1.0f);
+        animateCloud(cloudImageLeftWhite, "translationX", StateAnimation.finalX_Left, StateAnimation.finalX_Left , 0.0f, 0.0f);
+        animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
+        animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
+        animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 0.0f);
     }
 
 
