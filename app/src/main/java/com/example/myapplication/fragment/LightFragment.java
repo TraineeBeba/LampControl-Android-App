@@ -34,7 +34,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
     private ConstraintLayout panelAddColor;
     private Button btnNavHome, btnNavWifi, btnMode1, btnMode2, btnMode3;
     AppCompatImageButton backToPanelModeBtn;
-    private ImageButton button_add_color;
+    private Button button_add_color;
     private TabManager tabManager;
     private SeekBarManager seekBarManager;
 
