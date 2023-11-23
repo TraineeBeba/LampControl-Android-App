@@ -6,16 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
 import android.util.Log;
 
 import com.example.myapplication.ble.BluetoothHandler;
 import com.example.myapplication.constant.Lamp;
 import com.example.myapplication.constant.LampCache;
 import com.example.myapplication.constant.Mode;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class BroadcastReceiverUtil {
     private Context context;
@@ -24,9 +20,6 @@ public class BroadcastReceiverUtil {
     private BroadcastReceiver modeReceiver;
     private BroadcastReceiver lampStateReceiver;
     private BroadcastReceiver disconnectReceiver;
-
-    private Handler debounceHandler = new Handler();
-    private Runnable debounceRunnable;
 
     public interface Callback {
         default  void onLampStateUpdate(Lamp lampState) {
@@ -38,10 +31,6 @@ public class BroadcastReceiverUtil {
         }
 
         default  void onModeUpdate(int mode) {
-            // Default implementation (empty)
-        }
-
-        default  void onColorsUpdate(HashMap<Integer, HashMap<Integer, List<Integer>>> colorData) {
             // Default implementation (empty)
         }
 
@@ -63,7 +52,7 @@ public class BroadcastReceiverUtil {
                 if (intent.getAction().equals(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION)) {
                     String brightnessStr = intent.getStringExtra(BluetoothHandler.EXTRA_BRIGHTNESS);
                     int brightness = Integer.valueOf(brightnessStr);
-                    Log.d("Brightness", "Brightness: " + brightness);
+                    Log.d("brightnessReceiver", "Brightness: " + brightness);
                     callback.onBrightnessUpdate(brightness);
 
                     LampCache.setBrightness(brightness);
@@ -79,7 +68,7 @@ public class BroadcastReceiverUtil {
                 if (intent.getAction().equals(BluetoothHandler.MODE_UPDATE_ACTION)) {
                     String modeStr = intent.getStringExtra(BluetoothHandler.EXTRA_MODE);
                     int mode = Integer.valueOf(modeStr);
-                    Log.d("Mode", "Mode: " + Mode.fromModeNumber(mode));
+                    Log.d("modeReceiver", "Mode: " + Mode.fromModeNumber(mode));
                     callback.onModeUpdate(mode);
 
                 }
@@ -89,17 +78,15 @@ public class BroadcastReceiverUtil {
         lampStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                debounceHandler.removeCallbacks(debounceRunnable);
-                debounceRunnable = () -> {
+                if (intent.getAction().equals(BluetoothHandler.LAMP_STATE_UPDATE_ACTION)) {
                     String lampStateStr = intent.getStringExtra(BluetoothHandler.EXTRA_LAMP_STATE);
                     Lamp lampState = Lamp.valueOf(lampStateStr);
                     LampCache.setIsOn(lampState);
+                    Log.d("GET", "State: " + lampState.name() + " " + this.toString());
 
-                    Log.d("Class", this.toString());
-                    Log.d("GET", "State: " + lampState.name());
                     callback.onLampStateUpdate(lampState);
-                };
-                debounceHandler.postDelayed(debounceRunnable, 100); // Adjust delay as needed
+
+                }
             }
         };
 
@@ -107,7 +94,7 @@ public class BroadcastReceiverUtil {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION)) {
-                    Log.d("Disconnect", "Disconnect: ");
+                    Log.d("disconnectReceiver", "Disconnect: ");
                     callback.onDisconnect();
                 }
             }
