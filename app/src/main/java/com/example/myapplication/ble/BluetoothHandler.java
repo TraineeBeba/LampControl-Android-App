@@ -1,12 +1,9 @@
 package com.example.myapplication.ble;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import static com.welie.blessed.BluetoothBytesParser.asHexString;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +17,6 @@ import com.welie.blessed.BluetoothCentralManager;
 import com.welie.blessed.BluetoothCentralManagerCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
-import com.welie.blessed.BondState;
 import com.welie.blessed.ConnectionPriority;
 import com.welie.blessed.ConnectionState;
 import com.welie.blessed.GattStatus;
@@ -32,10 +28,8 @@ import com.welie.blessed.WriteType;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -71,14 +65,30 @@ public class BluetoothHandler {
     private BluetoothPeripheral peripheral = null;
 
 
+    public interface BluetoothConnectionCallback {
+        void onDeviceConnected();
+        void onDeviceDisconnected();
+    }
+
+    private BluetoothConnectionCallback connectionCallback;
+
+    public void setBluetoothConnectionCallback(BluetoothConnectionCallback callback) {
+        this.connectionCallback = callback;
+    }
+
+
     public interface BluetoothScanCallback {
-        void onDeviceDiscovered(String deviceName);
+        void onDeviceDiscovered(String deviceName, String deviceAddress);
     }
 
     private BluetoothScanCallback scanCallback;
 
     public BluetoothPeripheral getDiscoveredPeripheral(String deviceName) {
         return discoveredPeripherals.get(deviceName);
+    }
+
+    public List<BluetoothPeripheral> getConnectedDevices() {
+        return central.getConnectedPeripherals();
     }
 
     public void connectPeripheral(BluetoothPeripheral peripheral) {
@@ -221,6 +231,13 @@ public class BluetoothHandler {
             synchronized (BluetoothHandler.this) {
                 BluetoothHandler.getInstance(context).peripheral = peripheral;
             }
+
+            if (connectionCallback != null) {
+                connectionCallback.onDeviceConnected();
+            }
+
+            central.stopScan();
+
             Log.d("Scan",String.format("connected to '%s'", peripheral.getName()));
         }
 
@@ -228,6 +245,9 @@ public class BluetoothHandler {
         public void onConnectionFailed(@NotNull BluetoothPeripheral peripheral, final @NotNull HciStatus status) {
             //Todo check if this is needed and correct
             BluetoothHandler.getInstance(context).peripheral = null;
+            if (connectionCallback != null) {
+                connectionCallback.onDeviceDisconnected();
+            }
             Log.d("Scan",String.format("connection '%s' failed with status %s", peripheral.getName(), status));
         }
 
@@ -239,6 +259,10 @@ public class BluetoothHandler {
                     BluetoothHandler.getInstance(context).peripheral = null;
                 }
             }
+
+            if (connectionCallback != null) {
+                connectionCallback.onDeviceDisconnected();
+            }
             sendDisconnectLampStateUpdateBroadcast();
             Log.d("Scan",String.format("disconnected '%s' with status %s", peripheral.getName(), status));
 
@@ -248,10 +272,13 @@ public class BluetoothHandler {
 
         @Override
         public void onDiscoveredPeripheral(@NotNull BluetoothPeripheral peripheral, @NotNull ScanResult scanResult) {
-            Log.d("onDiscoveredPeripheral",String.format("Found peripheral '%s'", peripheral.getName()));
-            discoveredPeripherals.put(peripheral.getName(), peripheral);
+//            Log.d("onDiscoveredPeripheral",String.format("Found peripheral '%s'", peripheral.getName()));
             if (scanCallback != null) {
-                scanCallback.onDeviceDiscovered(peripheral.getName());
+                if(!peripheral.getName().trim().isEmpty()){
+                    discoveredPeripherals.put(peripheral.getName(), peripheral);
+                    scanCallback.onDeviceDiscovered(peripheral.getName(), peripheral.getAddress());
+                    Log.d("onDiscoveredPeripheral",String.format("Found peripheral '%s'", peripheral.getName()));
+                }
             }
             // Removed the stopScan() call
 
@@ -273,6 +300,9 @@ public class BluetoothHandler {
 //                central.startPairingPopupHack();
 //                startScan();
             } else if (state == BluetoothAdapter.STATE_OFF) {
+                if (connectionCallback != null) {
+                    connectionCallback.onDeviceDisconnected();
+                }
                 sendDisconnectLampStateUpdateBroadcast();
             }
         }
@@ -314,7 +344,8 @@ public class BluetoothHandler {
 
     public void startScan() {
         handler.postDelayed(() -> {
-            central.scanForPeripheralsWithServices(new UUID[]{LC_SERVICE_UUID});
+//            central.scanForPeripheralsWithServices(new UUID[]{LC_SERVICE_UUID});
+            central.scanForPeripherals();
             handler.postDelayed(this::stopScanIfNeeded, SCAN_PERIOD); // Stop scanning after a period
         }, 1000);
     }

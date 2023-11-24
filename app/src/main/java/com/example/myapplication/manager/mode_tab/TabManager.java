@@ -1,6 +1,7 @@
 package com.example.myapplication.manager.mode_tab;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,9 +29,11 @@ public class TabManager {
     private ChangeColorTabManager changeColorTabManager;
     private ColorPickerManager colorPickerManager;
     private List<ModeTab> modeTabs;
-
     public static Button selectedActiveBtn;
     private Mode lastVisibleMode = null; // Store the last visible mode
+    private Handler debounceHandler = new Handler();
+    private Runnable debounceRunnable;
+
 
     public TabManager(Context context, View view) {
         this.context = context;
@@ -39,6 +42,7 @@ public class TabManager {
         this.colorPickerManager = new ColorPickerManager(context, view, modeTabs);
         this.changeColorTabManager = new ChangeColorTabManager(context, view, colorPickerManager);
         this.currentImageView = view.findViewById(R.id.modeImage);
+        changeTab(LampCache.getMode());
         loadColorData();
         resetAllBtns();
     }
@@ -52,7 +56,7 @@ public class TabManager {
         modeTabs = new ArrayList<>();
         for (Mode mode : Mode.values()) {
             int tabLayoutId = context.getResources().getIdentifier("groupActiveColors" + (mode.getModeNumber() + 1), "id", context.getPackageName());
-            modeTabs.add(new ModeTab(context, view, view.findViewById(tabLayoutId), mode.getDrawableResId()));
+            modeTabs.add(new ModeTab(context, view, view.findViewById(tabLayoutId), mode.getModeNumber()));
         }
     }
 
@@ -80,6 +84,7 @@ public class TabManager {
     }
 
     private void resetAllBtns() {
+        selectedActiveBtn = null;
         colorPickerManager.resetAll();
         for (ModeTab modeTab : modeTabs) {
             for (Button activeColorButton : modeTab.getTabActiveButtonsManager().getActiveColorButtons()) {
@@ -89,7 +94,7 @@ public class TabManager {
     }
 
     private void updateTabVisibility(Mode activeMode) {
-        LampCache.setMode(activeMode.getModeNumber());
+        LampCache.setMode(activeMode);
         for (int i = 0; i < modeTabs.size(); i++) {
             modeTabs.get(i).getTabLayout().setVisibility(i == activeMode.getModeNumber() ? View.VISIBLE : View.INVISIBLE);
         }
@@ -98,16 +103,25 @@ public class TabManager {
         currentImageView.setBackground(context.getDrawable(activeMode.getDrawableResId()));
     }
     private void updateLampMode(int modeNumber) {
-        if (LampCache.isOn() == Lamp.OFF) return;
+        // Cancel any existing callbacks
+        debounceHandler.removeCallbacks(debounceRunnable);
 
-        try {
-            byte[] mode = new byte[]{(byte) modeNumber};
-            MainActivity.getBleCommunicationUtil().writeMode(mode);
-        } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-            Log.e("LightFragment", "Error updating lamp mode", e);
-//            Toast.makeText(getContext(), "Error updating mode: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        // Define the runnable
+        debounceRunnable = () -> {
+            if (LampCache.isOn() == Lamp.OFF) return;
+
+            try {
+                byte[] mode = new byte[]{(byte) modeNumber};
+                MainActivity.getBleCommunicationUtil().writeMode(mode);
+            } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+                Log.e("LightFragment", "Error updating lamp mode", e);
+            }
+        };
+
+        // Schedule the runnable after a specified delay (e.g., 500 milliseconds)
+        debounceHandler.postDelayed(debounceRunnable, 100);
     }
+
 
 //    public void disableAllTabs() {
 //        for (int i = 0; i < tabInfoList.size(); i++) {

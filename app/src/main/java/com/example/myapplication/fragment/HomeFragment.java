@@ -31,16 +31,9 @@ import com.example.myapplication.constant.StateAnimation;
 
 public class HomeFragment extends Fragment implements FragmentBroadcastListener {
     private ConstraintLayout homeLayout;
-
-    private ImageView toggleView;
     private Button btnNavWifi, btnNavLight;
     private ImageButton btnToggleLamp;
-    private ImageView cloudImageLeftBlack;
-
-    private ImageView Sunshine;
-    private ImageView cloudImageLeftWhite;
-    private ImageView cloudImageRightBlack;
-    private ImageView cloudImageRightWhite;
+    private ImageView cloudImageLeftBlack, Sunshine, cloudImageLeftWhite, cloudImageRightBlack, cloudImageRightWhite;
     Lamp currentState = Lamp.OFF;
 
 
@@ -65,14 +58,12 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         return view;
     }
 
-
-
     private void loadState() {
         updateVisual(LampCache.isOn());
         try {
             MainActivity.getBleCommunicationUtil().readLampState();
         } catch (NullPointerException | BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -85,12 +76,13 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
             Lamp toggleState = Lamp.getToggle(LampCache.isOn());
             MainActivity.getBleCommunicationUtil().writeLampState(toggleState.name().getBytes());
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void updateVisual(Lamp lampState) {
-        Log.d("updateVisual", "Before");
+        Log.d("updateVisual", "lampState " + lampState);
+        Log.d("updateVisual", "lampState " + lampState);
         if (lampState == currentState) {
             return;
         }
@@ -98,7 +90,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         Log.d("updateVisual", "After");
         switch (lampState) {
             case OFF:
-//                toggleView.setImageResource(R.drawable.turn_off_image);
                 btnToggleLamp.setBackgroundResource(R.drawable.turn_off_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_off);
 
@@ -116,7 +107,6 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
                 break;
             case ON:
 
-//                toggleView.setImageResource(R.drawable.turn_on_image);
                 btnToggleLamp.setBackgroundResource(R.drawable.turn_on_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_on);
 
@@ -178,17 +168,14 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;
 
-        cloudImageLeftBlack.post(new Runnable() {
-            @Override
-            public void run() {
-                widthImageCloud = cloudImageLeftBlack.getWidth();
+        cloudImageLeftBlack.post(() -> {
+            widthImageCloud = cloudImageLeftBlack.getWidth();
 //                widthDpCloud = widthImageCloud / getResources().getDisplayMetrics().density;
 
-                offset = (int) (screenWidth*0.05 + widthImageCloud / 2);
-                Log.d("widthImageCloud", String.valueOf(widthImageCloud));
-                Log.d("screenWidth", String.valueOf(screenWidth));
-                Log.d("offset", String.valueOf(offset));
-            }
+            offset = (int) (screenWidth*0.05 + widthImageCloud / 2);
+            Log.d("widthImageCloud", String.valueOf(widthImageCloud));
+            Log.d("screenWidth", String.valueOf(screenWidth));
+            Log.d("offset", String.valueOf(offset));
         });
     }
 

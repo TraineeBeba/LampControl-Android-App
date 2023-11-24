@@ -22,12 +22,9 @@ public class ModeTab {
     private List<Integer> buttonColors;
 
     private ConstraintLayout tabLayout;
-    private int drawableResId;
-
-    public ModeTab(Context context, View view, ConstraintLayout tabLayout, int drawableResId) {
+    public ModeTab(Context context, View view, ConstraintLayout tabLayout, int modeNumber) {
         this.tabLayout = tabLayout;
-        this.drawableResId = drawableResId;
-        this.activeButtonsManager = new ActiveButtonsManager(context, view);
+        this.activeButtonsManager = new ActiveButtonsManager(context, view, modeNumber);
         this.buttonColors = new ArrayList<>();
         // Initialize other ModeTab fields
     }

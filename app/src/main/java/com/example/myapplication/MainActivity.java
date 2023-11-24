@@ -20,6 +20,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -96,16 +97,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TODO version check
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
+//        getWindow().setFlags(
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN
+//        );
 
-//        View decorView = getWindow().getDecorView();
-//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
-//                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-//        decorView.setSystemUiVisibility(uiOptions);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.home);
         getSupportFragmentManager().beginTransaction()
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     String modeStr = intent.getStringExtra(BluetoothHandler.EXTRA_MODE);
                     int mode = Integer.parseInt(modeStr);
                     Log.d("Mode", "Mode: " + Mode.fromModeNumber(mode));
+                    LampCache.setMode(Mode.fromModeNumber(mode));
                     currentFragmentListener.onModeUpdate(mode);
 
                 }
@@ -320,7 +322,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Enable BLE try","Trying to enable BLE");
         if (getBluetoothManager().getAdapter() != null) {
             if (!isBluetoothEnabled()) {
-                enableBleRequest.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                String[] missingPermissions = getMissingPermissions(getRequiredPermissions());
+                if (missingPermissions.length == 0) {
+                    enableBleRequest.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                } else {
+                    checkPermissions();
+                }
             } else {
                 checkPermissions();
             }
@@ -331,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkPermissions() {
         Log.d("checkPermissions","checkPermissions");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] missingPermissions = getMissingPermissions(getRequiredPermissions());
             if (missingPermissions.length > 0) {
                 //What it do?
