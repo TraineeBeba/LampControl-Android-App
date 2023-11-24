@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import android.widget.RelativeLayout;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -27,15 +26,10 @@ import java.util.List;
 
 
 public class WifiFragment extends Fragment {
-    private Button buttonHome;
-    private Button buttonLight;
-    private Button search_lamp;
-    private Button back_to_conn_btn;
-    private Button update_btn;
+    private Button buttonHome, buttonLight, search_lamp, back_to_conn_btn, update_btn;
+    private ConstraintLayout panel_connection1,  panel_connection2;
+    private ConstraintLayout wifilayout;
     private ListView listView;
-    private RelativeLayout panel1;
-    private RelativeLayout panel2;
-    private FrameLayout wifilayout;
 
     private Handler handler = new Handler();
     private ArrayAdapter<String> adapter;
@@ -48,8 +42,8 @@ public class WifiFragment extends Fragment {
         View view = inflater.inflate(R.layout.connection, container, false);
 
         wifilayout = view.findViewById(R.id.wifiLayout);
-//        panel1 = view.findViewById(R.id.panel1);
-//        panel2 = view.findViewById(R.id.panel2);
+        panel_connection1 = view.findViewById(R.id.panel_connection1);
+        panel_connection2 = view.findViewById(R.id.panel_connection2);
 
         listView = view.findViewById(R.id.listView);
         context = getActivity();
@@ -92,9 +86,8 @@ public class WifiFragment extends Fragment {
 
         search_lamp = view.findViewById(R.id.search_lamp);
         search_lamp.setOnClickListener(v -> {
-            wifilayout.setBackgroundResource(R.drawable.lamps_near_background);
-            panel1.setVisibility(View.INVISIBLE);
-            panel2.setVisibility(View.VISIBLE);
+            panel_connection1.setVisibility(View.INVISIBLE);
+            panel_connection2.setVisibility(View.VISIBLE);
 
             // Check permissions and initialize Bluetooth
             if (getActivity() instanceof MainActivity) {
@@ -105,17 +98,11 @@ public class WifiFragment extends Fragment {
             }
         });
 
+
         back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
         back_to_conn_btn.setOnClickListener(v -> {
-            wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
-            panel1.setVisibility(View.VISIBLE);
-            panel2.setVisibility(View.INVISIBLE);
-        });
-        back_to_conn_btn = view.findViewById(R.id.back_to_conn_btn);
-        back_to_conn_btn.setOnClickListener(v -> {
-            wifilayout.setBackgroundResource(R.drawable.search_lamp_background);
-            panel1.setVisibility(View.VISIBLE);
-            panel2.setVisibility(View.INVISIBLE);
+            panel_connection1.setVisibility(View.VISIBLE);
+            panel_connection2.setVisibility(View.INVISIBLE);
         });
 
         update_btn = view.findViewById(R.id.update_btn);

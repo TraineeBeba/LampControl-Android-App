@@ -6,7 +6,7 @@ public abstract class LampCache {
     private static Lamp isOn = Lamp.OFF;
     private static int brightness = 25;
     private static int seekBarPos = 0;
-    private static int mode = 0;
+    private static Mode mode = Mode.MODE_ONE;
 
 
     public static Lamp isOn() {
@@ -30,11 +30,11 @@ public abstract class LampCache {
         LampCache.brightness = brightness;
     }
 
-    public static int getMode() {
+    public static Mode getMode() {
         return mode;
     }
 
-    public static void setMode(int mode) {
+    public static void setMode(Mode mode) {
         LampCache.mode = mode;
     }
 

@@ -42,6 +42,7 @@ public class TabManager {
         this.colorPickerManager = new ColorPickerManager(context, view, modeTabs);
         this.changeColorTabManager = new ChangeColorTabManager(context, view, colorPickerManager);
         this.currentImageView = view.findViewById(R.id.modeImage);
+        changeTab(LampCache.getMode());
         loadColorData();
         resetAllBtns();
     }
@@ -93,7 +94,7 @@ public class TabManager {
     }
 
     private void updateTabVisibility(Mode activeMode) {
-        LampCache.setMode(activeMode.getModeNumber());
+        LampCache.setMode(activeMode);
         for (int i = 0; i < modeTabs.size(); i++) {
             modeTabs.get(i).getTabLayout().setVisibility(i == activeMode.getModeNumber() ? View.VISIBLE : View.INVISIBLE);
         }

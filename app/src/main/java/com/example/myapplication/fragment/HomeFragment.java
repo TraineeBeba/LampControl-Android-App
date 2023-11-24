@@ -81,7 +81,8 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     }
 
     public void updateVisual(Lamp lampState) {
-        Log.d("updateVisual", "Before");
+        Log.d("updateVisual", "lampState " + lampState);
+        Log.d("updateVisual", "lampState " + lampState);
         if (lampState == currentState) {
             return;
         }
