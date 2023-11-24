@@ -700,7 +700,7 @@
         android:id="@+id/panelAddColor"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:background="@drawable/add_color_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.6"
@@ -855,13 +855,14 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/colorBtn12_2"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@drawable/circle_fone12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/colorBtn13_2"
                 app:layout_constraintHeight_percent="0.7"
                 app:layout_constraintStart_toEndOf="@+id/colorBtn11_2"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton

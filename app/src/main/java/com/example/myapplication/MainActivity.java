@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.provider.Settings;
+import android.view.View;
 import android.view.WindowManager;
 import android.Manifest;
 import android.app.AlertDialog;
@@ -95,10 +96,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TODO version check
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
+//        getWindow().setFlags(
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN
+//        );
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.home);
         getSupportFragmentManager().beginTransaction()

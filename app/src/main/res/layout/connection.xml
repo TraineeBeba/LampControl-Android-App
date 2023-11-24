@@ -348,16 +348,6 @@
             app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
             app:layout_constraintWidth_percent="0.3">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@drawable/bluetooth_image_white"
-                app:layout_constraintBottom_toTopOf="@+id/guideline_for_bluetooth"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.23"
-                app:layout_constraintStart_toStartOf="parent" />
-
 
             <ImageView
                 android:id="@+id/imageView"

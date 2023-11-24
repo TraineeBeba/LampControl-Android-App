@@ -46,6 +46,7 @@ public class WifiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.connection, container, false);
+        
 //        wifilayout = view.findViewById(R.id.wifiLayout);
 //        panel1 = view.findViewById(R.id.panel1);
 //        panel2 = view.findViewById(R.id.panel2);
