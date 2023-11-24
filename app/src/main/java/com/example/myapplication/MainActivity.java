@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -313,7 +314,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Enable BLE try","Trying to enable BLE");
         if (getBluetoothManager().getAdapter() != null) {
             if (!isBluetoothEnabled()) {
-                enableBleRequest.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                String[] missingPermissions = getMissingPermissions(getRequiredPermissions());
+                if (missingPermissions.length == 0) {
+                    enableBleRequest.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                } else {
+                    checkPermissions();
+                }
             } else {
                 checkPermissions();
             }
@@ -324,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkPermissions() {
         Log.d("checkPermissions","checkPermissions");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] missingPermissions = getMissingPermissions(getRequiredPermissions());
             if (missingPermissions.length > 0) {
                 //What it do?

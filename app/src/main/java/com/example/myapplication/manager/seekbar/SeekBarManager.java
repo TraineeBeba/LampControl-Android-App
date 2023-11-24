@@ -60,7 +60,7 @@ public class SeekBarManager {
                 };
                 percentageText.setText(BrightnessModeUtil.calculatePercentage(progress) + " %");
 
-                debounceHandler.postDelayed(debounceRunnable, 200);
+                debounceHandler.postDelayed(debounceRunnable, 100);
             }
 
             @Override

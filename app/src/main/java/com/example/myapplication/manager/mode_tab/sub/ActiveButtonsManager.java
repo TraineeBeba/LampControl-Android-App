@@ -5,8 +5,11 @@ import static com.example.myapplication.manager.mode_tab.sub.util.ButtonAppearan
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,20 +29,29 @@ public class ActiveButtonsManager {
 
     private Button selectedActiveBtn = null;
 
-    public ActiveButtonsManager(Context context, View view){
+    public ActiveButtonsManager(Context context, View view, int mode){
         this.context = context;
-        initTabActiveColorButtons(view);
+        initTabActiveColorButtons(view, mode);
         initTabActiveColorButtonsListeners();
     }
 
-    private void initTabActiveColorButtons(View view) {
+    private void initTabActiveColorButtons(View view, int mode) {
         activeColorButtons = new ArrayList<>();
-        this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode1_1));
-        this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_1));
-        this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_2));
-        this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_3));
-        this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_4));
-        this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode3_1));
+
+        switch (mode) {
+            case 0:
+                this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode1_1));
+                break;
+            case 1:
+                this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_1));
+                this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_2));
+                this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_3));
+                this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode2_4));
+                break;
+            case 2:
+                this.activeColorButtons.add(view.findViewById(R.id.activeColorBtnMode3_1));
+                break;
+        }
     }
 
     private void toggleActiveColorButton(Button button) {
@@ -98,21 +110,21 @@ public class ActiveButtonsManager {
 
         for (int i = 0; i < activeColorButtons.size() && i < colors.size(); i++) {
             Button button = activeColorButtons.get(i);
+            Log.d("updateActiveButtonColors", "button: " + button.getId());
             ModeColorData.RGBColor color = colors.get(i);
-            Log.d("updateActiveButtonColors", "" + color.red + color.green + color.blue);
+            int red = color.red;
+            int green = color.green;
+            int blue = color.blue;
+            Log.d("updateActiveButtonColors", "red: " + red + " green: " + green + " blue: " + blue);
 
+            int savedColor = Color.rgb(red, green, blue);
             Drawable background = button.getBackground();
             if (background instanceof GradientDrawable) {
-                // If the background is a GradientDrawable, update its color
-                GradientDrawable gradientDrawable = (GradientDrawable) background;
-                gradientDrawable.setColor(android.graphics.Color.rgb(color.red, color.green, color.blue));
-            } else {
-                // If the background is not a GradientDrawable, update the button's background color
-                button.setBackgroundColor(android.graphics.Color.rgb(color.red, color.green, color.blue));
+                ((GradientDrawable) background).setColor(savedColor);
             }
 
             // Save the updated color to preferences
-            sharedPref.edit().putInt("activeColor" + button.getId(), android.graphics.Color.rgb(color.red, color.green, color.blue)).apply();
+            sharedPref.edit().putInt("activeColor" + button.getId(), android.graphics.Color.rgb(red, green, blue)).apply();
         }
     }
 

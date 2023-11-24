@@ -158,6 +158,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
                     BLECommunicationUtil bleCommunicationUtil = MainActivity.getBleCommunicationUtil();
                     bleCommunicationUtil.readBrightness();
                     bleCommunicationUtil.readMode();
+                    MainActivity.getBleCommunicationUtil().readActiveColors();
                 } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
                     Log.d("Exc", "Exc");
                 }
@@ -175,9 +176,9 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
             List<ModeTab> tabs = tabManager.getTabs();
             if (modeIndex >= 0 && modeIndex < tabs.size()) {
                 ModeTab tab = tabs.get(modeIndex);
+                Log.d("Tab", String.valueOf(modeIndex));
                 tab.updateTabActiveButtonColors(colors);
 
-                Log.d("Tab", String.valueOf(modeIndex));
             }
         }
     }
