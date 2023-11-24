@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lightLayout"
+    android:forceDarkAllowed="false"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -60,9 +61,13 @@
                 android:gravity="center"
                 android:text="1-Колір"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
 
-                android:shadowColor="#40FFFFFF"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
+                android:shadowColor="#AAFFFFFF"
                 android:shadowDx="0"
                 android:shadowDy="10"
                 android:shadowRadius="10"
@@ -99,9 +104,13 @@
                 android:gravity="center"
                 android:text="Веселка"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
 
-                android:shadowColor="#50000000"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
+                android:shadowColor="#AA000000"
                 android:shadowDx="0"
                 android:shadowDy="10"
                 android:shadowRadius="10"
@@ -139,9 +148,13 @@
                 android:gravity="center"
                 android:text="День-Ніч"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
 
-                android:shadowColor="#50000000"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="19sp"
+                android:autoSizeStepGranularity="1sp"
+
+                android:shadowColor="#AA000000"
                 android:shadowDx="0"
                 android:shadowDy="10"
                 android:shadowRadius="10"
@@ -194,9 +207,14 @@
                 android:gravity="start|center"
                 android:text="Активні кольори"
                 android:textColor="#FFFFFF"
-                android:textSize="19sp"
+
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="1sp"
+
                 app:layout_constraintStart_toStartOf="@+id/line_text_activeColor1"
-                app:layout_constraintWidth_percent="0.42"/>
+                app:layout_constraintWidth_percent="0.5"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/groupActiveColors1"
@@ -355,8 +373,13 @@
                 android:fontFamily="@font/robotomono_light"
                 android:gravity="start"
                 android:text="Панель кольорів"
+
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="1sp"
+
                 android:textColor="#FFFFFF"
-                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/line_text_activeColor2"
                 app:layout_constraintWidth_percent="0.52">
             </TextView>
@@ -678,7 +701,7 @@
         android:id="@+id/panelAddColor"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:background="@drawable/add_color_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.6"
@@ -833,13 +856,14 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/colorBtn12_2"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@drawable/circle_fone12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/colorBtn13_2"
                 app:layout_constraintHeight_percent="0.7"
                 app:layout_constraintStart_toEndOf="@+id/colorBtn11_2"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -941,7 +965,6 @@
                 app:layout_constraintHeight_percent="0.6"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.2">
-
             </ImageButton>
 
             <androidx.constraintlayout.widget.Guideline
@@ -951,10 +974,7 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.9" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
