@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         try {
             MainActivity.getBleCommunicationUtil().readLampState();
         } catch (NullPointerException | BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
             Lamp toggleState = Lamp.getToggle(LampCache.isOn());
             MainActivity.getBleCommunicationUtil().writeLampState(toggleState.name().getBytes());
         } catch (BluetoothNotConnectedException | CharacteristicNotFoundException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

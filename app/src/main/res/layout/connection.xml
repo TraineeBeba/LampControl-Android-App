@@ -162,6 +162,7 @@
                 </ImageView>
 
                 <ImageView
+                    android:id="@+id/update_btn_img"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:src="@drawable/element_for_search"
@@ -170,14 +171,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHeight_percent="0.4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-
-                    android:fromDegrees="0"
-                    android:toDegrees="360"
-                    android:pivotX="50%"
-                    android:pivotY="50%"
-                    android:duration="1000"
-                    android:repeatCount="infinite">
+                    app:layout_constraintTop_toTopOf="parent">
 
                 </ImageView>
 
