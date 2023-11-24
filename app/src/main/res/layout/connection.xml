@@ -21,12 +21,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout17"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/rectangle_connection1"
             app:layout_constraintHeight_percent="0.6"
             app:layout_constraintTop_toTopOf="@+id/guideline_for_panel_connection"
             app:layout_constraintWidth_percent="1">
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Guideline
@@ -73,6 +75,35 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.15" />
+
+
+        <TextView
+            android:id="@+id/text_connection_already"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fontFamily="@font/robotomono_medium"
+            android:gravity="center"
+            android:text="Ви вже підключені до однієї з ламп"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+
+            android:visibility="invisible"
+
+            android:shadowColor="#BBFFFFFF"
+            android:shadowDx="0"
+            android:shadowDy="10"
+            android:shadowRadius="10"
+
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout17"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.17"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.7">
+
+        </TextView>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -87,6 +118,7 @@
             android:layout_height="0dp"
             android:background="@drawable/rectangle_connection2"
             app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline_for_panel_connection2"
             app:layout_constraintWidth_percent="1">
 
@@ -138,7 +170,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHeight_percent="0.4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    android:fromDegrees="0"
+                    android:toDegrees="360"
+                    android:pivotX="50%"
+                    android:pivotY="50%"
+                    android:duration="1000"
+                    android:repeatCount="infinite">
 
                 </ImageView>
 
@@ -159,6 +198,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout18"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -170,10 +210,35 @@
                 <ListView
                     android:id="@+id/listView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    tools:layout_editor_absoluteX="31dp"
+                    tools:layout_editor_absoluteY="0dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/text_connect_successfully"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/robotomono_medium"
+                android:gravity="center"
+                android:shadowColor="#BBFFFFFF"
+                android:shadowDx="0"
+                android:shadowDy="10"
+                android:shadowRadius="10"
+
+                android:text="Ви успішно підключились!"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:visibility="invisible"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.17"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout18"
+                app:layout_constraintWidth_percent="0.7">
+
+            </TextView>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -191,9 +256,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHeight_percent="0.7"
-                    app:layout_constraintWidth_percent="0.8"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.8">
+
                 </ImageView>
 
                 <Button
@@ -204,9 +270,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHeight_percent="0.7"
-                    app:layout_constraintWidth_percent="0.8"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.8">
+
                 </Button>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
