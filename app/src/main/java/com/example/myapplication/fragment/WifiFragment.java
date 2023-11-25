@@ -206,9 +206,13 @@ public class WifiFragment extends Fragment implements BluetoothHandler.Bluetooth
     @Override
     public void onDeviceDisconnected() {
         List<BluetoothPeripheral> connectedDevices = BluetoothHandler.getInstance(context).getConnectedDevices();
+
+        adapter.notifyDataSetChanged();
         if(connectedDevices.size()>0){
-            connectedDevices.get(0).getName();
-            
+            for (Cat cat : catNames) {
+                cat.setConnected(connectedDevices.contains(cat.getName()));
+            }
+
 //                text_connect_successfully.setVisibility(View.VISIBLE);
 //                text_connection_already.setText(text_connection_already.getText() + "\n" + connectedDevices.get(0).getName());
             text_connect_successfully.setVisibility(View.VISIBLE);

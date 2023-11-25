@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,15 @@ public class CustomListAdapter extends ArrayAdapter<Cat> {
         }
 
         Cat item = getItem(position);
+        if(item == null) {
+            return convertView;
+        }
+
+        if (item.isConnected()) {
+            convertView.setBackgroundColor(Color.GREEN);
+        } else {
+            // Set a different background for disconnected devices
+        }
 
         TextView mainField = convertView.findViewById(R.id.mainField);
         TextView additionalField = convertView.findViewById(R.id.additionalField);

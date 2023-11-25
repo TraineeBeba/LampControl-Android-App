@@ -3,6 +3,7 @@ package com.example.myapplication.fragment;
 public class Cat {
     private String name;
     private String additionalInfo; // This could be age, breed, etc.
+    private boolean isConnected = false;
 
     public Cat(String name, String additionalInfo) {
         this.name = name;
@@ -18,6 +19,11 @@ public class Cat {
         return additionalInfo;
     }
 
-    // Setters (if needed)
-    // ...
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
+    }
 }
