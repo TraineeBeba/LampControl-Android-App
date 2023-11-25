@@ -39,8 +39,8 @@ public class WifiFragment extends Fragment implements BluetoothHandler.Bluetooth
     TextView text_connect_successfully, text_connection_already;
 
     private Handler handler = new Handler();
-    private ArrayAdapter<String> adapter;
-    List<String> catNames = new ArrayList<>();
+    private CustomListAdapter adapter;
+    List<Cat> catNames = new ArrayList<>();
     private Context context;
 
     @Override
@@ -55,7 +55,7 @@ public class WifiFragment extends Fragment implements BluetoothHandler.Bluetooth
 
         listView = view.findViewById(R.id.listView);
         context = getActivity();
-        adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, catNames);
+        adapter = new CustomListAdapter(getContext(), catNames);
         adapter.clear();
         listView.setAdapter(adapter);
 
@@ -65,14 +65,15 @@ public class WifiFragment extends Fragment implements BluetoothHandler.Bluetooth
         initConnectedDevices();
 
         listView.setOnItemClickListener((parent, view1, position, id) -> {
-            String selectedDeviceName = catNames.get(position);
+            String selectedDeviceName = catNames.get(position).getName();
+            String address = catNames.get(position).getAdditionalInfo();
             BluetoothHandler bluetoothHandler = BluetoothHandler.getInstance(getContext());
             BluetoothPeripheral selectedPeripheral = bluetoothHandler.getDiscoveredPeripheral(selectedDeviceName);
             if (selectedPeripheral != null) {
                 bluetoothHandler.connectPeripheral(selectedPeripheral);
 //                text_connect_successfully.setVisibility(View.VISIBLE);
 //                text_connection_already.setVisibility(View.VISIBLE);
-                Toast.makeText(context, "Device: " + selectedPeripheral.getAddress(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Device: " + selectedDeviceName + " " + address, Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(context, "Device not found", Toast.LENGTH_SHORT).show();
@@ -85,7 +86,7 @@ public class WifiFragment extends Fragment implements BluetoothHandler.Bluetooth
 //                adapter.notifyDataSetChanged();
 //            }
             if (!catNames.contains(deviceName)) {
-                catNames.add(deviceName);
+                catNames.add(new Cat(deviceName, deviceAddress));
                 adapter.notifyDataSetChanged();
             }
         }));
@@ -149,7 +150,7 @@ public class WifiFragment extends Fragment implements BluetoothHandler.Bluetooth
             connectedDevices.forEach(device -> {
                 String deviceName = device.getName();
                 if (!catNames.contains(deviceName)) {
-                    catNames.add(deviceName);
+                    catNames.add(new Cat(deviceName, device.getAddress()));
                 }
             });
             adapter.notifyDataSetChanged();
