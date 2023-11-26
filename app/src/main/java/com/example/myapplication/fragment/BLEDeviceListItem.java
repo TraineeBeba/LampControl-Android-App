@@ -1,13 +1,13 @@
 package com.example.myapplication.fragment;
 
-public class Cat {
+public class BLEDeviceListItem {
     private String name;
-    private String additionalInfo; // This could be age, breed, etc.
+    private String address; // This could be age, breed, etc.
     private boolean isConnected = false;
 
-    public Cat(String name, String additionalInfo) {
+    public BLEDeviceListItem(String name, String address) {
         this.name = name;
-        this.additionalInfo = additionalInfo;
+        this.address = address;
     }
 
     // Getters
@@ -15,15 +15,15 @@ public class Cat {
         return name;
     }
 
-    public String getAdditionalInfo() {
-        return additionalInfo;
+    public String getAddress() {
+        return address;
     }
 
     public boolean isConnected() {
         return isConnected;
     }
 
-    public void setConnected(boolean connected) {
+    public void setViewConnected(boolean connected) {
         isConnected = connected;
     }
 }

@@ -81,8 +81,9 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     }
 
     public void updateVisual(Lamp lampState) {
-        Log.d("updateVisual", "lampState " + lampState);
-        Log.d("updateVisual", "lampState " + lampState);
+        resetAnimations();
+        Log.d("lampState", "lampState " + lampState);
+        Log.d("currentState", "currentState " + lampState);
         if (lampState == currentState) {
             return;
         }
@@ -123,6 +124,15 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
                 currentState = Lamp.ON;
                 break;
         }
+    }
+
+    private void resetAnimations() {
+        // Cancel or reset all ongoing animations
+        cloudImageLeftBlack.clearAnimation();
+        cloudImageLeftWhite.clearAnimation();
+        cloudImageRightBlack.clearAnimation();
+        cloudImageRightWhite.clearAnimation();
+        Sunshine.clearAnimation();
     }
 
 
@@ -257,6 +267,15 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     @Override
     public void onDisconnect() {
         updateVisual(Lamp.OFF);
+    }
+
+    @Override
+    public void onConnect() {
+        try {
+            MainActivity.getBleCommunicationUtil().readLampState();
+        } catch (NullPointerException | BluetoothNotConnectedException | CharacteristicNotFoundException e) {
+//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

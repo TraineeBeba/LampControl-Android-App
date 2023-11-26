@@ -1,12 +1,10 @@
 package com.example.myapplication.constant;
 
-import android.util.Log;
-
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.fragment.HomeFragment;
 import com.example.myapplication.fragment.LightFragment;
-import com.example.myapplication.fragment.WifiFragment;
+import com.example.myapplication.fragment.BLEFragment;
 
 public enum FragmentType {
     HOME, LIGHT, WIFI;
@@ -17,7 +15,7 @@ public enum FragmentType {
             case LIGHT:
                 return new LightFragment();
             case WIFI:
-                return new WifiFragment();
+                return new BLEFragment();
             default:
                 throw new IllegalArgumentException("Unknown Fragment Type");
         }

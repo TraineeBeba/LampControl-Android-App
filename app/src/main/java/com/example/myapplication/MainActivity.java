@@ -67,12 +67,14 @@ public class MainActivity extends AppCompatActivity {
             registerReceiver(brightnessReceiver, new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION), flags);
             registerReceiver(modeReceiver, new IntentFilter(BluetoothHandler.MODE_UPDATE_ACTION), flags);
             registerReceiver(disconnectReceiver, new IntentFilter(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION), flags);
+            registerReceiver(connectReceiver, new IntentFilter(BluetoothHandler.CONNECT_LAMP_STATE_UPDATE_ACTION), flags);
             registerReceiver(colorDataReceiver, new IntentFilter(BluetoothHandler.COLOR_DATA_UPDATE_ACTION), flags);
         } else {
             registerReceiver(lampStateReceiver, new IntentFilter(BluetoothHandler.LAMP_STATE_UPDATE_ACTION));
             registerReceiver(brightnessReceiver, new IntentFilter(BluetoothHandler.BRIGHTNESS_UPDATE_ACTION));
             registerReceiver(modeReceiver, new IntentFilter(BluetoothHandler.MODE_UPDATE_ACTION));
             registerReceiver(disconnectReceiver, new IntentFilter(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION));
+            registerReceiver(connectReceiver, new IntentFilter(BluetoothHandler.CONNECT_LAMP_STATE_UPDATE_ACTION));
             registerReceiver(colorDataReceiver, new IntentFilter(BluetoothHandler.COLOR_DATA_UPDATE_ACTION));
         }
     }
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(brightnessReceiver);
         unregisterReceiver(modeReceiver);
         unregisterReceiver(disconnectReceiver);
+        unregisterReceiver(connectReceiver);
         unregisterReceiver(colorDataReceiver);
 
     }
@@ -91,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
     public void setCurrentFragmentListener(FragmentBroadcastListener listener) {
         this.currentFragmentListener = listener;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,11 +104,7 @@ public class MainActivity extends AppCompatActivity {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN
 //        );
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(uiOptions);
+        setImmersiveMode();
 
         setContentView(R.layout.home);
         getSupportFragmentManager().beginTransaction()
@@ -173,6 +171,20 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver connectReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (currentFragmentListener != null) {
+                if (intent.getAction().equals(BluetoothHandler.CONNECT_LAMP_STATE_UPDATE_ACTION)) {
+                    Log.d("Connect", "Connect: ");
+                    Toast.makeText(context, "Пристрій підключено", Toast.LENGTH_SHORT).show();
+                    currentFragmentListener.onConnect();
+                }
+            }
+        }
+    };
+
+
 
     private final BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
         @Override
@@ -180,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
             if (currentFragmentListener != null) {
                 if (intent.getAction().equals(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION)) {
                     Log.d("Disconnect", "Disconnect: ");
+                    Toast.makeText(context, "Пристрій відключено", Toast.LENGTH_SHORT).show();
                     currentFragmentListener.onDisconnect();
                 }
             }
@@ -403,5 +416,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setImmersiveMode();
+    }
 
+    private void setImmersiveMode() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
 }

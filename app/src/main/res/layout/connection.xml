@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/panel_connection1"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.9"
@@ -48,26 +48,26 @@
             app:layout_constraintHeight_percent="0.1"
             app:layout_constraintWidth_percent="1">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/search_lamp_image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.5">
+<!--            <ImageView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:src="@drawable/search_lamp_image"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.5">-->
 
-            </ImageView>
+<!--            </ImageView>-->
 
-            <Button
-                android:id="@+id/search_lamp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="#00FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.5">
+<!--            <Button-->
+<!--                android:id="@+id/search_lamp"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="#00FFFFFF"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.5">-->
 
-            </Button>
+<!--            </Button>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -113,7 +113,7 @@
         android:id="@+id/panel_connection2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.9"
@@ -230,7 +230,7 @@
                 android:shadowDy="10"
                 android:shadowRadius="10"
 
-                android:text="Ви успішно підключились!"
+                android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="invisible"
@@ -252,32 +252,32 @@
                 app:layout_constraintHeight_percent="0.2"
                 app:layout_constraintWidth_percent="0.4">
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:src="@drawable/back_image_to_conect"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHeight_percent="0.7"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.8">
+<!--                <ImageView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:src="@drawable/back_image_to_conect"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHeight_percent="0.7"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintWidth_percent="0.8">-->
 
-                </ImageView>
+<!--                </ImageView>-->
 
-                <Button
-                    android:id="@+id/back_to_conn_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHeight_percent="0.7"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.8">
+<!--                <Button-->
+<!--                    android:id="@+id/back_to_conn_btn"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:background="#00FFFFFF"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHeight_percent="0.7"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintWidth_percent="0.8">-->
 
-                </Button>
+<!--                </Button>-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
