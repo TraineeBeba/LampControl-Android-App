@@ -39,7 +39,7 @@ public class CustomListAdapter extends ArrayAdapter<BLEDeviceListItem> {
 
         if (item.isConnected()) {
             Log.d("CUSTOM_LIST_ADAPTER", "CONNECTED");
-            convertView.setBackgroundColor(Color.rgb(48, 34, 29));
+            convertView.setBackgroundColor(Color.rgb(68, 72, 84));
             statusField.setText("Підключено"); // Set text when connected
         } else {
             Log.d("CUSTOM_LIST_ADAPTER", "NOT CONNECTED");
