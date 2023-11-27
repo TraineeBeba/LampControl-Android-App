@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment;
 
 import android.animation.AnimatorSet;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,8 @@ import android.animation.ObjectAnimator;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
+
 
 import android.widget.Toast;
 
@@ -37,9 +40,12 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
     Lamp currentState = Lamp.OFF;
 
 
+    private SharedPreferences sharedPref;
+
     private int widthImageCloud;
     private float widthDpCloud;
     private int offset;
+
 
     private int screenWidth;
 
@@ -52,8 +58,9 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         View view = inflater.inflate(R.layout.home, container, false);
 
         initView(view);
+
         initBtnListeners();
-        loadState();
+
 
         return view;
     }
@@ -91,14 +98,16 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         Log.d("updateVisual", "After");
         switch (lampState) {
             case OFF:
+                Log.d("Off offset", String.valueOf(offset));
+
                 btnToggleLamp.setBackgroundResource(R.drawable.turn_off_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_off);
 
 
                 if (StateAnimation.finalX_Left != 0){
                     animationBtnOff();
-                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()+offset;
-                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()-offset;
+                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX() + offset;
+                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX() - offset;
                 }
                 else{
                     animationStopBtnOff();
@@ -107,18 +116,20 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
                 currentState = Lamp.OFF;
                 break;
             case ON:
-
+                Log.d("On offset", String.valueOf(offset));
                 btnToggleLamp.setBackgroundResource(R.drawable.turn_on_image);
                 homeLayout.setBackgroundResource(R.drawable.homescreen__background_on);
 
-                // 0 start position
+
                 if (StateAnimation.finalX_Left == 0){
                     animationBtnOn();
-                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX()-offset;
-                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX()+offset;
+                    StateAnimation.finalX_Left = cloudImageLeftBlack.getTranslationX() - offset;
+                    StateAnimation.finalX_Right = cloudImageRightBlack.getTranslationX() + offset;
+                    Log.d("ActiveAnomation", "Norm2");
                 }
                 else{
                     animationStopBtnOn();
+                    Log.d("StopAnomation", "Norm2");
                 }
 
                 currentState = Lamp.ON;
@@ -179,10 +190,14 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         screenWidth = displayMetrics.widthPixels;
 
         cloudImageLeftBlack.post(() -> {
+
             widthImageCloud = cloudImageLeftBlack.getWidth();
 //                widthDpCloud = widthImageCloud / getResources().getDisplayMetrics().density;
 
             offset = (int) (screenWidth*0.05 + widthImageCloud / 2);
+            loadState();
+//            StateAnimation.finalX_Right += offset;
+//            StateAnimation.finalX_Left += offset;
             Log.d("widthImageCloud", String.valueOf(widthImageCloud));
             Log.d("screenWidth", String.valueOf(screenWidth));
             Log.d("offset", String.valueOf(offset));
@@ -195,6 +210,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + offset, 1.0f, 0.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right + offset, 0.0f, 1.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 1.0f);
+
     }
 
     public void animationStopBtnOn() {
@@ -203,6 +219,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right, 0.0f, 0.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right, 1.0f, 1.0f);
         animateCloud(Sunshine, "translationX", 0, 0, 1.0f, 1.0f);
+
     }
 
     public void animationBtnOff() {
@@ -211,6 +228,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-offset,0.0f, 1.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right-offset, 1.0f, 0.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 1.0f, 0.0f);
+
     }
 
     public void animationStopBtnOff() {
@@ -219,6 +237,7 @@ public class HomeFragment extends Fragment implements FragmentBroadcastListener 
         animateCloud(cloudImageRightBlack, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 1.0f, 1.0f);
         animateCloud(cloudImageRightWhite, "translationX", StateAnimation.finalX_Right, StateAnimation.finalX_Right , 0.0f, 0.0f);
         animateCloud(Sunshine, "translationX", 0, 0 , 0.0f, 0.0f);
+
     }
 
 

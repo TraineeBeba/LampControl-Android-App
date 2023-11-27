@@ -110,6 +110,7 @@ public class LightFragment extends Fragment implements FragmentBroadcastListener
 
         btnMode1.setOnClickListener(v -> {
             tabManager.changeTab(Mode.MODE_ONE);
+            saveTabSelection("MODE_ONE");
 
             textWhite(textViewOneMode);
             textBlack(textViewTwoMode);
