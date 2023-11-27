@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 if (intent.getAction().equals(BluetoothHandler.DISCONNECT_LAMP_STATE_UPDATE_ACTION)) {
                     Log.d("Disconnect", "Disconnect: ");
                     Toast.makeText(context, "Пристрій відключено", Toast.LENGTH_SHORT).show();
+                    LampCache.setIsOn(Lamp.OFF);
                     currentFragmentListener.onDisconnect();
                 }
             }

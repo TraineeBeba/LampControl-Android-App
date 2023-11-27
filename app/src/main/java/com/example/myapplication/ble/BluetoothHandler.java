@@ -89,7 +89,16 @@ public class BluetoothHandler {
     }
 
     public void connectPeripheral(BluetoothPeripheral peripheral) {
+        if (isAnyPeripheralConnected()) {
+            disconnectPeripheral(this.peripheral);
+            Log.d("BluetoothHandler", "A device is already connected. Ignoring the new connection request.");
+            return;
+        }
         central.connectPeripheral(peripheral, peripheralCallback);
+    }
+
+    private boolean isAnyPeripheralConnected() {
+        return this.peripheral != null && this.peripheral.getState() == ConnectionState.CONNECTED;
     }
 
     public void setBluetoothScanCallback(BluetoothScanCallback callback) {

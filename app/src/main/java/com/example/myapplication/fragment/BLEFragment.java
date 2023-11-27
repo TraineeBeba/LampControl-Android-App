@@ -264,6 +264,9 @@ public class BLEFragment extends Fragment implements FragmentBroadcastListener {
             for (BLEDeviceListItem BLEDeviceListItem : deviceListItems) {
                 if(isDeviceConnected(BLEDeviceListItem.getAddress()))
                     BLEDeviceListItem.setViewConnected(true);
+                else {
+                    BLEDeviceListItem.setViewConnected(false);
+                }
             }
             textConnectionAlready.setVisibility(View.VISIBLE);
         } else {

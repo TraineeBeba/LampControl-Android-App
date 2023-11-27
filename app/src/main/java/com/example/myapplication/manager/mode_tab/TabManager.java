@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -34,6 +35,10 @@ public class TabManager {
     private Handler debounceHandler = new Handler();
     private Runnable debounceRunnable;
 
+    private TextView textViewOneMode;
+    private TextView textViewTwoMode;
+    private TextView textViewThreeMode;
+
 
     public TabManager(Context context, View view) {
         this.context = context;
@@ -42,11 +47,31 @@ public class TabManager {
         this.colorPickerManager = new ColorPickerManager(context, view, modeTabs);
         this.changeColorTabManager = new ChangeColorTabManager(context, view, colorPickerManager);
         this.currentImageView = view.findViewById(R.id.modeImage);
+        this.textViewOneMode = view.findViewById(R.id.textView2);
+        this.textViewTwoMode = view.findViewById(R.id.textView4);
+        this.textViewThreeMode = view.findViewById(R.id.textView3);
         changeTab(LampCache.getMode());
         loadColorData();
         resetAllBtns();
     }
 
+    private void textWhite(TextView txt){
+        txt.setShadowLayer(
+                10,
+                0,
+                10,
+                0xAAFFFFFF
+        );
+    }
+
+    private void textBlack(TextView txt){
+        txt.setShadowLayer(
+                10,
+                0,
+                10,
+                0xAA000000
+        );
+    }
     public static Button getSelectedActiveColorBtn() {
         return selectedActiveBtn;
     }
@@ -99,8 +124,27 @@ public class TabManager {
             modeTabs.get(i).getTabLayout().setVisibility(i == activeMode.getModeNumber() ? View.VISIBLE : View.INVISIBLE);
         }
 
+        updateTextViewColors(activeMode);
         ModeTab.currentMode = activeMode;
         currentImageView.setBackground(context.getDrawable(activeMode.getDrawableResId()));
+    }
+
+    private void updateTextViewColors(Mode mode) {
+        textBlack(textViewOneMode);
+        textBlack(textViewTwoMode);
+        textBlack(textViewThreeMode);
+
+        switch (mode) {
+            case MODE_ONE:
+                textWhite(textViewOneMode);
+                break;
+            case MODE_TWO:
+                textWhite(textViewTwoMode);
+                break;
+            case MODE_THREE:
+                textWhite(textViewThreeMode);
+                break;
+        }
     }
     private void updateLampMode(int modeNumber) {
         // Cancel any existing callbacks
