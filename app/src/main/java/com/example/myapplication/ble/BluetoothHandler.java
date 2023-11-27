@@ -351,8 +351,8 @@ public class BluetoothHandler {
 
     public void startScan() {
         handler.postDelayed(() -> {
-//            central.scanForPeripheralsWithServices(new UUID[]{LC_SERVICE_UUID});
-            central.scanForPeripherals();
+            central.scanForPeripheralsWithServices(new UUID[]{LC_SERVICE_UUID});
+//            central.scanForPeripherals();
             handler.postDelayed(this::stopScanIfNeeded, SCAN_PERIOD); // Stop scanning after a period
         }, 1000);
     }
